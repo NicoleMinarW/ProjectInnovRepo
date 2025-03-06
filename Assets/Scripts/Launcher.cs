@@ -124,6 +124,13 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             Debug.Log("Loading Game Scene...");
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                Debug.Log("Main Camera: " + mainCamera);
+                mainCamera.gameObject.SetActive(false);
+            }
+
             PhotonNetwork.LoadLevel(1);
         }
         else
