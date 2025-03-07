@@ -11,7 +11,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI opponentNameText, opponentHpText;
     public GameObject attackButton;
 
-    private GameObject spawnedCreature;
+    private Dictionary<string, GameObject> spawnedCreatures = new Dictionary<string, GameObject>();
     private Creature playerCreature, opponentCreature;
     private Dictionary<string, GameObject> creaturePrefabs;
     private bool hasAssignedCreature = false;
@@ -19,7 +19,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     void Start()
     {
         // Try to get ObserverBehaviour component attached to this GameObject
-        var observerBehaviour = GetComponent<ObserverBehaviour>();
+        var observerBehaviour = GetComponentInChildren<ObserverBehaviour>();
 
         if (observerBehaviour == null)
         {
@@ -38,11 +38,12 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         // Initialize creature data
         creaturePrefabs = new Dictionary<string, GameObject>
         {
-            { "test2_scaled", creatureA},
-            { "test1_scaled", creatureB}
+            {"test1_scaled", creatureA},
+            {"test2_scaled", creatureB}
         };
         attackButton.SetActive(false);
         Debug.Log("Creature Data initialized successfully.");
+        Debug.Log("Creature Prefabs: " + creaturePrefabs.Count);
     }
 
 
@@ -53,6 +54,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         if (status.Status != Status.TRACKED || !PhotonNetwork.IsConnected)
         {
             Debug.Log("Target not tracked or Photon not connected.");
+            return;
         }
 
         // Get the name of the scanned card
@@ -64,46 +66,42 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             Debug.Log("Creature Prefab found!");
 
             // Check if a creature has already been spawned
-            if (spawnedCreature == null)
+            if (!hasAssignedCreature)
             {
-                Debug.Log("Spawning creature...");
-                spawnedCreature = PhotonNetwork.Instantiate(creaturePrefab.name, behaviour.transform.position, behaviour.transform.rotation);
-                spawnedCreature.transform.parent = behaviour.transform;
-
-                // Assign the Creature component
-                playerCreature = spawnedCreature.GetComponent<Creature>();
-                if (playerCreature == null)
+                if (!spawnedCreatures.ContainsKey(targetName))
                 {
-                    Debug.Log("Creature component not found. Adding...");
-                    playerCreature = spawnedCreature.AddComponent<Creature>();
-                }
+                    Debug.Log($"Creature Prefab found for {targetName}!");
+                    GameObject newCreature = PhotonNetwork.Instantiate(creaturePrefab.name, behaviour.transform.position, behaviour.transform.rotation);
+                    newCreature.transform.parent = behaviour.transform;
 
-                PhotonView photonView = spawnedCreature.GetComponent<PhotonView>();
-                if (photonView.IsMine)
-                { 
-                    Debug.Log("Creature spawned by local player.");
-                    if (targetName == "test2_scaled")
+                    spawnedCreatures[targetName] = newCreature; // Store in dictionary
+                    PhotonView photonView = newCreature.GetComponent<PhotonView>();
+                    Debug.Log($"PhotonView IsMine: {photonView.IsMine}");
+
+                    if (photonView.IsMine)
                     {
-                        playerCreature.Initialize("Creature A", 
-                            10, 8, 100, 
-                            new List<string> { "Fireball", "Slash" });
+                        playerCreature = newCreature.GetComponent<Creature>();
+                        hasAssignedCreature = true;
+
+                        if (targetName == "test2_scaled")
+                        {
+                            playerCreature.Initialize("Creature A", 10, 8, 100, new List<string> { "Fireball", "Slash" });
+                        }
+                        else if (targetName == "test1_scaled")
+                        {
+                            playerCreature.Initialize("Creature B", 12, 6, 120, new List<string> { "Ice Blast", "Bite" });
+                        }
+
+                        UpdateUI(playerCreature, true);
+                        attackButton.SetActive(true);
                     }
-                    else if (targetName == "test1_scaled")
+                    else
                     {
-                        playerCreature.Initialize("Creature B", 
-                            12, 6, 120, 
-                            new List<string> { "Ice Blast", "Bite" });
+                        Debug.Log("Opponent's creature detected.");
+                        opponentCreature = newCreature.GetComponent<Creature>();
+                        UpdateUI(opponentCreature, false);
                     }
-                    hasAssignedCreature = true;
-                    UpdateUI(playerCreature, true);
-                    attackButton.SetActive(true); // Show attack button for the player
                 }
-            }
-            else
-            {
-                Debug.Log("Creature already spawned!");
-                UpdateUI(playerCreature, false);
-                attackButton.SetActive(false); 
             }
         }
         else
