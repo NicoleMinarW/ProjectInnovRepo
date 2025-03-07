@@ -12,7 +12,7 @@ public class BattleUI : MonoBehaviour
     public Slider hpSlider; 
     public Button[] moveBtn; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
-    private User  player; 
+    private User player; 
     public BattleScript battleManager; 
 
     public void SetupUI(BaseMonster monster, User user){
@@ -67,4 +67,9 @@ public class BattleUI : MonoBehaviour
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
 
     }
+    void OnEndTurnButton()
+    {
+
+    }
+
 }

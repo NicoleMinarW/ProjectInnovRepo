@@ -5,16 +5,26 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using Photon.Pun;
+using Photon.Realtime;
+using Photon.Pun.Demo.PunBasics;
 
 public enum GameState {
-    START, PLAYER1TURN, PLAYER2TURN, WON, LOST 
+    START, PLAYERTURN, ENEMYTURN, WAITING, WON, LOST 
 }
 
-public class BattleScript : MonoBehaviour {
-    public GameState state; 
+public class BattleScript : MonoBehaviourPunCallbacks {
+    public static BattleScript Instance; 
+    public GameState state;
+    public BaseMonster myMonster; 
+    public BaseMonster enemyMonster;
+    public User player;
+    public User enemy;
+    public MoveSet selectedMove;
+    private bool isMyTurn; 
+
     public GameObject player1; 
     public GameObject player2; 
-    // public GameObject playerprefab;
     public Transform player1Position; 
     public Transform player2Position; 
     User UnitPlayer1; 
@@ -23,13 +33,39 @@ public class BattleScript : MonoBehaviour {
     public GameObject monsterBPrefab; 
     public BattleUI player1UI; 
     public BattleUI player2UI; 
-    public TMPro.TextMeshProUGUI PlayerTurn; 
+    public TMPro.TextMeshProUGUI turnIndicator;
+    public UnityEngine.UI.Button endTurnButton;
 
 
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
     void Start(){
-        state = GameState.START; 
+        isMyTurn = PhotonNetwork.IsMasterClient;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPC_SyncTurn", RpcTarget.Others, 1);
+        }
+    
+        if (PhotonNetwork.IsMasterClient)
+        {
+            state = GameState.PLAYERTURN; 
+        }
+        else
+        {
+            state = GameState.ENEMYTURN; 
+        }
+        //state = GameState.START; 
+
         StartCoroutine(SetupBattle()); 
     }
+
+
     IEnumerator SetupBattle(){
         // GameObject Player1Obj = new GameObject("Player")
         UnitPlayer1 = player1.GetComponent<User>(); 
@@ -105,55 +141,65 @@ public class BattleScript : MonoBehaviour {
 
         player1UI.SetupUI(UnitPlayer1.PlayerMonster, UnitPlayer1); 
         player2UI.SetupUI(UnitPlayer2.PlayerMonster, UnitPlayer2); 
-        state = GameState.PLAYER1TURN;
+        state = GameState.PLAYERTURN;
         UpdateTurn();
         // player1Turn(); 
         yield return null; 
         
     }
-    // public void player1Turn(){
-    //     PlayerTurn.text = "Player 1"; 
-    // }
-    // public void player2Turn(){
-    //     PlayerTurn.text = "Player 2"; 
-    // }
+
     public void AttackBtn1(){
-        if(state != GameState.PLAYER1TURN){
+        if(state != GameState.PLAYERTURN){
             return; 
         }
         // StartCoroutine(PlayerAttack(UnitPlayer1, UnitPlayer2, chosenMove)); 
 
     }
-    // IEnumerator PlayerAttack(Player attacker, Player opponent, MoveSet chosenAttack){
-    //     if(state != GameState.PLAYER1TURN && state != GameState.PLAYER2TURN){
-    //         yield break; 
-    //     }
-    //     BaseMonster attackerMonster = attacker.PlayerMonster; 
-    //     BaseMonster opponentMonster = opponent.PlayerMonster; 
-    //     bool isEnemyDead = chosenAttack.Execute(attacker, opponent, attackerMonster, opponentMonster); 
-    //     yield return new WaitForSeconds(3f); 
-    //     if (isEnemyDead){
-    //         state = GameState.WON; 
-    //     }
-    //     else{
-    //         state = GameState.PLAYER2TURN; 
-    //     }
 
-    // }
     public void ExecuteMove(MoveSet chosenMove){
-        if(state == GameState.PLAYER1TURN){
-            StartCoroutine(PlayerUseMove(UnitPlayer1, UnitPlayer2, chosenMove)); 
+        if(!isMyTurn)
+        {
+            return;
         }
-        else if (state == GameState.PLAYER2TURN){
-            StartCoroutine(PlayerUseMove(UnitPlayer2, UnitPlayer1, chosenMove)); 
-
+        if(chosenMove != null)
+        {
+            if (!UnitPlayer1.costActionPoints(chosenMove.APCost))
+            {
+                Debug.Log("Not enough AP to use this move!");
+                return;
+            }
+            bool isDead = chosenMove.Execute(UnitPlayer1, UnitPlayer2, UnitPlayer1.PlayerMonster, UnitPlayer2.PlayerMonster);
+            photonView.RPC("RPC_ApplyDamage", RpcTarget.All, enemyMonster._currHP);
+            if (isDead)
+            {
+                Debug.Log($"{enemyMonster.data.monsterName} has been defeated!");
+                EndBattle();
+            }
+            else
+            {
+                // Change turns
+                isMyTurn = false;
+                photonView.RPC("RPC_SyncTurn", RpcTarget.All, 0);
+            }
         }
     }
+    [PunRPC]
+    void RPC_ApplyDamage(int newHP)
+    {
+        enemyMonster._currHP = newHP;
+    }
+
+    [PunRPC]
+    void RPC_SyncTurn(int newTurn)
+    {
+        isMyTurn = (newTurn == 1);
+    }
+
     IEnumerator PlayerUseMove(User user, User opponent, MoveSet chosenMove)
     {
         Debug.Log($"[PlayerUseMove] Called by: {user.gameObject.name}");
 
-        if (state != GameState.PLAYER1TURN && state != GameState.PLAYER2TURN){
+        if (state != GameState.PLAYERTURN && state != GameState.ENEMYTURN){
             yield break;
         }
 
@@ -169,7 +215,7 @@ public class BattleScript : MonoBehaviour {
 
         if (isTargetDefeated)
         {
-            if (state == GameState.PLAYER1TURN){
+            if (state == GameState.PLAYERTURN){
                 state = GameState.WON; 
             }
             else{
@@ -183,16 +229,25 @@ public class BattleScript : MonoBehaviour {
         }
 
     }
-    public void UpdateTurn(){ 
-        Debug.Log($"Before turn switch: {state.ToString()}");
-        if (state == GameState.PLAYER1TURN){
-            state = GameState.PLAYER2TURN; 
+    public void UpdateTurn(){
+        if (PhotonNetwork.IsMasterClient)
+        {
+            state = GameState.ENEMYTURN;
+            UnitPlayer1._AP = Mathf.Min(UnitPlayer1._AP + 4, 6); 
         }
-        else if(state == GameState.PLAYER2TURN){
-            state = GameState.PLAYER1TURN; 
+        else
+        {
+            state = GameState.PLAYERTURN; 
+            UnitPlayer2._AP = Mathf.Min(UnitPlayer2._AP + 4, 6);
         }
-        UpdateTurnUI(); 
-        Debug.Log($"current turn:{state.ToString()}");
+        photonView.RPC("RPC_SyncAP", RpcTarget.All, UnitPlayer1._AP, UnitPlayer2._AP);
+        photonView.RPC("SyncTurn", RpcTarget.Others, (int)state);
+    }
+
+    [PunRPC]
+    void SyncTurn(int newState)
+    {
+        state = (GameState)newState;
     }
 
     public void EndBattle(){
@@ -203,28 +258,23 @@ public class BattleScript : MonoBehaviour {
             btn.interactable = false; 
         }
         if (state == GameState.WON){
-            PlayerTurn.text = "Player 1 Wins"; 
+            turnIndicator.text = "Player 1 Wins"; 
         }
         else if (state == GameState.LOST){
-            PlayerTurn.text = "Player 2 Wins"; 
+            turnIndicator.text = "Player 2 Wins"; 
         }
         // return to somewhere 
     }
+    void RPC_SyncAP(int player1AP, int player2AP)
+    {
+        UnitPlayer1._AP = player1AP;
+        UnitPlayer2._AP = player2AP;
+    }
     public void UpdateTurnUI(){
-        // if (state == GameState.PLAYER1TURN){
-        //     PlayerTurn.text = "Player 1 Turn"; 
-        //     SetMoveBtn(player1UI, true); 
-        //     SetMoveBtn(player2UI, false); 
-        // }
-        // else if (state == GameState.PLAYER2TURN){
-        //     PlayerTurn.text= "Player 2 Turn"; 
-        //     SetMoveBtn(player1UI, false); 
-        //     SetMoveBtn(player2UI, true); 
-        // }
         foreach (UnityEngine.UI.Button btn in player1UI.moveBtn)
-            btn.interactable = (state == GameState.PLAYER1TURN);
+            btn.interactable = (state == GameState.PLAYERTURN);
         foreach (UnityEngine.UI.Button btn in player2UI.moveBtn)
-            btn.interactable = (state == GameState.PLAYER2TURN);
+            btn.interactable = (state == GameState.ENEMYTURN);
     }
     void SetMoveBtn(BattleUI ui, bool set){
         foreach(UnityEngine.UI.Button btn in ui.moveBtn){

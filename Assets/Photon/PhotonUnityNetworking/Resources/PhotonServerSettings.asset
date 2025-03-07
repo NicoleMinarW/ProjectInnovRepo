@@ -40,6 +40,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - EndTurn
+  - RPC_ApplyDamage
+  - RPC_SyncTurn
+  - SyncTurn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
