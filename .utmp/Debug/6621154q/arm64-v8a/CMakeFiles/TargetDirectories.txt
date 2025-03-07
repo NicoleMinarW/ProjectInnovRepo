@@ -1,0 +1,5 @@
+C:/Users/Nicole Minar Widjaja/plsworkpls/ProjectInnovRepo/.utmp/Debug/6621154q/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Nicole Minar Widjaja/plsworkpls/ProjectInnovRepo/.utmp/Debug/6621154q/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/Nicole Minar Widjaja/plsworkpls/ProjectInnovRepo/.utmp/Debug/6621154q/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/Nicole Minar Widjaja/plsworkpls/ProjectInnovRepo/.utmp/Debug/6621154q/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/Nicole Minar Widjaja/plsworkpls/ProjectInnovRepo/.utmp/Debug/6621154q/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

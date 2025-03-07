@@ -2,7 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using System.IO;
 
-public class PleyerManager : MonoBehaviourPunCallbacks
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -16,7 +16,8 @@ public class PleyerManager : MonoBehaviourPunCallbacks
     void CreateController()
     {
         Debug.Log("Creating Player Controller");
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate("PhotonPrefabs/PlayerController", Vector3.zero, Quaternion.identity);
+
     }
     void Start()
     {

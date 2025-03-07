@@ -4,25 +4,17 @@ using Vuforia;
 using TMPro;
 using System.Collections.Generic;
 
-public class ARCardManager : MonoBehaviour
+public class ARCardManager : MonoBehaviourPunCallbacks
 {
     public GameObject creatureA, creatureB;
     public TextMeshProUGUI nameText, attackText, defenseText, hpText, attacksText;
+    public TextMeshProUGUI opponentNameText, opponentHpText;
     public GameObject attackButton;
 
     private GameObject spawnedCreature;
     private Creature playerCreature, opponentCreature;
     private Dictionary<string, GameObject> creaturePrefabs;
-
-    [System.Serializable]
-    public struct CreatureStats
-    {
-        public string creatureName;
-        public int attack;
-        public int defense;
-        public int hp;
-        public List<string> attacks;
-    }
+    private bool hasAssignedCreature = false;
 
     void Start()
     {
@@ -31,25 +23,24 @@ public class ARCardManager : MonoBehaviour
 
         if (observerBehaviour == null)
         {
-            observerBehaviour = GetComponentInChildren<ObserverBehaviour>(); // Double-check in children
-        }
+            Debug.LogError("ObserverBehaviour NOT found! Ensure it is correctly attached to the Image Target.");
+            observerBehaviour = GetComponentInChildren<ObserverBehaviour>(); 
+            Debug.Log("ObserverBehaviour found in children.");
 
+        }
+        
         if (observerBehaviour != null)
         {
             Debug.Log("ObserverBehaviour found and event subscribed!");
             observerBehaviour.OnTargetStatusChanged += OnARCardDetected;
         }
-        else
-        {
-            Debug.LogError("ObserverBehaviour NOT found! Ensure it is correctly attached to the Image Target.");
-        }
 
         // Initialize creature data
         creaturePrefabs = new Dictionary<string, GameObject>
-    {
-        { "test2_scaled", creatureA},
-        { "test1_scaled", creatureB}
-    };
+        {
+            { "test2_scaled", creatureA},
+            { "test1_scaled", creatureB}
+        };
         attackButton.SetActive(false);
         Debug.Log("Creature Data initialized successfully.");
     }
@@ -62,7 +53,6 @@ public class ARCardManager : MonoBehaviour
         if (status.Status != Status.TRACKED || !PhotonNetwork.IsConnected)
         {
             Debug.Log("Target not tracked or Photon not connected.");
-            return;
         }
 
         // Get the name of the scanned card
@@ -71,8 +61,12 @@ public class ARCardManager : MonoBehaviour
 
         if (creaturePrefabs.TryGetValue(targetName, out GameObject creaturePrefab))
         {
+            Debug.Log("Creature Prefab found!");
+
+            // Check if a creature has already been spawned
             if (spawnedCreature == null)
             {
+                Debug.Log("Spawning creature...");
                 spawnedCreature = PhotonNetwork.Instantiate(creaturePrefab.name, behaviour.transform.position, behaviour.transform.rotation);
                 spawnedCreature.transform.parent = behaviour.transform;
 
@@ -80,43 +74,63 @@ public class ARCardManager : MonoBehaviour
                 playerCreature = spawnedCreature.GetComponent<Creature>();
                 if (playerCreature == null)
                 {
+                    Debug.Log("Creature component not found. Adding...");
                     playerCreature = spawnedCreature.AddComponent<Creature>();
                 }
 
-                // Assign stats
-                if (targetName == "test2_scaled")
-                {
-                    playerCreature.creatureName = "Creature A";
-                    playerCreature.attack = 10;
-                    playerCreature.defense = 8;
-                    playerCreature.hp = 100;
-                    playerCreature.attacks = new List<string> { "Fireball", "Slash" };
+                PhotonView photonView = spawnedCreature.GetComponent<PhotonView>();
+                if (photonView.IsMine)
+                { 
+                    Debug.Log("Creature spawned by local player.");
+                    if (targetName == "test2_scaled")
+                    {
+                        playerCreature.Initialize("Creature A", 
+                            10, 8, 100, 
+                            new List<string> { "Fireball", "Slash" });
+                    }
+                    else if (targetName == "test1_scaled")
+                    {
+                        playerCreature.Initialize("Creature B", 
+                            12, 6, 120, 
+                            new List<string> { "Ice Blast", "Bite" });
+                    }
+                    hasAssignedCreature = true;
+                    UpdateUI(playerCreature, true);
+                    attackButton.SetActive(true); // Show attack button for the player
                 }
-                else if (targetName == "test1_scaled")
-                {
-                    playerCreature.creatureName = "Creature B";
-                    playerCreature.attack = 12;
-                    playerCreature.defense = 6;
-                    playerCreature.hp = 120;
-                    playerCreature.attacks = new List<string> { "Ice Blast", "Bite" };
-                }
-
-                UpdateUI(playerCreature);
-                attackButton.SetActive(true); // Show attack button for the player
+            }
+            else
+            {
+                Debug.Log("Creature already spawned!");
+                UpdateUI(playerCreature, false);
+                attackButton.SetActive(false); 
             }
         }
-
+        else
+        {
+            Debug.LogError("Creature Prefab not found!");
+        }
     }
 
-    private void UpdateUI(Creature stats)
+    private void UpdateUI(Creature stats, bool isOwner)
     {
         if (nameText && attackText && defenseText && hpText && attacksText)
         {
-            nameText.text = $"Summoned: {stats.creatureName}";
-            attackText.text = $"Attack: {stats.attack}";
-            defenseText.text = $"Defense: {stats.defense}";
-            hpText.text = $"HP: {stats.hp}";
-            attacksText.text = $"Attacks: {string.Join(", ", stats.attacks)}";
+            if (isOwner)
+            {
+                Debug.Log("Updating UI for player creature...");
+                nameText.text = $"{PhotonNetwork.NickName}'s Summoned: {stats.creatureName}";
+                attackText.text = $"Attack: {stats.attack}";
+                defenseText.text = $"Defense: {stats.defense}";
+                hpText.text = $"HP: {stats.hp}";
+                attacksText.text = $"Attacks: {string.Join(", ", stats.attacks)}";
+            }
+            else
+            {
+                Debug.Log("Updating UI for opponent creature...");
+                opponentNameText.text = $"Opponent: {stats.creatureName}";
+                opponentHpText.text = $"HP: {stats.hp}";
+            }
         }
         else
         {
