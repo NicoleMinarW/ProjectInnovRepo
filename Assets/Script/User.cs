@@ -7,9 +7,9 @@ public class User : MonoBehaviour
 {
     public string _username;
     public int _AP;
-    [SerializeField] BaseMonster[] _monsterList; 
-    public List<BaseMonster> MonsterList{get; private set;} = new List<BaseMonster>(); 
-    public BaseMonster PlayerMonster;
+    //[SerializeField] BaseMonster[] _monsterList; 
+    //public List<BaseMonster> MonsterList{get; private set;} = new List<BaseMonster>(); 
+    //public BaseMonster PlayerMonster;
     public bool costActionPoints(int cost){
         if(_AP >= cost){
             _AP -= cost; 
@@ -20,12 +20,12 @@ public class User : MonoBehaviour
         }
     }
 
-    public  void addMonster(BaseMonster monster){
-        MonsterList.Add(monster); 
-    }
-    public void changeMonster(){
-        PlayerMonster = MonsterList.ElementAt(MonsterList.IndexOf(PlayerMonster)+1); 
-    }
+    //public  void addMonster(BaseMonster monster){
+    //    MonsterList.Add(monster); 
+    //}
+    //public void changeMonster(){
+    //    PlayerMonster = MonsterList.ElementAt(MonsterList.IndexOf(PlayerMonster)+1); 
+    //}
 
 
 
