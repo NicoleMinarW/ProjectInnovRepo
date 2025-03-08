@@ -6,10 +6,14 @@ using System.Collections.Generic;
     public class BaseMonster : MonoBehaviour    
     {
         public MonsterData data; 
-        public float _currHP; 
-        public float _defense;
-        public int _defCounter;
-        public float _buff;
+        private float currHP;
+        public float _currHP {get => currHP; set => currHP=value;} 
+        private float defense; 
+        public float _defense {get=>defense; set=>defense=value;}
+        private int defCounter;
+        public int _defCounter {get=>defCounter; set=>defCounter=value;}
+        private float buff; 
+        public float _buff{get=>buff; set=>buff=value;}
         private void Awake(){
             if(data!=null){
                 _currHP = data.maxHP; 
