@@ -964,7 +964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3, y: 0}
+  m_AnchoredPosition: {x: -2.999939, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &247868021
@@ -1036,9 +1036,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _username: 
   _AP: 0
-  _monsterList:
-  - {fileID: 764580164}
-  PlayerMonster: {fileID: 0}
 --- !u!4 &278005535
 Transform:
   m_ObjectHideFlags: 0
@@ -3516,17 +3513,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754917075}
   m_CullTransparentMesh: 1
---- !u!114 &764580164 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -8054772611639769465, guid: a94b1c9cf2074cc40a2d3b2a608d0460, type: 3}
-  m_PrefabInstance: {fileID: 1378211927}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1760768060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2574e81434e01e499902d2c0696b146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &800642246
 GameObject:
   m_ObjectHideFlags: 0
@@ -6336,9 +6322,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _username: 
   _AP: 0
-  _monsterList:
-  - {fileID: 1753999276}
-  PlayerMonster: {fileID: 0}
 --- !u!4 &1429842979
 Transform:
   m_ObjectHideFlags: 0
@@ -6885,6 +6868,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  myMonster: {fileID: 0}
+  enemyMonster: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
+  selectedMove: {fileID: 0}
   player1: {fileID: 278005533}
   player2: {fileID: 1429842977}
   player1Position: {fileID: 970774221}
@@ -6893,7 +6881,8 @@ MonoBehaviour:
   monsterBPrefab: {fileID: 427921090}
   player1UI: {fileID: 975752398}
   player2UI: {fileID: 659256442}
-  PlayerTurn: {fileID: 1520368017}
+  turnIndicator: {fileID: 0}
+  endTurnButton: {fileID: 0}
 --- !u!4 &1527640352
 Transform:
   m_ObjectHideFlags: 0
@@ -8342,17 +8331,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1722160309}
   m_CullTransparentMesh: 1
---- !u!114 &1753999276 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -8054772611639769465, guid: a94b1c9cf2074cc40a2d3b2a608d0460, type: 3}
-  m_PrefabInstance: {fileID: 1935275131}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427921090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2574e81434e01e499902d2c0696b146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1760768060 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3617241932005378825, guid: a94b1c9cf2074cc40a2d3b2a608d0460, type: 3}

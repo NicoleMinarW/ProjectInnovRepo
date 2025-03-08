@@ -47,33 +47,23 @@ public class BattleScript : MonoBehaviourPunCallbacks {
         }
     }
     void Start(){
-        isMyTurn = PhotonNetwork.IsMasterClient;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("RPC_SyncTurn", RpcTarget.Others, 1);
-        }
-    
+        // isMyTurn = PhotonNetwork.IsMasterClient;
         if (PhotonNetwork.IsMasterClient)
         {
             state = GameState.PLAYERTURN; 
+            isMyTurn = true; 
+            photonView.RPC("RPC_SyncTurn", RpcTarget.Others, 2);
         }
-        else
-        {
+        else{
             state = GameState.ENEMYTURN; 
+            isMyTurn = false; 
         }
-        //state = GameState.START; 
 
         StartCoroutine(SetupBattle()); 
     }
 
 
     IEnumerator SetupBattle(){
-        // GameObject Player1Obj = new GameObject("Player")
-        //UnitPlayer1 = player1.GetComponent<User>(); 
-        //UnitPlayer2 = player2.GetComponent<User>(); 
-        // GameObject monster1Obj = Instantiate(monsterAPrefab, player1Position.position, Quaternion.identity);
-        // GameObject monster2Obj = Instantiate(monsterBPrefab, player2Position.position, Quaternion.identity);  
-
         player = player1.GetComponent<User>();
         enemy = player2.GetComponent<User>();
 
@@ -84,73 +74,19 @@ public class BattleScript : MonoBehaviourPunCallbacks {
         // how to set GameOBJ player to class Player  
         yield return new WaitForSeconds(2f); 
         
-        //BaseMonster monster1 = null; 
-        //BaseMonster monster2 = null; 
-        // BaseMonster monster1 = monster1Obj.GetComponent<BaseMonster>();
-        // BaseMonster monster2 = monster2Obj.GetComponent<BaseMonster>();
-
         if (myMonster == null) {
             GameObject monster1Obj = Instantiate(monsterAPrefab, player1Position.position, Quaternion.identity);
             //monster1 = monster1Obj.GetComponent<BaseMonster>();
             //UnitPlayer1.addMonster(monster1);
             myMonster = monster1Obj.GetComponent<BaseMonster>();
         }
-        //else{
-        //    monster1 = UnitPlayer1.PlayerMonster; 
-        //}
+
         if (enemyMonster == null) {
             GameObject monster2Obj = Instantiate(monsterBPrefab, player2Position.position, Quaternion.identity); // maybe call card manager?? 
             //monster2 = monster2Obj.GetComponent<BaseMonster>();
             //UnitPlayer2.addMonster(monster2);
             enemyMonster = monster2Obj.GetComponent<BaseMonster>();
         }
-        //else{
-        //    monster2 = UnitPlayer2.PlayerMonster; 
-        //}
-        //if (UnitPlayer1.PlayerMonster == null && UnitPlayer1.MonsterList.Count > 0) {
-        //    UnitPlayer1.PlayerMonster = UnitPlayer1.MonsterList[0];
-        //}
-        //if (UnitPlayer2.PlayerMonster == null && UnitPlayer2.MonsterList.Count > 0) {
-        //    UnitPlayer2.PlayerMonster = UnitPlayer2.MonsterList[0];
-        //}
-
-        // BaseMonster monster1 = Player.
-        // monster1.data = new MonsterData(); 
-        // monster2.data = new MonsterData(); 
-        //monster1.data = Resources.Load<MonsterData>("Baldy"); 
-        //monster2.data = Resources.Load<MonsterData>("Vulcano");
-
-        //if (monster1.data == null || monster2.data == null) {
-        //    Debug.LogError("MonsterData is NULL! Make sure MonsterData is in a Resources folder.");
-        //} else {
-        //    Debug.Log($"Assigned {monster1.data.monsterName} to Player 1's monster.");
-        //    Debug.Log($"Assigned {monster2.data.monsterName} to Player 2's monster.");
-        //}
-        //monster1._currHP = monster1.data.maxHP; 
-        //monster2._currHP = monster2.data.maxHP; 
-
-        //UnitPlayer1.addMonster(monster1);
-        //UnitPlayer2.addMonster(monster2);
-
-        //Debug.Log($"Before Assignment: UnitPlayer1.MonsterList Count = {UnitPlayer1.MonsterList.Count}");
-        //Debug.Log($"Before Assignment: UnitPlayer2.MonsterList Count = {UnitPlayer2.MonsterList.Count}");
-        //if (UnitPlayer1.MonsterList.Count > 0) {
-        //    UnitPlayer1.PlayerMonster = UnitPlayer1.MonsterList[0];
-        //} else {
-        //    Debug.LogError("UnitPlayer1.MonsterList is EMPTY when trying to assign PlayerMonster!");
-        //}
-
-        //if (UnitPlayer2.MonsterList.Count > 0) {
-        //    UnitPlayer2.PlayerMonster = UnitPlayer2.MonsterList[0];
-        //} else {
-        //    Debug.LogError("UnitPlayer2.MonsterList is EMPTY when trying to assign PlayerMonster!");
-        //}
-        //// UnitPlayer1.PlayerMonster = UnitPlayer1.MonsterList[0];
-        //// UnitPlayer2.PlayerMonster = UnitPlayer2.MonsterList[0];
-
-        //player1UI.SetupUI(UnitPlayer1.PlayerMonster, UnitPlayer1); 
-        //player2UI.SetupUI(UnitPlayer2.PlayerMonster, UnitPlayer2); 
-
         player1UI.SetupUI(myMonster, player);
         player2UI.SetupUI(enemyMonster, enemy);
 
@@ -215,45 +151,16 @@ public class BattleScript : MonoBehaviourPunCallbacks {
     [PunRPC]
     void RPC_SyncTurn(int newTurn)
     {
-        isMyTurn = (newTurn == 1);
+        isMyTurn = (PhotonNetwork.IsMasterClient && newTurn ==1) || (!PhotonNetwork.IsMasterClient && newTurn ==2);
+        endTurnButton.interactable = isMyTurn; 
+        if (isMyTurn){
+            state = GameState.PLAYERTURN; 
+        }
+        else{
+            state=GameState.ENEMYTURN; 
+        }
     }
-    //IEnumerator PlayerUseMove(User user, User opponent, MoveSet chosenMove)
-    //{
-    //    Debug.Log($"[PlayerUseMove] Called by: {user.gameObject.name}");
 
-    //    if (state != GameState.PLAYERTURN && state != GameState.ENEMYTURN)
-    //    {
-    //        yield break;
-    //    }
-
-    //    BaseMonster attacker = user.PlayerMonster;
-    //    BaseMonster target = opponent.PlayerMonster;
-
-    //    bool isTargetDefeated = chosenMove.Execute(user, opponent, attacker, target);
-
-    //    player1UI.UpdateHPSlider(UnitPlayer1.PlayerMonster._currHP);
-    //    player2UI.UpdateHPSlider(UnitPlayer2.PlayerMonster._currHP);
-
-    //    yield return new WaitForSeconds(1f);
-
-    //    if (isTargetDefeated)
-    //    {
-    //        if (state == GameState.PLAYERTURN)
-    //        {
-    //            state = GameState.WON;
-    //        }
-    //        else
-    //        {
-    //            state = GameState.LOST;
-    //        }
-    //        EndBattle();
-    //    }
-    //    else
-    //    {
-    //        UpdateTurn();
-    //    }
-
-    //}
     IEnumerator PlayerUseMove(User user, User opponent, MoveSet chosenMove)
     {
         Debug.Log($"[PlayerUseMove] Called by: {user.gameObject.name}");
@@ -310,8 +217,6 @@ public class BattleScript : MonoBehaviourPunCallbacks {
         player2UI.UpdateHPSlider(enemyMonster._currHP);
     }
 
-
-
     public void UpdateTurn(){
         if (PhotonNetwork.IsMasterClient)
         {
@@ -363,6 +268,13 @@ public class BattleScript : MonoBehaviourPunCallbacks {
         foreach(UnityEngine.UI.Button btn in ui.moveBtn){
             btn.interactable = set; 
         }
+    }
+    public void EndTurn()
+    {
+        if (!PhotonNetwork.IsMasterClient) return; // Only Master Client manages turns
+
+        int nextTurn = isMyTurn ? 2 : 1; // Swap turns (1 → 2, 2 → 1)
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, nextTurn);
     }
     
 }
