@@ -58,7 +58,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     public void StartBattle() {
-        if(PhotonNetwork.IsMasterClient) {
+        Debug.Log("Starting Battle (BattleScript)");
+        if (PhotonNetwork.IsMasterClient) {
             state = GameState.PLAYERTURN;
             isMyTurn = true;
             turnIndicator.text = "Your Turn!";

@@ -63,6 +63,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        Debug.Log("StartGame called");
         if (string.IsNullOrEmpty(assignedCardID)) {
             return;
         }

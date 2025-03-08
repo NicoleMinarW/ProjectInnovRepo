@@ -1374,7 +1374,7 @@ GameObject:
   - component: {fileID: 1151855071}
   - component: {fileID: 1151855074}
   - component: {fileID: 1151855073}
-  - component: {fileID: 1151855072}
+  - component: {fileID: 1151855075}
   m_Layer: 0
   m_Name: test1_scaled
   m_TagString: Untagged
@@ -1398,25 +1398,6 @@ Transform:
   - {fileID: 1357390570}
   m_Father: {fileID: 1596192397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1151855072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151855070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1151855074}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: test1_scaled
-  mDatasetName: Vuforia/--- EMPTY ---.xml
-  mCastedBehaviour: {fileID: 1151855074}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1151855073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,7 +1468,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1151855072}
+  mPreview: {fileID: 1151855075}
+--- !u!114 &1151855075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151855070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1151855074}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: test1_scaled
+  mDatasetName: Vuforia/--- EMPTY ---.xml
+  mCastedBehaviour: {fileID: 1151855074}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1248408096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,9 +1938,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1439486184}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.589334, y: 2.6302109, z: 1}
+  m_LocalScale: {x: 3.5893338, y: 2.6302109, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1298940548}
@@ -1948,7 +1948,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 407, y: -233}
+  m_AnchoredPosition: {x: 406.99997, y: -232.99998}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1439486186
@@ -2084,7 +2084,7 @@ MonoBehaviour:
   player1UI: {fileID: 0}
   player2UI: {fileID: 0}
   turnIndicator: {fileID: 1147040602}
-  endTurnButton: {fileID: 0}
+  endTurnButton: {fileID: 1901335504}
 --- !u!4 &1463476103
 Transform:
   m_ObjectHideFlags: 0
@@ -2217,6 +2217,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2076187936}
   - {fileID: 1151855071}
   - {fileID: 1695564659}
   m_Father: {fileID: 0}
@@ -2232,7 +2233,7 @@ GameObject:
   - component: {fileID: 1695564659}
   - component: {fileID: 1695564662}
   - component: {fileID: 1695564661}
-  - component: {fileID: 1695564660}
+  - component: {fileID: 1695564663}
   m_Layer: 0
   m_Name: test2_scaled
   m_TagString: Untagged
@@ -2256,25 +2257,6 @@ Transform:
   - {fileID: 530038847}
   m_Father: {fileID: 1596192397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1695564660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695564658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 1695564662}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: test2_scaled
-  mDatasetName: Vuforia/--- EMPTY ---.xml
-  mCastedBehaviour: {fileID: 1695564662}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &1695564661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2345,7 +2327,26 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1695564660}
+  mPreview: {fileID: 1695564663}
+--- !u!114 &1695564663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695564658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 1695564662}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: test2_scaled
+  mDatasetName: Vuforia/--- EMPTY ---.xml
+  mCastedBehaviour: {fileID: 1695564662}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &1901335502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2701,7 +2702,7 @@ RectTransform:
   - {fileID: 1439486185}
   - {fileID: 1147040604}
   - {fileID: 1901335503}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1596192397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2749,7 +2750,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 961739753}
   - {fileID: 203844589}
-  - {fileID: 2076187936}
   - {fileID: 923072377}
   - {fileID: 1439265999}
   - {fileID: 1596192397}
