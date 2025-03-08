@@ -11,6 +11,9 @@ public class UIManager : MonoBehaviour
     public Slider hpSlider; 
     public Button[] moveBtn; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
+    public GameObject APContainer; 
+    public GameObject APIcon; 
+    private List<GameObject> APIcons = new List<GameObject>();
     
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
@@ -58,4 +61,14 @@ public class UIManager : MonoBehaviour
 
     }
     
+    public void UpdateAPDisplay(int currentAP){
+        foreach(GameObject icon in APIcons){
+            Destroy(icon);
+        }
+        APIcons.Clear(); 
+        for(int i=0; i<currentAP; i++){
+            GameObject icon = Instantiate(APIcon, APContainer.transform); 
+            APIcons.Add(icon); 
+        }
+    }
 }

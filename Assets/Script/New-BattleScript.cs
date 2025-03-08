@@ -22,8 +22,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public Transform player2Position;
     List<GameObject> monsterPrefabs;
 
-    public BattleUI player1UI;
-    public BattleUI player2UI;
+    public BattleUI playerUI;
+
     public TMPro.TextMeshProUGUI turnIndicator;
     public UnityEngine.UI.Button endTurnButton;
     private Dictionary<string, GameObject> creatureDictionary;
@@ -107,6 +107,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             isMyTurn = false;
             photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
+        UIManager.UpdateAPDisplay(player._AP);
     }
 
     public void EndTurn() {
