@@ -6,16 +6,15 @@ using System.Collections.Generic;
 
 public class ARCardManager : MonoBehaviourPunCallbacks
 {
-    public GameObject creaturePrefabA, creaturePrefabB;
-    //public TextMeshProUGUI nameText, attackText, defenseText, hpText, attacksText;
-    //public TextMeshProUGUI opponentNameText, opponentHpText;
-    public GameObject attackButton;
+    public static ARCardManager Instance;  
 
-    //private Dictionary<string, GameObject> spawnedCreatures = new Dictionary<string, GameObject>();
-    //private Creature playerCreature, opponentCreature;
-    //private Dictionary<string, GameObject> creaturePrefabs;
-    private bool hasAssignedCreature = false;
-
+    private string assignedCardID;
+    private bool isLocked = false;
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }    
     void Start()
     {
         // Try to get ObserverBehaviour component attached to this GameObject
@@ -35,13 +34,6 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             observerBehaviour.OnTargetStatusChanged += OnARCardDetected;
         }
 
-        //// Initialize creature data
-        //creaturePrefabs = new Dictionary<string, GameObject>
-        //{
-        //    {"test1_scaled", creatureA},
-        //    {"test2_scaled", creatureB}
-        //};
-        attackButton.SetActive(false);
     }
 
 
@@ -54,99 +46,32 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             Debug.Log("Target not tracked or Photon not connected.");
             return;
         }
-
-        // Get the name of the scanned card
         string targetName = behaviour.TargetName; 
         Debug.Log("Card Detected: " + targetName);
-
-        if (targetName == "CardA" || targetName == "CardB")
-        {
-            Debug.Log("Creature Prefab found!");
-
-            // Check if a creature has already been spawned
-            if (!hasAssignedCreature)
-            {
-                if(!hasAssignedCreature)
-                //if (!spawnedCreatures.ContainsKey(targetName))
-                {
-                    Debug.Log($"Creature Prefab found for {targetName}!");
-                    GameObject creaturePrefab = targetName == "CardA" ? creaturePrefabA : creaturePrefabB;
-                    GameObject newCreature = PhotonNetwork.Instantiate(creaturePrefab.name, behaviour.transform.position, behaviour.transform.rotation);
-                    newCreature.transform.parent = behaviour.transform;
-
-                    //spawnedCreatures[targetName] = newCreature; // Store in dictionary
-                    PhotonView photonView = newCreature.GetComponent<PhotonView>();
-                    Debug.Log($"PhotonView IsMine: {photonView.IsMine}");
-
-                    if (photonView.IsMine)
-                    {
-                        //playerCreature = newCreature.GetComponent<Creature>();
-                        //hasAssignedCreature = true;
-
-                        //if (targetName == "test2_scaled")
-                        //{
-                        //    playerCreature.Initialize("Creature A", 10, 8, 100, new List<string> { "Fireball", "Slash" });
-                        //}
-                        //else if (targetName == "test1_scaled")
-                        //{
-                        //    playerCreature.Initialize("Creature B", 12, 6, 120, new List<string> { "Ice Blast", "Bite" });
-                        //}
-
-                        BattleScript.Instance.AssignPlayerCreature(newCreature.GetComponent<BaseMonster>(), targetName);
-                        hasAssignedCreature = true;
-                        //attackButton.SetActive(true);
-
-                        //UpdateUI(playerCreature, true);
-                        attackButton.SetActive(true);
-                    }
-                    else
-                    {
-                        Debug.Log("Opponent's creature detected.");
-                        //opponentCreature = newCreature.GetComponent<Creature>();
-                        BattleScript.Instance.AssignOpponentCreature(newCreature.GetComponent<BaseMonster>(), targetName);
-                        //UpdateUI(opponentCreature, false);
-                    }
-                }
-            }
+        AssignCard(targetName);
+    }
+    public void AssignCard(string cardID)
+    {
+        if (isLocked) {
+            return;
         }
-        else
-        {
-            Debug.LogError("Creature Prefab not found!");
+        assignedCardID = cardID;
+        Debug.Log($"Card {cardID} assigned to {PhotonNetwork.NickName}");
+
+
+        BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID);
+    }
+    public void StartGame()
+    {
+        if (string.IsNullOrEmpty(assignedCardID)) {
+            return;
         }
+        isLocked = true;
+        Debug.Log($"{PhotonNetwork.NickName} has locked in {assignedCardID}");
+
+        BattleScriptManager.Instance.StartBattle();
     }
 
-    //private void UpdateUI(Creature stats, bool isOwner)
-    //{
-    //    if (nameText && attackText && defenseText && hpText && attacksText)
-    //    {
-    //        if (isOwner)
-    //        {
-    //            Debug.Log("Updating UI for player creature...");
-    //            nameText.text = $"{PhotonNetwork.NickName}'s Summoned: {stats.creatureName}";
-    //            attackText.text = $"Attack: {stats.attack}";
-    //            defenseText.text = $"Defense: {stats.defense}";
-    //            hpText.text = $"HP: {stats.hp}";
-    //            attacksText.text = $"Attacks: {string.Join(", ", stats.attacks)}";
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Updating UI for opponent creature...");
-    //            opponentNameText.text = $"Opponent: {stats.creatureName}";
-    //            opponentHpText.text = $"HP: {stats.hp}";
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("UI Text components not assigned!");
-    //    }
-    //}
 
-    //public void OnAttackButtonPressed()
-    //{
-    //    if (playerCreature != null && PhotonNetwork.IsMine)
-    //    {
-    //        playerCreature.PerformAttack();
-    //    }
-    //}
 
 }
