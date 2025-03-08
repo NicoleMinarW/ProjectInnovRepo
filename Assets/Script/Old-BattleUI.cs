@@ -13,7 +13,7 @@ public class BattleUI : MonoBehaviour
     public Button[] moveBtn; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
     private User player; 
-    public BattleScript battleManager; 
+    public BattleScriptManager battleManager; 
 
     public void SetupUI(BaseMonster monster, User user){
         player = user; 
@@ -63,7 +63,7 @@ public class BattleUI : MonoBehaviour
     }
 
     void OnMoveButtonPress(MoveSet chosenMove){
-        FindObjectOfType<BattleScript>().ExecuteMove(chosenMove); 
+        FindObjectOfType<BattleScriptManager>().ExecuteMove(chosenMove); 
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
 
     }
