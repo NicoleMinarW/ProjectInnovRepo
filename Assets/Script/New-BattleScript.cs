@@ -57,20 +57,42 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
     }
 
-    public void StartBattle() {
+    public void StartBattle()
+    {
         Debug.Log("Starting Battle (BattleScript)");
-        if (PhotonNetwork.IsMasterClient) {
+
+        // Ensure photonView is not null
+        if (photonView == null)
+        {
+            Debug.LogError("PhotonView is missing on BattleScriptManager!");
+            return;
+        }
+
+        // Ensure turnIndicator is not null
+        if (turnIndicator == null)
+        {
+            Debug.LogError("turnIndicator is not assigned!");
+            return;
+        }
+
+        // Set initial game state based on MasterClient
+        if (PhotonNetwork.IsMasterClient)
+        {
             state = GameState.PLAYERTURN;
             isMyTurn = true;
             turnIndicator.text = "Your Turn!";
-        } 
-        else {
+        }
+        else
+        {
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
         }
+
+        // Sync turn with other players
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
+
 
     public void ExecuteMove(MoveSet chosenMove) {
         if (!isMyTurn || chosenMove == null) return;
