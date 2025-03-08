@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 public class ARCardManager : MonoBehaviourPunCallbacks
 {
-    public static ARCardManager Instance;  
-
+    public static ARCardManager Instance;
+    public GameObject startButton;
     private string assignedCardID;
     private bool isLocked = false;
     private void Awake()
@@ -69,7 +69,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         }
         isLocked = true;
         Debug.Log($"{PhotonNetwork.NickName} has locked in {assignedCardID}");
-
+        startButton.SetActive(false);
         BattleScriptManager.Instance.StartBattle();
     }
 
