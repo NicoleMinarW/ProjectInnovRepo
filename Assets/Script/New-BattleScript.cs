@@ -107,8 +107,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     public void EndTurn() {
-        if (!isMyTurn) return;
+        if (!isMyTurn) {
+            Debug.Log("It is not your turn"); 
+            return;
+        }
         isMyTurn = false;
+        Debug.Log("Ending Turn");
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, isMyTurn ? GameState.PLAYERTURN : GameState.ENEMYTURN);
     }
 
