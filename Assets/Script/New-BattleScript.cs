@@ -84,7 +84,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             turnIndicator.text = "Enemy's Turn!";
         }
 
-        // Sync turn with other players
+        endTurnButton.interactable = isMyTurn;
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
 
@@ -114,6 +114,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     [PunRPC]
     void RPC_SyncTurn(GameState newState) {
+        if (endTurnButton == null) {
+            Debug.LogError("End Turn Button is not assigned in the Inspector!");
+            return;
+        }
         state = newState;
         if(state == GameState.PLAYERTURN && PhotonNetwork.IsMasterClient || state == GameState.ENEMYTURN && !PhotonNetwork.IsMasterClient) { 
             isMyTurn = true;
