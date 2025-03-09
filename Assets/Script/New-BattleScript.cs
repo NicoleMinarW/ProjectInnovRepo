@@ -22,7 +22,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public Transform player2Position;
     List<GameObject> monsterPrefabs;
 
-    public BattleUI playerUI;
+    public UIManager playerUI;
 
     public TMPro.TextMeshProUGUI turnIndicator;
     public UnityEngine.UI.Button endTurnButton;
@@ -48,13 +48,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.LocalPlayer == player) {
             GameObject monsterObj = Instantiate(creatureDictionary[cardID], player1Position.position, Quaternion.identity);
             myMonster = monsterObj.GetComponent<BaseMonster>();
-            player1UI.SetupUI(myMonster, this.player);
+            playerUI.SetupUI(myMonster, enemyMonster, this.player);
         } 
-        else {
-            GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
-            enemyMonster = monsterObj.GetComponent<BaseMonster>();
-            player2UI.SetupUI(enemyMonster, this.enemy);
-        }
     }
 
     public void StartBattle()
@@ -98,6 +93,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (!isMyTurn || chosenMove == null) return;
         
         bool isDead = chosenMove.Execute(player, enemy, myMonster, enemyMonster);
+        playerUI.UpdateEnemyHPSlider(myMonster._currHP);
         photonView.RPC("RPC_UpdateHP", RpcTarget.All, enemyMonster._currHP);
         
         if (isDead) {
@@ -107,7 +103,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             isMyTurn = false;
             photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
-        UIManager.UpdateAPDisplay(player._AP);
+        playerUI.UpdateAPDisplay(player._AP);
     }
 
     public void EndTurn() {
@@ -131,7 +127,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     void RPC_UpdateHP(int newHP) {
         enemyMonster._currHP = newHP;
-        player2UI.UpdateHPSlider(newHP);
+        playerUI.UpdateEnemyHPSlider(newHP);
     }
 
     [PunRPC]

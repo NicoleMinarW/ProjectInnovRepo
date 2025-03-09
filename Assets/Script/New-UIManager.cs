@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private BattleScriptManager battleScriptManager;
-    public TMPro.TextMeshProUGUI nameText; 
-    public TMPro.TextMeshProUGUI hpText; 
-    public Slider hpSlider; 
+    public TMPro.TextMeshProUGUI playerMonText; 
+    public TMPro.TextMeshProUGUI enemyMonText;
+    public TMPro.TextMeshProUGUI playerhpText; 
+    public TMPro.TextMeshProUGUI enemyhpText;
+    public Slider playerHPSlider; 
+    public Slider enemyHPSlider; 
     public Button[] moveBtn; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
     public GameObject APContainer; 
@@ -22,12 +25,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetupUI(BaseMonster monster, User user){
-        nameText.text = monster.data.monsterName; 
-        hpText.text = $"{monster._currHP.ToString()}/{monster.data.maxHP}"; 
-        hpSlider.maxValue = monster.data.maxHP; 
-        hpSlider.value = monster._currHP; 
-        UpdateMoveButtons(monster); 
+    public void SetupUI(BaseMonster playerMonster, BaseMonster enemyMonster, User user){
+        playerMonText.text = playerMonster.data.monsterName; 
+        enemyMonText.text = enemyMonster.data.monsterName;
+        playerhpText.text = $"{playerMonster._currHP.ToString()}/{playerMonster.data.maxHP}";
+        enemyhpText.text = $"{enemyMonster._currHP.ToString()}/{enemyMonster.data.maxHP}";
+        playerHPSlider.maxValue = playerMonster.data.maxHP; 
+        playerHPSlider.value = playerMonster._currHP;
+        enemyHPSlider.maxValue = enemyMonster.data.maxHP;
+        enemyHPSlider.value = enemyMonster._currHP;
+        UpdateMoveButtons(playerMonster); 
     }
 
     public void UpdateMoveButtons(BaseMonster monster){
@@ -58,9 +65,18 @@ public class UIManager : MonoBehaviour
         // battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         battleScriptManager.ExecuteMove(chosenMove); 
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
+    }
 
+    public void UpdateEnemyHPSlider(float hp){
+        enemyHPSlider.value = hp; 
+        enemyhpText.text = $"{hp}/{enemyHPSlider.maxValue}"; 
+    }
+    public void UpdatePlayerHPSlider(float hp){
+        playerHPSlider.value = hp; 
+        playerhpText.text = $"{hp}/{playerHPSlider.maxValue}"; 
     }
     
+
     public void UpdateAPDisplay(int currentAP){
         foreach(GameObject icon in APIcons){
             Destroy(icon);
