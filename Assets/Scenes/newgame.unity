@@ -1242,7 +1242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1400, y: 156}
+  m_AnchoredPosition: {x: -1796, y: 92}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &363838572
@@ -3315,8 +3315,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   player1Position: {fileID: 0}
   player2Position: {fileID: 0}
-  player1UI: {fileID: 0}
-  player2UI: {fileID: 0}
+  playerUI: {fileID: 0}
   turnIndicator: {fileID: 1147040602}
   endTurnButton: {fileID: 1901335504}
 --- !u!4 &1463476103
@@ -4221,13 +4220,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 880a62ba24947954483fc42d3b085cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 651864420}
-  hpText: {fileID: 787047058}
-  hpSlider: {fileID: 1113167270}
+  playerMonText: {fileID: 0}
+  enemyMonText: {fileID: 0}
+  playerhpText: {fileID: 0}
+  enemyhpText: {fileID: 0}
+  playerHPSlider: {fileID: 0}
+  enemyHPSlider: {fileID: 0}
   moveBtn:
   - {fileID: 332821754}
   moveBtnTxt:
   - {fileID: 270383511}
+  APContainer: {fileID: 0}
+  APIcon: {fileID: 0}
 --- !u!1 &2079177695
 GameObject:
   m_ObjectHideFlags: 0
