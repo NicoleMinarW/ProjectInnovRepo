@@ -28,7 +28,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public UIManager playerUI;
 
     public TMPro.TextMeshProUGUI turnIndicator;
-    public UnityEngine.UI.Button endTurnButton;
+    public GameObject endTurnButton;
     private Dictionary<string, GameObject> creatureDictionary;
 
     private void Awake() {
@@ -104,9 +104,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        
-        endTurnButton.interactable = true;
-
         // Set initial game state based on MasterClient
         if (PhotonNetwork.IsMasterClient)
         {
@@ -121,10 +118,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
-            endTurnButton.interactable = false;
         }
 
-        //endTurnButton.interactable = PhotonNetwork.IsMasterClient;
+        endTurnButton.SetActive(isMyTurn);
 
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
@@ -183,7 +179,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         else{
             isMyTurn = false;
         }
-        endTurnButton.interactable = isMyTurn;
+        endTurnButton.SetActive(isMyTurn);
     }
 
     [PunRPC]
