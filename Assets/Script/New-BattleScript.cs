@@ -18,6 +18,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public User player;
     public User enemy;
     private bool isMyTurn;
+    private bool isPlayer1Ready = false;
+    private bool isPlayer2Ready = false;
 
     public Transform player1Position;
     public Transform player2Position;
@@ -37,6 +39,29 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public void Start(){
         InitializeCreatureDictionary();
     }
+
+    public void PlayerReady(Player player)
+    {
+        if (player == PhotonNetwork.LocalPlayer)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                isPlayer1Ready = true;
+                photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, true);
+            }
+            else
+            {
+                isPlayer2Ready = true;
+                photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, false);
+            }
+        }
+
+        if (isPlayer1Ready && isPlayer2Ready)
+        {
+            StartBattle();
+        }
+    }
+
     private void InitializeCreatureDictionary() {
         creatureDictionary = new Dictionary<string, GameObject>();
         foreach (var prefab in monsterPrefabs) {
@@ -59,18 +84,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             myMonster = newMonster;
             photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
         } 
-    }
-    [PunRPC]
-    void RPC_SetEnemyMonster(string cardID) {
-        if (!creatureDictionary.ContainsKey(cardID)) {
-            Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
-            return;
-        }
-
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
-        enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        Debug.Log("Enemy monster set: " + enemyMonster.name);
-        playerUI.SetupUI(myMonster, enemyMonster, this.player);
     }
 
     public void StartBattle()
@@ -141,6 +154,19 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC]
+    void RPC_SetEnemyMonster(string cardID) {
+        if (!creatureDictionary.ContainsKey(cardID)) {
+            Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
+            return;
+        }
+
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
+        enemyMonster = monsterObj.GetComponent<BaseMonster>();
+        Debug.Log("Enemy monster set: " + enemyMonster.name);
+        playerUI.SetupUI(myMonster, enemyMonster, this.player);
+    }
+
+    [PunRPC]
     void RPC_SyncTurn(GameState newState) {
         if (endTurnButton == null) {
             Debug.LogError("End Turn Button is not assigned in the Inspector!");
@@ -171,5 +197,24 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.LOST;
             turnIndicator.text = "You Lose!";
         };
+        isPlayer1Ready = false; 
+        isPlayer2Ready = false;
+    }
+    [PunRPC]
+    public void RPC_UpdatePlayerReadyState(bool isPlayer1)
+    {
+        if (isPlayer1)
+        {
+            isPlayer1Ready = true;
+        }
+        else
+        {
+            isPlayer2Ready = true;
+        }
+
+        if (isPlayer1Ready && isPlayer2Ready)
+        {
+            StartBattle();
+        }
     }
 }

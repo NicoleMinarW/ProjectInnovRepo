@@ -70,7 +70,8 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         isLocked = true;
         Debug.Log($"{PhotonNetwork.NickName} has locked in {assignedCardID}");
         startButton.SetActive(false);
-        BattleScriptManager.Instance.StartBattle();
+        BattleScriptManager.Instance.PlayerReady(PhotonNetwork.LocalPlayer);
+
     }
 
 
