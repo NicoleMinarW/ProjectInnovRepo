@@ -1420,10 +1420,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 530038849}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 549acf17bf5add64fad74db785557b52, type: 3}
 --- !u!4 &530038847 stripped
 Transform:
@@ -1435,23 +1432,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
   m_PrefabInstance: {fileID: 530038846}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &530038849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530038848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2574e81434e01e499902d2c0696b146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: bf4ca917311f98840ac3444a8f96da15, type: 2}
-  currHP: 0
-  defense: 0
-  defCounter: 0
-  buff: 0
 --- !u!1 &555034074
 GameObject:
   m_ObjectHideFlags: 0
@@ -3589,10 +3569,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1357390572}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
 --- !u!4 &1357390570 stripped
 Transform:
@@ -3604,23 +3581,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
   m_PrefabInstance: {fileID: 1357390569}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1357390572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357390571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2574e81434e01e499902d2c0696b146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: b024827ea3c5c5e4396c28367cf8d271, type: 2}
-  currHP: 0
-  defense: 0
-  defCounter: 0
-  buff: 0
 --- !u!1 &1439265993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3950,13 +3910,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  myMonster: {fileID: 1357390572}
-  enemyMonster: {fileID: 530038849}
+  myMonster: {fileID: 0}
+  enemyMonster: {fileID: 0}
   player: {fileID: 0}
   enemy: {fileID: 0}
   player1Position: {fileID: 0}
   player2Position: {fileID: 0}
-  playerUI: {fileID: 0}
+  monsterPrefabs:
+  - {fileID: 1357390571}
+  - {fileID: 530038848}
+  playerUI: {fileID: 2076187937}
   turnIndicator: {fileID: 1147040602}
   endTurnButton: {fileID: 1901335504}
 --- !u!4 &1463476103

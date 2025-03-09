@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Data.Common;
+using Unity.VisualScripting;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -20,7 +21,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     public Transform player1Position;
     public Transform player2Position;
-    List<GameObject> monsterPrefabs;
+    public List<GameObject> monsterPrefabs;
 
     public UIManager playerUI;
 
@@ -32,6 +33,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (Instance == null) {
             Instance = this;
         }
+    }
+    public void Start(){
+        InitializeCreatureDictionary();
     }
     private void InitializeCreatureDictionary() {
         creatureDictionary = new Dictionary<string, GameObject>();
