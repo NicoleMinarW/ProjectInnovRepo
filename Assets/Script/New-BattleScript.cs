@@ -48,12 +48,29 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID],
+        PhotonNetwork.LocalPlayer == player ? player1Position.position : player2Position.position,
+        Quaternion.identity);
+        BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
 
         if (PhotonNetwork.LocalPlayer == player) {
-            GameObject monsterObj = Instantiate(creatureDictionary[cardID], player1Position.position, Quaternion.identity);
-            myMonster = monsterObj.GetComponent<BaseMonster>();
-            playerUI.SetupUI(myMonster, enemyMonster, this.player);
+            // GameObject monsterObj = Instantiate(creatureDictionary[cardID], player1Position.position, Quaternion.identity);
+            // myMonster = monsterObj.GetComponent<BaseMonster>();
+            myMonster = newMonster;
+            photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
         } 
+    }
+    [PunRPC]
+    void RPC_SetEnemyMonster(string cardID) {
+        if (!creatureDictionary.ContainsKey(cardID)) {
+            Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
+            return;
+        }
+
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
+        enemyMonster = monsterObj.GetComponent<BaseMonster>();
+        Debug.Log("Enemy monster set: " + enemyMonster.name);
+        playerUI.SetupUI(myMonster, enemyMonster, this.player);
     }
 
     public void StartBattle()

@@ -46,6 +46,7 @@ MonoBehaviour:
   - EndBattle
   - RPC_UpdateHP
   - RPC_EndBattle
+  - RPC_SetEnemyMonster
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
