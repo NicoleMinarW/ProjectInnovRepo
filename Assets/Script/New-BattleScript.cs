@@ -40,24 +40,18 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         InitializeCreatureDictionary();
     }
 
-    public void PlayerReady(Player player)
-    {
-        if (player == PhotonNetwork.LocalPlayer)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
+    public void PlayerReady(Player player) {
+        if (player == PhotonNetwork.LocalPlayer) {
+            if (PhotonNetwork.IsMasterClient) {
                 isPlayer1Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, true);
-            }
-            else
-            {
+            } else {
                 isPlayer2Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, false);
             }
         }
 
-        if (isPlayer1Ready && isPlayer2Ready)
-        {
+        if (isPlayer1Ready && isPlayer2Ready) {
             StartBattle();
         }
     }
@@ -88,6 +82,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     public void StartBattle()
     {
+        if (!PhotonNetwork.IsMasterClient) {
+            return;
+        }
+
         Debug.Log("Starting Battle (BattleScript)");
 
         // Ensure photonView is not null
@@ -105,25 +103,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
 
         // Set initial game state based on MasterClient
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("MasterClient is Player 1");
-            state = GameState.PLAYERTURN;
-            isMyTurn = true;
-            turnIndicator.text = "Your Turn!";
-        }
-        else
-        {
-            Debug.Log("MasterClient is Player 2");
-            state = GameState.ENEMYTURN;
-            isMyTurn = false;
-            turnIndicator.text = "Enemy's Turn!";
-        }
-
+        state = GameState.PLAYERTURN;
+        isMyTurn = true;
+        turnIndicator.text = "Player1 Turn!";
         endTurnButton.SetActive(isMyTurn);
-        Debug.Log($"endturnbutton set to {isMyTurn}");
-        Debug.Log($"The current state is {state}");
-        photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
+
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
+
     }
 
 
@@ -150,6 +136,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
         isMyTurn = false;
+        state = GameState.ENEMYTURN;
         Debug.Log("Ending Turn");
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
     }
@@ -175,31 +162,30 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
         Debug.Log($"RPC_SyncTurn: Setting state to {newState}");
         state = newState;
-        if(state == GameState.PLAYERTURN && PhotonNetwork.IsMasterClient) { 
-            Debug.Log("Player Turn and photon is master client");
-            isMyTurn = true;
-        }
-        else if(state == GameState.ENEMYTURN && !PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("Enemy Turn and photon is not master client");
-            isMyTurn = true;
-        }
-        else if(state == GameState.PLAYERTURN && !PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("player turn and is not master client");
-            isMyTurn = false;
-        }
-        else if (state == GameState.ENEMYTURN && PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("not player turn and is master client");
-            isMyTurn = false;
-        }
+        Debug.Log($"isMasterClient is currently {PhotonNetwork.IsMasterClient}");
+        if (state == GameState.PLAYERTURN) {
+            if (PhotonNetwork.IsMasterClient) {
+                isMyTurn = true;
+                turnIndicator.text = "Player 1 Turn"; // Update for Player 1
+            } else {
+                isMyTurn = false;
+                turnIndicator.text = "Player 2 Turn"; // Update for Player 2
+            }
+        } else if (state == GameState.ENEMYTURN) {
+            if (PhotonNetwork.IsMasterClient) {
+                isMyTurn = false;
+                turnIndicator.text = "Player 2 Turn"; // Update for Player 1
+            } else {
+                isMyTurn = true;
+                turnIndicator.text = "Player 1 Turn"; // Update for Player 2
+            }
+        }    
         else {
-            isMyTurn = false;
+            isMyTurn = false; // For WON or LOST states
         }
         endTurnButton.SetActive(isMyTurn);
         Debug.Log($"RPC_SyncTurn endturnbutton set to {isMyTurn}");
-        }
+    }
 
     [PunRPC]
     void RPC_UpdateHP(int newHP) {
