@@ -73,18 +73,21 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Set initial game state based on MasterClient
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("MasterClient is Player 1");
             state = GameState.PLAYERTURN;
             isMyTurn = true;
             turnIndicator.text = "Your Turn!";
         }
         else
         {
+            Debug.Log("MasterClient is Player 2");
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
         }
 
-        endTurnButton.interactable = isMyTurn;
+        endTurnButton.interactable = PhotonNetwork.IsMasterClient;
+
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
 
@@ -100,14 +103,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.WON;
             photonView.RPC("RPC_EndBattle", RpcTarget.All, true);
         } else {
-            isMyTurn = false;
-            photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
+            //isMyTurn = false;
+            //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
         playerUI.UpdateAPDisplay(player._AP);
     }
 
     public void EndTurn() {
-        if (!isMyTurn) {
+        if (isMyTurn == false) {
             Debug.Log("It is not your turn"); 
             return;
         }
