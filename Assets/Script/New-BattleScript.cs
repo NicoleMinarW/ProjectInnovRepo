@@ -104,6 +104,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
+        
+        endTurnButton.interactable = true;
+
         // Set initial game state based on MasterClient
         if (PhotonNetwork.IsMasterClient)
         {
@@ -118,9 +121,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
+            endTurnButton.interactable = false;
         }
 
-        endTurnButton.interactable = PhotonNetwork.IsMasterClient;
+        //endTurnButton.interactable = PhotonNetwork.IsMasterClient;
 
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
