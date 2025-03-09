@@ -3921,7 +3921,7 @@ MonoBehaviour:
   - {fileID: 530038848}
   playerUI: {fileID: 2076187937}
   turnIndicator: {fileID: 1147040602}
-  endTurnButton: {fileID: 1901335504}
+  endTurnButton: {fileID: 1901335502}
 --- !u!4 &1463476103
 Transform:
   m_ObjectHideFlags: 0

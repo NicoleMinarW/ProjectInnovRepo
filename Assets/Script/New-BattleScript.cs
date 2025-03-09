@@ -111,6 +111,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.PLAYERTURN;
             isMyTurn = true;
             turnIndicator.text = "Your Turn!";
+            Debug.Log("Setting endTurnButton to active");
+            endTurnButton.SetActive(true);
         }
         else
         {
@@ -118,9 +120,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
+            Debug.Log("Setting endTurnButton to inactive");
+            endTurnButton.SetActive(false);
         }
-
-        endTurnButton.SetActive(isMyTurn);
 
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
