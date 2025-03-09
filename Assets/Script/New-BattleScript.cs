@@ -111,8 +111,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.PLAYERTURN;
             isMyTurn = true;
             turnIndicator.text = "Your Turn!";
-            Debug.Log("Setting endTurnButton to active");
-            endTurnButton.SetActive(true);
         }
         else
         {
@@ -120,10 +118,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.ENEMYTURN;
             isMyTurn = false;
             turnIndicator.text = "Enemy's Turn!";
-            Debug.Log("Setting endTurnButton to inactive");
-            endTurnButton.SetActive(false);
         }
 
+        endTurnButton.SetActive(isMyTurn);
+        Debug.Log($"endturnbutton set to {isMyTurn}");
+        Debug.Log($"The current state is {state}");
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
 
@@ -152,7 +151,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
         isMyTurn = false;
         Debug.Log("Ending Turn");
-        photonView.RPC("RPC_SyncTurn", RpcTarget.All, isMyTurn ? GameState.PLAYERTURN : GameState.ENEMYTURN);
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
     }
 
     [PunRPC]
@@ -174,15 +173,33 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("End Turn Button is not assigned in the Inspector!");
             return;
         }
+        Debug.Log($"RPC_SyncTurn: Setting state to {newState}");
         state = newState;
-        if(state == GameState.PLAYERTURN && PhotonNetwork.IsMasterClient || state == GameState.ENEMYTURN && !PhotonNetwork.IsMasterClient) { 
+        if(state == GameState.PLAYERTURN && PhotonNetwork.IsMasterClient) { 
+            Debug.Log("Player Turn and photon is master client");
             isMyTurn = true;
         }
-        else{
+        else if(state == GameState.ENEMYTURN && !PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("Enemy Turn and photon is not master client");
+            isMyTurn = true;
+        }
+        else if(state == GameState.PLAYERTURN && !PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("player turn and is not master client");
+            isMyTurn = false;
+        }
+        else if (state == GameState.ENEMYTURN && PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("not player turn and is master client");
+            isMyTurn = false;
+        }
+        else {
             isMyTurn = false;
         }
         endTurnButton.SetActive(isMyTurn);
-    }
+        Debug.Log($"RPC_SyncTurn endturnbutton set to {isMyTurn}");
+        }
 
     [PunRPC]
     void RPC_UpdateHP(int newHP) {
