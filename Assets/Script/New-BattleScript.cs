@@ -136,13 +136,22 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.Log("It is not your turn"); 
             return;
         }
-        isMyTurn = false;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            state = (state == GameState.PLAYERTURN) ? GameState.ENEMYTURN : GameState.PLAYERTURN;
-            Debug.Log("MasterClient switching turn to: " + state);
-            photonView.RPC("RPC_SyncTurn", RpcTarget.All, state); // Sync turn for all players
+        // isMyTurn = false;
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        //     state = (state == GameState.PLAYERTURN) ? GameState.ENEMYTURN : GameState.PLAYERTURN;
+        //     Debug.Log("MasterClient switching turn to: " + state);
+        //     photonView.RPC("RPC_SyncTurn", RpcTarget.All, state); // Sync turn for all players
+        // }
+        if(state == GameState.PLAYERTURN){
+            state = GameState.ENEMYTURN;
         }
+        else if (state == GameState.ENEMYTURN){
+            state = GameState.PLAYERTURN;
+        }
+        Debug.Log("Ending turn"); 
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
+
     }
 
     [PunRPC]
