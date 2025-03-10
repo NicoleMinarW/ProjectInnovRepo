@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Attack", menuName = "New Attack")]
+[CreateAssetMenu(fileName = "New Basic Attack", menuName = "New Basic Attack")]
 public class BasicAttack : MoveSet 
 {
     // [SerializeField] private string _attackName; 

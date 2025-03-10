@@ -82,6 +82,7 @@ public class UIManager : MonoBehaviour
     
 
     public void UpdateAPDisplay(int currentAP){
+        Debug.Log($"Updating AP to {currentAP}");
         foreach(GameObject icon in APIcons){
             Destroy(icon);
         }

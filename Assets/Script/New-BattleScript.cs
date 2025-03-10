@@ -139,8 +139,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             //isMyTurn = false;
             //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
-        photonView.RPC("RPC_SyncMonsters", RpcTarget.Others, enemyMonster, myMonster);
         playerUI.UpdateAPDisplay(userplayer._AP);
+        photonView.RPC("RPC_SyncMonsters", RpcTarget.Others, enemyMonster, myMonster);
     }
 
     public void EndTurn() {

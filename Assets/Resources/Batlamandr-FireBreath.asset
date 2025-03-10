@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e1bbdb20110c254890881bbf4654bb5, type: 3}
-  m_Name: Baldy
+  m_Script: {fileID: 11500000, guid: c10069865cd06c14eb419771fe277d5b, type: 3}
+  m_Name: Batlamandr-FireBreath
   m_EditorClassIdentifier: 
-  monsterName: Baldy
-  maxHP: 55
-  element: 1
-  moveList:
-  - {fileID: 11400000, guid: 42c5a0d8b018f884d937730cdbc38624, type: 2}
-  - {fileID: 11400000, guid: 06c93a80b08c9234e91daae0b3211707, type: 2}
+  _moveName: FireBreath
+  _APCost: 3
+  _damage: 4
+  _attackElement: 2
