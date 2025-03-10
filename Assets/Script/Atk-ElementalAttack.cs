@@ -19,7 +19,7 @@ public class ElementalAttack : BasicAttack
             (_attackElement == MonsterElement.Poison && opponent.data.element == MonsterElement.Water)){
                 mult = 1.5f; 
             }
-            opponent._currHP -= ((Damage + attacker._buff)* mult ) - opponent._defense; 
+            opponent._currHP -= (Damage * mult )+ attacker._buff - opponent._defense; 
             return CheckDeath(opponent); 
         }
         return false; 
