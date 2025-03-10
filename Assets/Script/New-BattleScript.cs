@@ -138,7 +138,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         isMyTurn = false;
         state = GameState.ENEMYTURN;
         Debug.Log("Ending Turn");
-        photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
     }
 
     [PunRPC]
