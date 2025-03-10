@@ -50,6 +50,7 @@ MonoBehaviour:
   - RPC_UpdatePlayerReadyState
   - RPC_SyncMonsters
   - RPC_InitializeUI
+  - RPC_SyncMonstersHP
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -240,7 +240,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
     }
     [PunRPC]
-    public void RPC_SyncMonstersHP(int myHP, int enemyHP)
+    public void RPC_SyncMonstersHP(float myHP, float enemyHP)
     {
         myMonster._currHP = myHP; 
         enemyMonster._currHP = enemyHP;
@@ -251,6 +251,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void RPC_InitializeUI()
     {
+        turnCountText.text = "Turn: " + turnCount.ToString();
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
 }
