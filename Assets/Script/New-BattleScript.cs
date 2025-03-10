@@ -131,6 +131,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     public void EndTurn() {
+        Debug.Log("End Turn Button Clicked");
         if (isMyTurn == false) {
             Debug.Log("It is not your turn"); 
             return;
@@ -138,7 +139,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         isMyTurn = false;
         state = GameState.ENEMYTURN;
         Debug.Log("Ending Turn");
-        photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
+        photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
     }
 
     [PunRPC]
