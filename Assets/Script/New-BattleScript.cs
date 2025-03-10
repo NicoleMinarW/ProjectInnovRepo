@@ -130,8 +130,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (!isMyTurn || chosenMove == null) return;
         
         bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
-        playerUI.UpdateEnemyHPSlider(myMonster._currHP);
-        photonView.RPC("RPC_UpdateHP", RpcTarget.All, enemyMonster._currHP);
+        playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
         if (isDead) {
             state = GameState.WON;
@@ -140,6 +139,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             //isMyTurn = false;
             //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
+        photonView.RPC("RPC_SyncMonsters", RpcTarget.Others, enemyMonster, myMonster);
         playerUI.UpdateAPDisplay(userplayer._AP);
     }
 
@@ -178,7 +178,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
-        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer);
+        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
 
     [PunRPC]
@@ -211,11 +211,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"RPC_SyncTurn: isMyTurn set to {isMyTurn}");
     }
 
-    void RPC_UpdateHP(int newHP) {
-        enemyMonster._currHP = newHP;
-        playerUI.UpdateEnemyHPSlider(newHP);
-    }
-
     [PunRPC]
     void RPC_EndBattle(bool playerWon) {
         if(playerWon == true) {
@@ -244,5 +239,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         {
             StartBattle();
         }
+    }
+    [PunRPC]
+    public void RPC_SyncMonsters(BaseMonster p1, BaseMonster p2)
+    {
+        myMonster._currHP = p1._currHP;
+        enemyMonster._currHP = p2._currHP;
+        playerUI.UpdatePlayerHPSlider(myMonster._currHP);
+        playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
+        
     }
 }

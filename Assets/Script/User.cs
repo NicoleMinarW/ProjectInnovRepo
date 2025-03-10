@@ -15,6 +15,7 @@ public class User : MonoBehaviourPunCallbacks
         currentplayer = player;
         _username = username;
         PlayerMonster = monster; 
+        _AP = 4; 
     }
     public bool costActionPoints(int cost){
         if(_AP >= cost){
@@ -23,6 +24,15 @@ public class User : MonoBehaviourPunCallbacks
         }
         else{
             return false; 
+        }
+    }
+
+    public void refreshAP(){
+        if(_AP <2){
+            _AP +=4;
+        }
+        else{
+            _AP = 6;
         }
     }
 
