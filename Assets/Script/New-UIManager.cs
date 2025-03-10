@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
         enemyHPSlider.value = enemyMonster._currHP;
         playerUsername.text = user1._username;
         enemyUsername.text = user2._username;
+        SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
 
@@ -48,7 +49,6 @@ public class UIManager : MonoBehaviour
             Debug.LogError($"Monster {monster.data.monsterName} has no moves");
             return; 
         }
-
         for(int i=0; i< moveBtn.Length; i++){
             if(i<moves.Count && moves != null){
                 moveBtn[i].gameObject.SetActive(true); 
