@@ -1411,7 +1411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
       propertyPath: m_Name
-      value: Cube
+      value: tacomundo_scaled
       objectReference: {fileID: 0}
     - target: {fileID: 8715448819350281187, guid: 549acf17bf5add64fad74db785557b52, type: 3}
       propertyPath: sceneViewId
@@ -3383,7 +3383,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
       propertyPath: m_Name
-      value: Capsule
+      value: test1_scaled
       objectReference: {fileID: 0}
     - target: {fileID: 7903046027289759598, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
       propertyPath: sceneViewId
@@ -3775,10 +3775,8 @@ MonoBehaviour:
   state: 0
   myMonster: {fileID: 0}
   enemyMonster: {fileID: 0}
-  player: {fileID: 0}
-  enemy: {fileID: 0}
-  player1Position: {fileID: 0}
-  player2Position: {fileID: 0}
+  userplayer: {fileID: 0}
+  enemyplayer: {fileID: 0}
   monsterPrefabs:
   - {fileID: 1357390571}
   - {fileID: 530038848}
