@@ -77,6 +77,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
         monsterObj.transform.SetParent(arCard.transform);
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
+        newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         // if (PhotonNetwork.LocalPlayer == player) {
