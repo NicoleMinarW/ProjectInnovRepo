@@ -15,8 +15,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public GameState state;
     public BaseMonster myMonster;
     public BaseMonster enemyMonster;
-    public User player;
-    public User enemy;
+    public User userplayer;
+    public User enemyplayer;
     private bool isMyTurn;
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
@@ -74,16 +74,18 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
         monsterObj.transform.SetParent(arCard.transform);
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
-
-        if (PhotonNetwork.LocalPlayer == player) {
-            myMonster = newMonster;
-            photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
-        } 
+        userplayer = new User(player, player.NickName, newMonster);
+        myMonster = newMonster; 
+        // if (PhotonNetwork.LocalPlayer == player) {
+        //     myMonster = newMonster;
+        //     photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
+        // } 
         PhotonView pv = monsterObj.GetComponent<PhotonView>();
         // if (pv==null){
         //     pv = monsterObj.AddComponent<PhotonView>();
         // }
         // pv.ViewID = PhotonNetwork.AllocateViewID();
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -123,7 +125,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public void ExecuteMove(MoveSet chosenMove) {
         if (!isMyTurn || chosenMove == null) return;
         
-        bool isDead = chosenMove.Execute(player, enemy, myMonster, enemyMonster);
+        bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
         playerUI.UpdateEnemyHPSlider(myMonster._currHP);
         photonView.RPC("RPC_UpdateHP", RpcTarget.All, enemyMonster._currHP);
         
@@ -134,7 +136,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             //isMyTurn = false;
             //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
-        playerUI.UpdateAPDisplay(player._AP);
+        playerUI.UpdateAPDisplay(userplayer._AP);
     }
 
     public void EndTurn() {
@@ -170,8 +172,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         GameObject arCard = GameObject.Find(cardID);
         GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        Debug.Log("Enemy monster set: " + enemyMonster.name);
-        playerUI.SetupUI(myMonster, enemyMonster, this.player);
+        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        Debug.Log($"Enemy monster {enemyMonster.name}");
+        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer);
     }
 
     [PunRPC]
