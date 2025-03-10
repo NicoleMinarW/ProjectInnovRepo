@@ -67,17 +67,25 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID],
-        PhotonNetwork.LocalPlayer == player ? player1Position.position : player2Position.position,
-        Quaternion.identity);
+        GameObject arCard = GameObject.Find(cardID);
+        if (arCard == null) {
+            Debug.LogError("AR Card not found: " + cardID);
+            return;
+        }
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
+        monsterObj.transform.SetParent(arCard.transform);
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
 
         if (PhotonNetwork.LocalPlayer == player) {
-            // GameObject monsterObj = Instantiate(creatureDictionary[cardID], player1Position.position, Quaternion.identity);
-            // myMonster = monsterObj.GetComponent<BaseMonster>();
             myMonster = newMonster;
             photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
         } 
+        PhotonView pv = monsterObj.GetComponent<PhotonView>();
+        // if (pv==null){
+        //     pv = monsterObj.AddComponent<PhotonView>();
+        // }
+        // pv.ViewID = PhotonNetwork.AllocateViewID();
+        Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
     public void StartBattle()

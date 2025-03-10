@@ -74,4 +74,17 @@ public class ARCardManager : MonoBehaviourPunCallbacks
 
     }
 
+    public Transform GetTrackedCardTransform(string cardID)
+    {
+        ObserverBehaviour[] observerss = GetComponentsInChildren<ObserverBehaviour>();
+        foreach(var observer in observerss)
+        {
+            if (observer.TargetName == cardID && observer.TargetStatus.Status == Status.TRACKED)
+            {
+                return observer.transform;
+            }
+        }
+        return null; 
+    }
+
 }
