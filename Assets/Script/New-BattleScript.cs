@@ -21,8 +21,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
 
-    public Transform player1Position;
-    public Transform player2Position;
+
     public List<GameObject> monsterPrefabs;
 
     public UIManager playerUI;
@@ -168,8 +167,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
-
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
+        GameObject arCard = GameObject.Find(cardID);
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         Debug.Log("Enemy monster set: " + enemyMonster.name);
         playerUI.SetupUI(myMonster, enemyMonster, this.player);
