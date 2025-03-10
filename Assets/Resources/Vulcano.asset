@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63052d13c7a44cc448f2223cf28805ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e1bbdb20110c254890881bbf4654bb5, type: 3}
   m_Name: Vulcano
   m_EditorClassIdentifier: 
   monsterName: Vulcano
