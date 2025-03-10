@@ -56,10 +56,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     private void InitializeCreatureDictionary() {
+        Debug.Log("Initializing creature dictionary");
         creatureDictionary = new Dictionary<string, GameObject>();
         foreach (var prefab in monsterPrefabs) {
+            Debug.Log("Adding prefab: " + prefab.name);
             creatureDictionary[prefab.name] = prefab;
         }
+
     }
     public void RegisterPlayer(Player player, string cardID) {
         if (!creatureDictionary.ContainsKey(cardID)) {
