@@ -4078,8 +4078,8 @@ Transform:
   m_Children:
   - {fileID: 1463476103}
   - {fileID: 2076187936}
-  - {fileID: 1151855071}
   - {fileID: 1695564659}
+  - {fileID: 1151855071}
   - {fileID: 260060143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4096,7 +4096,7 @@ GameObject:
   - component: {fileID: 1695564661}
   - component: {fileID: 1695564663}
   m_Layer: 0
-  m_Name: test2_scaled
+  m_Name: tacomundo_scaled
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4177,14 +4177,14 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: test2_scaled
+  mTrackableName: tacomundo_scaled
   mInitializedInEditor: 1
   mDataSetPath: Vuforia/--- EMPTY ---.xml
-  mAspectRatio: 1.4008209
+  mAspectRatio: 1.4321679
   mImageTargetType: 3
-  mWidth: 0.14277343
+  mWidth: 0.13964844
   mHeight: 0.2
-  mRuntimeTexture: {fileID: 2800000, guid: 563d16791e864cadb0a821c06dd45983, type: 3}
+  mRuntimeTexture: {fileID: 2800000, guid: 4fbc36dd135547e2a8b147d1730848ab, type: 3}
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
@@ -4203,7 +4203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mObserverBehaviour: {fileID: 1695564662}
   mHiddenRoot: {fileID: 0}
-  mTargetName: test2_scaled
+  mTargetName: tacomundo_scaled
   mDatasetName: Vuforia/--- EMPTY ---.xml
   mCastedBehaviour: {fileID: 1695564662}
   mMeshFilter: {fileID: 0}
