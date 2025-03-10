@@ -6489,14 +6489,22 @@ MonoBehaviour:
   enemyMonText: {fileID: 1319527592}
   playerhpText: {fileID: 787047058}
   enemyhpText: {fileID: 1345928438}
-  playerUsername: {fileID: 0}
-  enemyUsername: {fileID: 0}
+  playerUsername: {fileID: 1282285323}
+  enemyUsername: {fileID: 54617703}
   playerHPSlider: {fileID: 1113167270}
   enemyHPSlider: {fileID: 757762747}
   moveBtn:
   - {fileID: 332821754}
+  - {fileID: 2116663460}
+  - {fileID: 669509834}
+  - {fileID: 72428365}
+  - {fileID: 1467258769}
   moveBtnTxt:
   - {fileID: 270383511}
+  - {fileID: 1932513025}
+  - {fileID: 1423754549}
+  - {fileID: 204146407}
+  - {fileID: 204146407}
   APContainer: {fileID: 363838570}
   APIcon: {fileID: 801837695}
 --- !u!1 &2079177695

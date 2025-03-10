@@ -80,16 +80,21 @@ public class UIManager : MonoBehaviour
         playerhpText.text = $"{hp}/{playerHPSlider.maxValue}"; 
     }
     
-
-    public void UpdateAPDisplay(int currentAP){
-        Debug.Log($"Updating AP to {currentAP}");
-        foreach(GameObject icon in APIcons){
-            Destroy(icon);
-        }
-        APIcons.Clear(); 
-        for(int i=0; i<currentAP; i++){
-            GameObject icon = Instantiate(APIcon, APContainer.transform); 
+    public void SetupAPDisplay(){
+        for (int i=0; i<6; i++){
+            GameObject icon = Instantiate(APIcon, APContainer.transform);
             APIcons.Add(icon); 
+        }
+        UpdateAPDisplay(4); 
+    }
+    public void UpdateAPDisplay(int currentAP)
+    {
+        Debug.Log($"Updating AP to {currentAP}");
+
+        for (int i = 0; i < APIcons.Count; i++)
+        {
+            // APIcons[i].SetActive(i < currentAP); 
+            APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
         }
     }
 }

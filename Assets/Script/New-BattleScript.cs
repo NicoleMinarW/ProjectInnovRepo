@@ -5,6 +5,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using System.Data.Common;
 using Unity.VisualScripting;
+using System;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -20,6 +21,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isMyTurn;
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
+    public int turnCount = 1; 
+    public TMPro.TextMeshProUGUI turnCountText;
 
 
     public List<GameObject> monsterPrefabs;
@@ -51,6 +54,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
 
         if (isPlayer1Ready && isPlayer2Ready) {
+            photonView.RPC("RPC_InitializeUI", RpcTarget.All);
             StartBattle();
         }
     }
@@ -118,7 +122,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Set initial game state based on MasterClient
         state = GameState.PLAYERTURN;
         isMyTurn = true;
-        turnIndicator.text = "Player1 Turn!";
+        turnIndicator.text = userplayer._username + "'s Turn";
         endTurnButton.SetActive(isMyTurn);
 
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
@@ -149,19 +153,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.Log("It is not your turn"); 
             return;
         }
-        // isMyTurn = false;
-        // if (PhotonNetwork.IsMasterClient)
-        // {
-        //     state = (state == GameState.PLAYERTURN) ? GameState.ENEMYTURN : GameState.PLAYERTURN;
-        //     Debug.Log("MasterClient switching turn to: " + state);
-        //     photonView.RPC("RPC_SyncTurn", RpcTarget.All, state); // Sync turn for all players
-        // }
+        userplayer.refreshAP();
         if(state == GameState.PLAYERTURN){
             state = GameState.ENEMYTURN;
         }
         else if (state == GameState.ENEMYTURN){
             state = GameState.PLAYERTURN;
         }
+        turnCount += 1; 
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
@@ -178,7 +177,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
-        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
 
     [PunRPC]
@@ -198,13 +196,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         {
             Debug.Log("MasterClient setting turn for all players");
             isMyTurn = (state == GameState.PLAYERTURN);
-            turnIndicator.text = isMyTurn ? "Player 1 Turn" : "Player 2 Turn";
+            turnIndicator.text = isMyTurn ? (userplayer._username + "'s turn"): (enemyplayer._username + "'s turn");
         }
         else
         {
             Debug.Log("Non-MasterClient setting turn for all players");
             isMyTurn = (state == GameState.ENEMYTURN);
-            turnIndicator.text = isMyTurn ? "Player 1 Turn" : "Player 2 Turn";
+            turnIndicator.text = isMyTurn ? (userplayer._username + "'s turn"): (enemyplayer._username + "'s turn");
         }
 
         endTurnButton.SetActive(isMyTurn);
@@ -248,5 +246,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         playerUI.UpdatePlayerHPSlider(myMonster._currHP);
         playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
+    }
+    [PunRPC]
+    public void RPC_InitializeUI()
+    {
+        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
 }
