@@ -144,7 +144,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
         }
         playerUI.UpdateAPDisplay(userplayer._AP);
-        photonView.RPC("RPC_SyncMonsters", RpcTarget.Others, enemyMonster, myMonster);
+        photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
     }
 
     public void EndTurn() {
@@ -161,6 +161,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.PLAYERTURN;
         }
         turnCount += 1; 
+        turnCountText.text = "Turn: " + turnCount.ToString();
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
@@ -239,12 +240,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
     }
     [PunRPC]
-    public void RPC_SyncMonsters(BaseMonster p1, BaseMonster p2)
+    public void RPC_SyncMonstersHP(int myHP, int enemyHP)
     {
-        myMonster._currHP = p1._currHP;
-        enemyMonster._currHP = p2._currHP;
-        playerUI.UpdatePlayerHPSlider(myMonster._currHP);
-        playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
+        myMonster._currHP = myHP; 
+        enemyMonster._currHP = enemyHP;
+        playerUI.UpdatePlayerHPSlider(myHP);
+        playerUI.UpdateEnemyHPSlider(enemyHP);
         
     }
     [PunRPC]

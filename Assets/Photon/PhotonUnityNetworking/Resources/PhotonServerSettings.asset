@@ -49,6 +49,7 @@ MonoBehaviour:
   - RPC_SetEnemyMonster
   - RPC_UpdatePlayerReadyState
   - RPC_SyncMonsters
+  - RPC_InitializeUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
