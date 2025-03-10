@@ -255,3 +255,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
 }
+
+
+// as 2 people who 3 weeks ago did not know about Photon PUN2 and Vuforia 
+// we are proud of what we have accomplished 
+// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+// sincerely, exchange students x2

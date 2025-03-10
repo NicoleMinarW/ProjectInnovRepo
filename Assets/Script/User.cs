@@ -28,12 +28,9 @@ public class User : MonoBehaviourPunCallbacks
     }
 
     public void refreshAP(){
-        if(_AP <2){
-            _AP +=4;
-        }
-        else{
-            _AP = 6;
-        }
+        _AP += 4; 
+        _AP = Mathf.Clamp(_AP, 0, 6);
+
     }
 
 
