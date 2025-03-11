@@ -23,7 +23,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isPlayer2Ready = false;
     public int turnCount = 1; 
     public TMPro.TextMeshProUGUI turnCountText;
-
+    //private bool instantiatedCharacter = false;
 
 
     public List<GameObject> monsterPrefabs;
@@ -81,21 +81,20 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
+        if (arCard.transform.childCount > 0)
+        {
+            Debug.LogWarning("A monster is already assigned to this card.");
+            return;
+        }
         GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
         monsterObj.transform.SetParent(arCard.transform);
+        
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
+        
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
-        // if (PhotonNetwork.LocalPlayer == player) {
-        //     myMonster = newMonster;
-        //     photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
-        // } 
-        PhotonView pv = monsterObj.GetComponent<PhotonView>();
-        // if (pv==null){
-        //     pv = monsterObj.AddComponent<PhotonView>();
-        // }
-        // pv.ViewID = PhotonNetwork.AllocateViewID();
+        
         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
@@ -187,7 +186,15 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
         GameObject arCard = GameObject.Find(cardID);
+
+        if (arCard.transform.childCount > 0)
+        {
+            Debug.LogWarning("An enemy monster is already present on this card.");
+            return;
+        }
+
         GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
+        monsterObj.transform.SetParent(arCard.transform);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
