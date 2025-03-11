@@ -4590,6 +4590,8 @@ MonoBehaviour:
   playerUI: {fileID: 2076187937}
   turnIndicator: {fileID: 1147040602}
   endTurnButton: {fileID: 1901335502}
+  gameOverScreen: {fileID: 260060142}
+  gameOverText: {fileID: 1237382534}
 --- !u!4 &1463476103
 Transform:
   m_ObjectHideFlags: 0

@@ -25,6 +25,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public TMPro.TextMeshProUGUI turnCountText;
 
 
+
     public List<GameObject> monsterPrefabs;
 
     public UIManager playerUI;
@@ -32,6 +33,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public TMPro.TextMeshProUGUI turnIndicator;
     public GameObject endTurnButton;
     private Dictionary<string, GameObject> creatureDictionary;
+    public GameObject gameOverScreen; 
+    public TMPro.TextMeshProUGUI gameOverText;
 
     private void Awake() {
         if (Instance == null) {
@@ -138,13 +141,21 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         
         if (isDead) {
             state = GameState.WON;
-            photonView.RPC("RPC_EndBattle", RpcTarget.All, true);
-        } else {
-            //isMyTurn = false;
-            //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
-        }
+            photonView.RPC("RPC_EndBattle", RpcTarget.All);
+        } 
+        
         playerUI.UpdateAPDisplay(userplayer._AP);
         photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
+    }
+
+    public void displayGameOver(GameState currentState){
+        if (currentState == GameState.WON){
+            gameOverText.text = "You WIN!"; 
+        }
+        else if (currentState == GameState.LOST){
+            gameOverText.text = "You LOSE!"; 
+        }
+        gameOverScreen.SetActive(true);
     }
 
     public void EndTurn() {
@@ -154,6 +165,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
         userplayer.refreshAP();
+        playerUI.UpdateAPDisplay(userplayer._AP);
         if(state == GameState.PLAYERTURN){
             state = GameState.ENEMYTURN;
         }
@@ -211,17 +223,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC]
-    void RPC_EndBattle(bool playerWon) {
-        if(playerWon == true) {
-            state = GameState.WON;
-            turnIndicator.text = "You Win!";
-        } else{
-            state = GameState.LOST;
-            turnIndicator.text = "You Lose!";
-        };
-        isPlayer1Ready = false; 
-        isPlayer2Ready = false;
+    void RPC_EndBattle() {
+        displayGameOver(state);
     }
+
     [PunRPC]
     public void RPC_UpdatePlayerReadyState(bool isPlayer1)
     {
