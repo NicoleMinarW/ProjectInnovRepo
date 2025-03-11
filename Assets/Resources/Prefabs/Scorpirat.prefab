@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7257834610348060467}
   - component: {fileID: 1295880730987505190}
   m_Layer: 0
-  m_Name: ScorpiratIdle
+  m_Name: Scorpirat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
