@@ -81,7 +81,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
         monsterObj.transform.SetParent(arCard.transform);
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
@@ -187,7 +187,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
         GameObject arCard = GameObject.Find(cardID);
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, Quaternion.identity);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
