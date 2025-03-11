@@ -5,6 +5,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using System.Data.Common;
 using Unity.VisualScripting;
+using System;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -15,21 +16,25 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public GameState state;
     public BaseMonster myMonster;
     public BaseMonster enemyMonster;
-    public User player;
-    public User enemy;
+    public User userplayer;
+    public User enemyplayer;
     private bool isMyTurn;
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
+    public int turnCount = 1; 
+    public TMPro.TextMeshProUGUI turnCountText;
 
-    public Transform player1Position;
-    public Transform player2Position;
+
+
     public List<GameObject> monsterPrefabs;
 
     public UIManager playerUI;
 
     public TMPro.TextMeshProUGUI turnIndicator;
-    public UnityEngine.UI.Button endTurnButton;
+    public GameObject endTurnButton;
     private Dictionary<string, GameObject> creatureDictionary;
+    public GameObject gameOverScreen; 
+    public TMPro.TextMeshProUGUI gameOverText;
 
     private void Awake() {
         if (Instance == null) {
@@ -40,54 +45,67 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         InitializeCreatureDictionary();
     }
 
-    public void PlayerReady(Player player)
-    {
-        if (player == PhotonNetwork.LocalPlayer)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
+    public void PlayerReady(Player player) {
+        if (player == PhotonNetwork.LocalPlayer) {
+            if (PhotonNetwork.IsMasterClient) {
                 isPlayer1Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, true);
-            }
-            else
-            {
+            } else {
                 isPlayer2Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, false);
             }
         }
 
-        if (isPlayer1Ready && isPlayer2Ready)
-        {
+        if (isPlayer1Ready && isPlayer2Ready) {
+            photonView.RPC("RPC_InitializeUI", RpcTarget.All);
             StartBattle();
         }
     }
 
     private void InitializeCreatureDictionary() {
+        Debug.Log("Initializing creature dictionary");
         creatureDictionary = new Dictionary<string, GameObject>();
         foreach (var prefab in monsterPrefabs) {
+            Debug.Log("Adding prefab: " + prefab.name);
             creatureDictionary[prefab.name] = prefab;
         }
+
     }
     public void RegisterPlayer(Player player, string cardID) {
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID],
-        PhotonNetwork.LocalPlayer == player ? player1Position.position : player2Position.position,
-        Quaternion.identity);
+        GameObject arCard = GameObject.Find(cardID);
+        if (arCard == null) {
+            Debug.LogError("AR Card not found: " + cardID);
+            return;
+        }
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
+        monsterObj.transform.SetParent(arCard.transform);
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
-
-        if (PhotonNetwork.LocalPlayer == player) {
-            // GameObject monsterObj = Instantiate(creatureDictionary[cardID], player1Position.position, Quaternion.identity);
-            // myMonster = monsterObj.GetComponent<BaseMonster>();
-            myMonster = newMonster;
-            photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
-        } 
+        newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
+        userplayer = new User(player, player.NickName, newMonster);
+        myMonster = newMonster; 
+        // if (PhotonNetwork.LocalPlayer == player) {
+        //     myMonster = newMonster;
+        //     photonView.RPC("RPC_SetEnemyMonster", RpcTarget.OthersBuffered, cardID);
+        // } 
+        PhotonView pv = monsterObj.GetComponent<PhotonView>();
+        // if (pv==null){
+        //     pv = monsterObj.AddComponent<PhotonView>();
+        // }
+        // pv.ViewID = PhotonNetwork.AllocateViewID();
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
     public void StartBattle()
     {
+        if (!PhotonNetwork.IsMasterClient) {
+            return;
+        }
+
         Debug.Log("Starting Battle (BattleScript)");
 
         // Ensure photonView is not null
@@ -104,57 +122,62 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        
-        endTurnButton.interactable = true;
-
         // Set initial game state based on MasterClient
-        if (PhotonNetwork.IsMasterClient)
-        {
-            Debug.Log("MasterClient is Player 1");
-            state = GameState.PLAYERTURN;
-            isMyTurn = true;
-            turnIndicator.text = "Your Turn!";
-        }
-        else
-        {
-            Debug.Log("MasterClient is Player 2");
-            state = GameState.ENEMYTURN;
-            isMyTurn = false;
-            turnIndicator.text = "Enemy's Turn!";
-            endTurnButton.interactable = false;
-        }
-
-        //endTurnButton.interactable = PhotonNetwork.IsMasterClient;
+        state = GameState.PLAYERTURN;
+        isMyTurn = true;
+        turnIndicator.text = userplayer._username + "'s Turn";
+        endTurnButton.SetActive(isMyTurn);
 
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
+
     }
 
 
     public void ExecuteMove(MoveSet chosenMove) {
         if (!isMyTurn || chosenMove == null) return;
         
-        bool isDead = chosenMove.Execute(player, enemy, myMonster, enemyMonster);
-        playerUI.UpdateEnemyHPSlider(myMonster._currHP);
-        photonView.RPC("RPC_UpdateHP", RpcTarget.All, enemyMonster._currHP);
+        bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
+        playerUI.UpdatePlayerHPSlider(myMonster._currHP);
+        playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
         if (isDead) {
             state = GameState.WON;
-            photonView.RPC("RPC_EndBattle", RpcTarget.All, true);
-        } else {
-            //isMyTurn = false;
-            //photonView.RPC("RPC_SyncTurn", RpcTarget.All, GameState.ENEMYTURN);
+            photonView.RPC("RPC_EndBattle", RpcTarget.All);
+        } 
+        
+        playerUI.UpdateAPDisplay(userplayer._AP);
+        photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
+    }
+
+    public void displayGameOver(GameState currentState){
+        if (currentState == GameState.WON){
+            gameOverText.text = "You WIN!"; 
         }
-        playerUI.UpdateAPDisplay(player._AP);
+        else if (currentState == GameState.LOST){
+            gameOverText.text = "You LOSE!"; 
+        }
+        gameOverScreen.SetActive(true);
     }
 
     public void EndTurn() {
+        Debug.Log("End Turn Button Clicked");
         if (isMyTurn == false) {
             Debug.Log("It is not your turn"); 
             return;
         }
-        isMyTurn = false;
-        Debug.Log("Ending Turn");
-        photonView.RPC("RPC_SyncTurn", RpcTarget.All, isMyTurn ? GameState.PLAYERTURN : GameState.ENEMYTURN);
+        userplayer.refreshAP();
+        playerUI.UpdateAPDisplay(userplayer._AP);
+        if(state == GameState.PLAYERTURN){
+            state = GameState.ENEMYTURN;
+        }
+        else if (state == GameState.ENEMYTURN){
+            state = GameState.PLAYERTURN;
+        }
+        turnCount += 1; 
+        turnCountText.text = "Turn: " + turnCount.ToString();
+        Debug.Log("Ending turn"); 
+        photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
+
     }
 
     [PunRPC]
@@ -163,47 +186,51 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
-
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], player2Position.position, Quaternion.identity);
+        GameObject arCard = GameObject.Find(cardID);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        Debug.Log("Enemy monster set: " + enemyMonster.name);
-        playerUI.SetupUI(myMonster, enemyMonster, this.player);
+        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        Debug.Log($"Enemy monster {enemyMonster.name}");
     }
 
     [PunRPC]
-    void RPC_SyncTurn(GameState newState) {
-        if (endTurnButton == null) {
-            Debug.LogError("End Turn Button is not assigned in the Inspector!");
+    void RPC_SyncTurn(GameState newState)
+    {
+        if (turnIndicator == null)
+        {
+            Debug.LogError("Turn Indicator is not assigned!");
             return;
         }
+
         state = newState;
-        if(state == GameState.PLAYERTURN && PhotonNetwork.IsMasterClient || state == GameState.ENEMYTURN && !PhotonNetwork.IsMasterClient) { 
-            isMyTurn = true;
+        Debug.Log($"RPC_SyncTurn: State changed to {state}");
+
+        // Correctly set turns for each player
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("MasterClient setting turn for all players");
+            isMyTurn = (state == GameState.PLAYERTURN);
+            turnIndicator.text = isMyTurn ? (userplayer._username + "'s turn"): (enemyplayer._username + "'s turn");
         }
-        else{
-            isMyTurn = false;
+        else
+        {
+            Debug.Log("Non-MasterClient setting turn for all players");
+            isMyTurn = (state == GameState.ENEMYTURN);
+            turnIndicator.text = isMyTurn ? (userplayer._username + "'s turn"): (enemyplayer._username + "'s turn");
         }
-        endTurnButton.interactable = isMyTurn;
+
+        endTurnButton.SetActive(isMyTurn);
+        Debug.Log($"RPC_SyncTurn: isMyTurn set to {isMyTurn}");
     }
 
     [PunRPC]
-    void RPC_UpdateHP(int newHP) {
-        enemyMonster._currHP = newHP;
-        playerUI.UpdateEnemyHPSlider(newHP);
+    public void RPC_EndBattle() {
+        if(state != GameState.WON){
+            state = GameState.LOST; 
+        }
+        displayGameOver(state);
     }
 
-    [PunRPC]
-    void RPC_EndBattle(bool playerWon) {
-        if(playerWon == true) {
-            state = GameState.WON;
-            turnIndicator.text = "You Win!";
-        } else{
-            state = GameState.LOST;
-            turnIndicator.text = "You Lose!";
-        };
-        isPlayer1Ready = false; 
-        isPlayer2Ready = false;
-    }
     [PunRPC]
     public void RPC_UpdatePlayerReadyState(bool isPlayer1)
     {
@@ -221,4 +248,26 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             StartBattle();
         }
     }
+    [PunRPC]
+    public void RPC_SyncMonstersHP(float myHP, float enemyHP)
+    {
+        myMonster._currHP = myHP; 
+        enemyMonster._currHP = enemyHP;
+        playerUI.UpdatePlayerHPSlider(myHP);
+        playerUI.UpdateEnemyHPSlider(enemyHP);
+        
+    }
+    [PunRPC]
+    public void RPC_InitializeUI()
+    {
+        turnCountText.text = "Turn: " + turnCount.ToString();
+        playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
+    }
 }
+
+
+// as 2 people who 3 weeks ago did not know about Photon PUN2 and Vuforia 
+// we are proud of what we have accomplished 
+// (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+// sincerely, exchange students x2

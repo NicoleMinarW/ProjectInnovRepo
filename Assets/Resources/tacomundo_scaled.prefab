@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8715448819350281187}
   - component: {fileID: -8467218344178650261}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: tacomundo_scaled
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,4 +144,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: bf4ca917311f98840ac3444a8f96da15, type: 2}
+  data: {fileID: 11400000, guid: 1062b3e6a41f4954588af8a3e1a1badd, type: 2}

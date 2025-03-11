@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63052d13c7a44cc448f2223cf28805ea, type: 3}
-  m_Name: Vulcano
+  m_Script: {fileID: 11500000, guid: 2e1bbdb20110c254890881bbf4654bb5, type: 3}
+  m_Name: Monster-Baldy
   m_EditorClassIdentifier: 
-  monsterName: Vulcano
-  maxHP: 75
-  element: 2
+  monsterName: Baldy
+  maxHP: 55
+  element: 1
   moveList:
-  - {fileID: 11400000, guid: d67171f0935a633469411fc3b364d2bd, type: 2}
-  - {fileID: 11400000, guid: 9e3ad9e6786866740a4655fdd23bf876, type: 2}
+  - {fileID: 11400000, guid: 42c5a0d8b018f884d937730cdbc38624, type: 2}
+  - {fileID: 11400000, guid: 06c93a80b08c9234e91daae0b3211707, type: 2}

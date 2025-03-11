@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI enemyMonText;
     public TMPro.TextMeshProUGUI playerhpText; 
     public TMPro.TextMeshProUGUI enemyhpText;
+    public TMPro.TextMeshProUGUI playerUsername;
+    public TMPro.TextMeshProUGUI enemyUsername;
     public Slider playerHPSlider; 
     public Slider enemyHPSlider; 
     public Button[] moveBtn; 
@@ -25,7 +27,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetupUI(BaseMonster playerMonster, BaseMonster enemyMonster, User user){
+    public void SetupUI(BaseMonster playerMonster, BaseMonster enemyMonster, User user1, User user2){
         playerMonText.text = playerMonster.data.monsterName; 
         enemyMonText.text = enemyMonster.data.monsterName;
         playerhpText.text = $"{playerMonster._currHP.ToString()}/{playerMonster.data.maxHP}";
@@ -34,6 +36,9 @@ public class UIManager : MonoBehaviour
         playerHPSlider.value = playerMonster._currHP;
         enemyHPSlider.maxValue = enemyMonster.data.maxHP;
         enemyHPSlider.value = enemyMonster._currHP;
+        playerUsername.text = user1._username;
+        enemyUsername.text = user2._username;
+        SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
 
@@ -44,7 +49,6 @@ public class UIManager : MonoBehaviour
             Debug.LogError($"Monster {monster.data.monsterName} has no moves");
             return; 
         }
-
         for(int i=0; i< moveBtn.Length; i++){
             if(i<moves.Count && moves != null){
                 moveBtn[i].gameObject.SetActive(true); 
@@ -76,15 +80,21 @@ public class UIManager : MonoBehaviour
         playerhpText.text = $"{hp}/{playerHPSlider.maxValue}"; 
     }
     
-
-    public void UpdateAPDisplay(int currentAP){
-        foreach(GameObject icon in APIcons){
-            Destroy(icon);
-        }
-        APIcons.Clear(); 
-        for(int i=0; i<currentAP; i++){
-            GameObject icon = Instantiate(APIcon, APContainer.transform); 
+    public void SetupAPDisplay(){
+        for (int i=0; i<6; i++){
+            GameObject icon = Instantiate(APIcon, APContainer.transform);
             APIcons.Add(icon); 
+        }
+        UpdateAPDisplay(4); 
+    }
+    public void UpdateAPDisplay(int currentAP)
+    {
+        Debug.Log($"Updating AP to {currentAP}");
+
+        for (int i = 0; i < APIcons.Count; i++)
+        {
+            // APIcons[i].SetActive(i < currentAP); 
+            APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
         }
     }
 }
