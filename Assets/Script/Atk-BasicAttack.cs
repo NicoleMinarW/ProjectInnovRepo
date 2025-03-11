@@ -3,11 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Basic Attack", menuName = "New Basic Attack")]
 public class BasicAttack : MoveSet 
 {
-    // [SerializeField] private string _attackName; 
     [SerializeField] private float _damage; 
-    // public string AttackName => _attackName; 
     public float Damage => _damage; 
-    // public int _APCost{get; protected set;}
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Executing {MoveName}: {attacker.data.monsterName} attacks {opponent.data.monsterName}");
         if(P1.costActionPoints(APCost)){
@@ -20,11 +17,5 @@ public class BasicAttack : MoveSet
         return false; 
         
     }
-    // public BasicAttack(string attackName, float damage, int APCost){
-    //     _attackName = attackName; 
-    //     _damage = damage;
-    //     // _APCost = APCost; 
-    // }
-
 
 }
