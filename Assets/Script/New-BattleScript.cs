@@ -223,7 +223,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC]
-    void RPC_EndBattle() {
+    public void RPC_EndBattle() {
+        if(state != GameState.WON){
+            state = GameState.LOST; 
+        }
         displayGameOver(state);
     }
 
