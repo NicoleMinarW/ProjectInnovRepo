@@ -14,26 +14,26 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     {
         if (Instance == null)
             Instance = this;
-    }    
+    }
     void Start()
     {
-        // Try to get ObserverBehaviour component attached to this GameObject
-        var observerBehaviour = GetComponentInChildren<ObserverBehaviour>();
+        // Get all ObserverBehaviour components in children (to handle multiple image targets)
+        ObserverBehaviour[] observerBehaviours = GetComponentsInChildren<ObserverBehaviour>();
 
-        if (observerBehaviour == null)
+        if (observerBehaviours.Length == 0)
         {
-            Debug.LogError("ObserverBehaviour NOT found! Ensure it is correctly attached to the Image Target.");
-            observerBehaviour = GetComponentInChildren<ObserverBehaviour>(); 
-            Debug.Log("ObserverBehaviour found in children.");
-
-        }
-        
-        if (observerBehaviour != null)
-        {
-            Debug.Log("ObserverBehaviour found and event subscribed!");
-            observerBehaviour.OnTargetStatusChanged += OnARCardDetected;
+            Debug.LogError("No ObserverBehaviours found! Ensure Image Targets are correctly attached.");
+            return;
         }
 
+        foreach (var observer in observerBehaviours)
+        {
+            if (observer != null)
+            {
+                Debug.Log($"ObserverBehaviour found: {observer.TargetName}");
+                observer.OnTargetStatusChanged += OnARCardDetected;
+            }
+        }
     }
 
 
@@ -72,6 +72,19 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         startButton.SetActive(false);
         BattleScriptManager.Instance.PlayerReady(PhotonNetwork.LocalPlayer);
 
+    }
+
+    public Transform GetTrackedCardTransform(string cardID)
+    {
+        ObserverBehaviour[] observerss = GetComponentsInChildren<ObserverBehaviour>();
+        foreach(var observer in observerss)
+        {
+            if (observer.TargetName == cardID && observer.TargetStatus.Status == Status.TRACKED)
+            {
+                return observer.transform;
+            }
+        }
+        return null; 
     }
 
 }

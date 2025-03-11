@@ -10,6 +10,7 @@ public abstract class MoveSet : ScriptableObject
 
     public abstract bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent); 
 
+
     public bool CheckDeath(BaseMonster opponent)
     {
         if(opponent._currHP <= 0){
