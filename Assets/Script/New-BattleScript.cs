@@ -137,6 +137,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (!isMyTurn || chosenMove == null) return;
         
         bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
+        playerUI.UpdatePlayerHPSlider(myMonster._currHP);
         playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
         if (isDead) {
