@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af8cf80e6183745bbd196a4d8454d8, type: 3}
   m_Name: Batlamandr-heal
   m_EditorClassIdentifier: 
-  _moveName: 
-  _APCost: 0
-  _healAmount: 0
+  _moveName: Healing move
+  _APCost: 2
+  _healAmount: 3
