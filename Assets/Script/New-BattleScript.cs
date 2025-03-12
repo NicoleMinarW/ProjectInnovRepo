@@ -258,7 +258,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         BaseMonster enemyMonster = monsterObj.GetComponent<BaseMonster>();
         //enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
         User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
-        User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlaerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
     }
 
