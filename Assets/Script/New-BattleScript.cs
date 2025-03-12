@@ -80,18 +80,20 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
-        GameObject arCard = GameObject.Find(cardID);
-        if (arCard == null) {
+        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        if (cardTransform == null) {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
-        if (arCard.transform.childCount > 0)
+        if (cardTransform.transform.childCount > 0)
         {
             Debug.LogWarning("A monster is already assigned to this card.");
             return;
         }
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
-        monsterObj.transform.SetParent(arCard.transform);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
+                                                            cardTransform.transform.position, 
+                                                            cardTransform.transform.rotation);
+        monsterObj.transform.SetParent(cardTransform.transform);
         
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
@@ -99,7 +101,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -214,7 +216,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-    void RPC_SetEnemyMonster(string cardID) {
+    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
@@ -227,8 +229,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, Quaternion.identity);
-        monsterObj.transform.SetParent(arCard.transform);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, position, rotation);
+        monsterObj.transform.SetParent(null);
+
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");

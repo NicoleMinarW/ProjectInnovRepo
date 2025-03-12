@@ -4338,7 +4338,7 @@ MonoBehaviour:
   m_Script: {fileID: -1826476478, guid: 8a9a760f95896c34689febc965510927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mWorldCenterMode: 2
+  mWorldCenterMode: 1
   mWorldCenter: {fileID: 0}
 --- !u!81 &1439265997
 AudioListener:
@@ -4582,7 +4582,6 @@ MonoBehaviour:
   enemyMonster: {fileID: 0}
   userplayer: {fileID: 0}
   enemyplayer: {fileID: 0}
-  turnCount: 1
   turnCountText: {fileID: 1103827320}
   monsterPrefabs:
   - {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
