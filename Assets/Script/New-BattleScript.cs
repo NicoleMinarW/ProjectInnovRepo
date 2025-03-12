@@ -87,7 +87,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
-        if (cardTransform.transform.childCount > 0)
+        if (cardTransform.transform.childCount > 1)
         {
             Debug.LogWarning("A monster is already assigned to this card.");
             return;
