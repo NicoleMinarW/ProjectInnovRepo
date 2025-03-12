@@ -12,8 +12,10 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     private bool isLocked = false;
     private void Awake()
     {
+        // PhotonNetwork.AutoCleanUpPlayerObjects = false;
         if (Instance == null)
             Instance = this;
+        
     }
     void Start()
     {
@@ -55,9 +57,10 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         string targetName = behaviour.TargetName; 
         Debug.Log("Card Detected: " + targetName);
 
-        AssignCard(targetName);
+        AssignCard(targetName, behaviour);
     }
-    public void AssignCard(string cardID)
+
+    public void AssignCard(string cardID, ObserverBehaviour behaviour)
     {
         if (isLocked) {
             return;
@@ -65,7 +68,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         assignedCardID = cardID;
         Debug.Log($"Card {cardID} assigned to {PhotonNetwork.NickName}");
 
-        BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID);
+        BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID, behaviour);
     }
     public void StartGame()
     {
