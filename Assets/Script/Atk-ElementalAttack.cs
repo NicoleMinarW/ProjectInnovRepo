@@ -6,7 +6,6 @@ public class ElementalAttack : BasicAttack
 {   
 
     [SerializeField] private MonsterElement _attackElement; 
-
     public MonsterElement AttackElement => _attackElement; 
     // public ElementalAttack(string attackName, float damage, int APCost, MonsterElement element) : base(attackName, damage, APCost){
     //     _attackElement = element; 
@@ -20,9 +19,7 @@ public class ElementalAttack : BasicAttack
             (_attackElement == MonsterElement.Poison && opponent.data.element == MonsterElement.Water)){
                 mult = 1.5f; 
             }
-            totalDamage = (Damage * mult) + attacker._buff;
-            totalDamage -= totalDamage * (opponent._defense / 100); 
-            opponent._currHP -= totalDamage;
+            opponent._currHP -= (Damage * mult )+ attacker._buff - opponent._defense; 
             opponent._currHP = Mathf.Clamp(opponent._currHP, 0, opponent.data.maxHP);
             return CheckDeath(opponent); 
         }

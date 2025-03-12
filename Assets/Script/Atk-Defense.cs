@@ -10,7 +10,7 @@ public class Defense : MoveSet{
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Adding defense stat to user {_defense} for {attacker.data.monsterName}");
         if(P1.costActionPoints(APCost)){
-            attacker._defense = _defense; 
+            attacker._defense += _defense; 
             BattleScriptManager.Instance.setTurnDefense(P1.userTurnCount, _duration); 
         }
         return false; 
