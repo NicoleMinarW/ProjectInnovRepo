@@ -1797,10 +1797,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1695564659}
     m_Modifications:
-    - target: {fileID: 1160692548453919163, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1841,10 +1837,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1755439555255764606, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
-      propertyPath: vertexIndex
-      value: 2272
-      objectReference: {fileID: 0}
     - target: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_Name
       value: Animated batamander
@@ -1852,13 +1844,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1727649637}
-    - targetCorrespondingSourceObject: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1727649636}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
 --- !u!1 &651864418
 GameObject:
@@ -5292,51 +5278,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f91d2712aab1df43b1ed22a8b8ae51f, type: 3}
---- !u!1 &1727649634 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
-  m_PrefabInstance: {fileID: 582272046}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1727649635 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
   m_PrefabInstance: {fileID: 582272046}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1727649636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727649634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 0}
---- !u!114 &1727649637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727649634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 2
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!4 &1728130105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
