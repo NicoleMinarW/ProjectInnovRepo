@@ -7,6 +7,7 @@ using System.Data.Common;
 using Unity.VisualScripting;
 using System;
 using Unity.Burst;
+using UnityEngine.UIElements;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -111,8 +112,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         
-         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
-        //photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
+         //photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -233,8 +234,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    //void RPC_SetEnemyMonster(string cardID){
+     //void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
+    void RPC_SetEnemyMonster(string cardID)
+    {
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
@@ -250,12 +252,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, position, rotation);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, cardTransform.position, cardTransform.rotation);
         monsterObj.transform.SetParent(cardTransform);
 
         BaseMonster enemyMonster = monsterObj.GetComponent<BaseMonster>();
         //enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
         User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlaerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
     }
 
