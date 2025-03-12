@@ -83,6 +83,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
+
         Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
 
         if (cardTransform == null) {
@@ -98,10 +99,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         creatureSpawned = true;
 
         Debug.Log("Registering player: " + player.NickName);
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
-                                                            cardTransform.transform.position, 
-                                                            cardTransform.transform.rotation);
-        monsterObj.transform.SetParent(cardTransform.transform);
+
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], 
+                                                            cardTransform.position, 
+                                                            cardTransform.rotation);
+        monsterObj.transform.SetParent(cardTransform);
         
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
@@ -109,8 +111,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         
-        // photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
+         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        //photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -231,29 +233,29 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-    // void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    void RPC_SetEnemyMonster(string cardID){
+     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
+    //void RPC_SetEnemyMonster(string cardID){
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
 
-        // Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+
+        if (cardTransform == null)
+        {
+            Debug.LogError("Card not found: " + cardID);
+            return;
+        }
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
-        // if (cardTransform == null)
-        // {
-        //     Debug.LogError("Card not found: " + cardID);
-        //     return;
-        // }
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, position, rotation);
+        monsterObj.transform.SetParent(cardTransform);
 
-        // GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, position, rotation);
-        // monsterObj.transform.SetParent(cardTransform);
-
-        // enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
-        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        BaseMonster enemyMonster = monsterObj.GetComponent<BaseMonster>();
+        //enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
+        User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
     }
 

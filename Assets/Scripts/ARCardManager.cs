@@ -44,14 +44,17 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     private void OnARCardDetected(ObserverBehaviour behaviour, TargetStatus status)
     {
         Debug.Log($"OnARCardDetected triggered! Target: {behaviour.TargetName}, Status: {status.Status}");
+        
         // Check if the target is tracked and no creature has been spawned yet
         if (status.Status != Status.TRACKED || !PhotonNetwork.IsConnected)
         {
             Debug.Log("Target not tracked or Photon not connected.");
             return;
         }
+
         string targetName = behaviour.TargetName; 
         Debug.Log("Card Detected: " + targetName);
+
         AssignCard(targetName);
     }
     public void AssignCard(string cardID)
@@ -70,6 +73,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         if (string.IsNullOrEmpty(assignedCardID)) {
             return;
         }
+
         isLocked = true;
         Debug.Log($"{PhotonNetwork.NickName} has locked in {assignedCardID}");
         startButton.SetActive(false);
