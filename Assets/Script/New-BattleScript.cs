@@ -101,7 +101,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log("Registering player: " + player.NickName);
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], 
                                                             cardTransform.position, 
                                                             cardTransform.rotation);
         monsterObj.transform.SetParent(cardTransform);
@@ -112,8 +112,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         
-         //photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
+         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        // photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -234,9 +234,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-     //void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    void RPC_SetEnemyMonster(string cardID)
-    {
+    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
+    // void RPC_SetEnemyMonster(string cardID)
+    
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
@@ -253,11 +253,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, arCard.transform.rotation);
+        GameObject monsterObj = Instantiate(creatureDictionary[cardID], arCard.transform.position, arCard.transform.rotation);
         monsterObj.transform.SetParent(arCard.transform);
 
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        //enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
+        // enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
     }
