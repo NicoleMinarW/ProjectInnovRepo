@@ -4847,7 +4847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skinnedMesh: {fileID: 2095567897885801336}
-  vertexIndex: 2338
+  vertexIndex: 3061
   particleEffect: {fileID: 1388958168229890276}
 --- !u!1001 &1514862950381635837
 PrefabInstance:
@@ -5008,6 +5008,10 @@ PrefabInstance:
     - target: {fileID: -1241058847572682039, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 19.023115
+      objectReference: {fileID: 0}
+    - target: {fileID: 368807445523079494, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 581294436086199173, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5211,13 +5215,59 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
       insertIndex: 1
       addedObject: {fileID: 6975314400377595951}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2239775579106556631}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4906631305368196302}
   m_SourcePrefab: {fileID: 100100000, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
 --- !u!4 &1337400514921934614 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
   m_PrefabInstance: {fileID: 1514862950381635837}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1856809066843141548 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
+  m_PrefabInstance: {fileID: 1514862950381635837}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2239775579106556631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856809066843141548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4906631305368196302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856809066843141548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 0}
 --- !u!137 &2095567897885801336 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 581294436086199173, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
