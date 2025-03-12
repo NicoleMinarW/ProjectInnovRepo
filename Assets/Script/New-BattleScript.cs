@@ -101,7 +101,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log("Registering player: " + player.NickName);
 
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], 
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
                                                             cardTransform.position, 
                                                             cardTransform.rotation);
         monsterObj.transform.SetParent(cardTransform);
@@ -242,9 +242,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        // Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        GameObject arCard = GameObject.Find(cardID);
 
-        if (cardTransform == null)
+        if (arCard == null)
         {
             Debug.LogError("Card not found: " + cardID);
             return;
@@ -252,12 +253,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, cardTransform.position, cardTransform.rotation);
-        monsterObj.transform.SetParent(cardTransform);
+        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, arCard.transform.position, arCard.transform.rotation);
+        monsterObj.transform.SetParent(arCard.transform);
 
-        BaseMonster enemyMonster = monsterObj.GetComponent<BaseMonster>();
+        enemyMonster = monsterObj.GetComponent<BaseMonster>();
         //enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
-        User enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
     }
 

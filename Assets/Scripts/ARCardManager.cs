@@ -93,5 +93,9 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         }
         return null; 
     }
+    private void OnDestroy()
+    {
+        Debug.Log("Monster instance destroyed: " + gameObject.name);
+    }
 
 }
