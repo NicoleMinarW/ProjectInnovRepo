@@ -86,14 +86,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
         if (cardTransform.transform.childCount > 0)
-        {
-            Debug.LogWarning("A monster is already assigned to this card.");
+        {            Debug.LogWarning("A monster is already assigned to this card.");
             return;
         }
         GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
                                                             cardTransform.transform.position, 
                                                             cardTransform.transform.rotation);
-        monsterObj.transform.SetParent(cardTransform.transform);
+        monsterObj.transform.SetParent(cardTransform);
         
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
@@ -219,13 +218,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
-            return;
-        }
-        GameObject arCard = GameObject.Find(cardID);
-
-        if (arCard.transform.childCount > 0)
-        {
-            Debug.LogWarning("An enemy monster is already present on this card.");
             return;
         }
 
