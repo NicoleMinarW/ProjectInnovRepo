@@ -6,7 +6,7 @@ public class ElementalAttack : BasicAttack
 {   
 
     [SerializeField] private MonsterElement _attackElement; 
-    private float totalDamage;
+
     public MonsterElement AttackElement => _attackElement; 
     // public ElementalAttack(string attackName, float damage, int APCost, MonsterElement element) : base(attackName, damage, APCost){
     //     _attackElement = element; 

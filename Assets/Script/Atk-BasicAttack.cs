@@ -4,7 +4,7 @@ using UnityEngine;
 public class BasicAttack : MoveSet 
 {
     [SerializeField] private float _damage; 
-    private float totalDamage; 
+    public float totalDamage; 
     public float Damage => _damage; 
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Executing {MoveName}: {attacker.data.monsterName} attacks {opponent.data.monsterName}");
