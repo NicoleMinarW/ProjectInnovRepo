@@ -27,7 +27,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     int Def_endDuration = 0; 
     int Buff_endDuration = 0; 
     bool defenseOn = false; 
-    bool buffOn = false; 
+    bool buffOn = false;
+    private bool creatureSpawned = false;
 
 
     public List<GameObject> monsterPrefabs;
@@ -88,11 +89,13 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
-        if (cardTransform.transform.childCount > 0)
+        if (creatureSpawned == true)
         {
             Debug.LogWarning("A monster is already assigned to this card.");
             return;
         }
+
+        creatureSpawned = true;
 
         Debug.Log("Registering player: " + player.NickName);
         GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 

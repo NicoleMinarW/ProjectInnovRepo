@@ -1765,6 +1765,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: test1_scaled
       objectReference: {fileID: 0}
+    - target: {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7903046027289759598, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
       propertyPath: sceneViewId
       value: 2
@@ -1870,6 +1874,10 @@ PrefabInstance:
     - target: {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
       propertyPath: m_Name
       value: tacomundo_scaled
+      objectReference: {fileID: 0}
+    - target: {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8715448819350281187, guid: 549acf17bf5add64fad74db785557b52, type: 3}
       propertyPath: sceneViewId
