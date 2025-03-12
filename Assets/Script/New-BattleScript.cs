@@ -123,8 +123,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster; 
         
-        //  photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
+        // photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -245,23 +245,28 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    // void RPC_SetEnemyMonster(string cardID){
+    // void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
+    void RPC_SetEnemyMonster(string cardID){
     
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
 
-        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
-        // GameObject arCard = GameObject.Find(cardID);
-        GameObject monsterObj = Instantiate(creatureDictionary[cardID], position, rotation);
-
-
-
-        if(cardTransform == null){
-            monsterObj.transform.SetParent(cardTransform);
+        GameObject monsterObj = GameObject.Find(creatureDictionary[cardID].name + "(Clone)");
+        // GameObject monsterObj = Instantiate(creatureDictionary[cardID], position, rotation);
+        // monsterObj.transform.SetParent(cardTransform);
+        if(monsterObj == null){
+            Debug.LogError("Could not find existing monster for card"+ cardID);
+            return; 
+            // monsterObj.transform.SetParent(cardTransform);
         }
+        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        if (cardTransform == null) {
+            Debug.LogError("Card Transform is nULL for: " + cardID);
+            return;
+        }
+        monsterObj.transform.SetParent(cardTransform, true);
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
