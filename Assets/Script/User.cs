@@ -11,6 +11,7 @@ public class User : MonoBehaviourPunCallbacks
     public string _username;
     public int _AP;
     public BaseMonster PlayerMonster;
+    public int userTurnCount = 1; 
     public User(Player player, string username, BaseMonster monster){
         currentplayer = player;
         _username = username;

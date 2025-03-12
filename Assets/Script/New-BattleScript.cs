@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using Unity.VisualScripting;
 using System;
+using Unity.Burst;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -21,9 +22,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isMyTurn;
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
-    public int turnCount = 1; 
     public TMPro.TextMeshProUGUI turnCountText;
     //private bool instantiatedCharacter = false;
+    int Def_endDuration = 0; 
+    int Buff_endDuration = 0; 
+    bool defenseOn = false; 
+    bool buffOn = false; 
 
 
     public List<GameObject> monsterPrefabs;
@@ -172,12 +176,42 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         else if (state == GameState.ENEMYTURN){
             state = GameState.PLAYERTURN;
         }
-        turnCount += 1; 
-        turnCountText.text = "Turn: " + turnCount.ToString();
+        userplayer.userTurnCount += 1; 
+        turnCountText.text = "Turn: " + userplayer.userTurnCount.ToString();
+        if(defenseOn){
+            checkDefense(userplayer.userTurnCount, Def_endDuration);
+            photonView.RPC("RPC_syncDef", RpcTarget.Others, myMonster._defense);
+        }
+        if (buffOn){
+            checkBuff(userplayer.userTurnCount, Buff_endDuration);
+            photonView.RPC("RPC_syncBuff", RpcTarget.Others, myMonster._buff);
+        }
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
     }
+
+    public void setTurnDefense(int currTurns, int duration){
+        Def_endDuration = currTurns + duration +1;
+        defenseOn = true; 
+    }
+    public void checkDefense(int currTurn, int lastTurn){
+        if(currTurn <= lastTurn){
+            myMonster._defense = 0;
+            defenseOn = false;
+        }
+    }
+    public void setTurnBuff(int currTurns, int duration){
+        Buff_endDuration = currTurns + duration +1;
+        buffOn = true; 
+    }
+    public void checkBuff(int currTurn, int lastTurn){
+        if(currTurn <= lastTurn){
+            myMonster._buff = 0;
+            buffOn = false;
+        }
+    }
+
 
     [PunRPC]
     void RPC_SetEnemyMonster(string cardID) {
@@ -267,10 +301,21 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void RPC_InitializeUI()
     {
-        turnCountText.text = "Turn: " + turnCount.ToString();
+        turnCountText.text = "Turn: " + userplayer.userTurnCount.ToString();
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
-}
+    [PunRPC]
+    public void RPC_syncDef(int def){
+        enemyMonster._defense = def;
+    }
+    
+    [PunRPC]
+    public void RPC_syncBuff(int buff){
+        enemyMonster._buff = buff;
+    }
+
+}   
+
 
 
 // as 2 people who 3 weeks ago did not know about Photon PUN2 and Vuforia 
