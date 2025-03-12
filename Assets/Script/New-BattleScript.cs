@@ -54,9 +54,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             if (PhotonNetwork.IsMasterClient) {
                 isPlayer1Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, true);
+                Debug.Log("Player 1 is ready");
             } else {
                 isPlayer2Ready = true;
                 photonView.RPC("RPC_UpdatePlayerReadyState", RpcTarget.Others, false);
+                Debug.Log("Player 2 is ready");
             }
         }
 
@@ -107,6 +109,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public void StartBattle()
     {
         if (!PhotonNetwork.IsMasterClient) {
+            Debug.LogError("Trying to start battle without being the MasterClient!");
             return;
         }
 
@@ -129,9 +132,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Set initial game state based on MasterClient
         state = GameState.PLAYERTURN;
         isMyTurn = true;
+        if (userplayer._username == null)
+        {
+            Debug.LogError("Userplayer username is null!");
+            return;
+        }
         turnIndicator.text = userplayer._username + "'s Turn";
         endTurnButton.SetActive(isMyTurn);
-
+        Debug.Log("Battle started (battlescript)");
         photonView.RPC("RPC_SyncTurn", RpcTarget.Others, state);
 
     }

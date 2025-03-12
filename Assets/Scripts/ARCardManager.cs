@@ -58,7 +58,6 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         assignedCardID = cardID;
         Debug.Log($"Card {cardID} assigned to {PhotonNetwork.NickName}");
 
-
         BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID);
     }
     public void StartGame()
