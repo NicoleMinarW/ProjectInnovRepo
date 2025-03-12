@@ -26,14 +26,18 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             return;
         }
 
+        int observerCount = 0;
+
         foreach (var observer in observerBehaviours)
         {
             if (observer != null)
             {
                 Debug.Log($"ObserverBehaviour found: {observer.TargetName}");
                 observer.OnTargetStatusChanged += OnARCardDetected;
+                observerCount++;
             }
         }
+        Debug.Log($"there are {observerCount} observer count");
     }
 
 
