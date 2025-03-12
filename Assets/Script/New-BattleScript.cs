@@ -185,6 +185,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
+        
         GameObject arCard = GameObject.Find(cardID);
 
         if (arCard.transform.childCount > 0)
@@ -197,7 +198,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         monsterObj.transform.SetParent(arCard.transform);
         enemyMonster = monsterObj.GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
-        Debug.Log($"Enemy monster {enemyMonster.name}");
+        Debug.Log($"Enemy monster {enemyMonster.name} spawned");
     }
 
     [PunRPC]
