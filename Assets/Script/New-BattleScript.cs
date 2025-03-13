@@ -25,8 +25,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isMyTurn;
     private bool isPlayer1Ready = false;
     private bool isPlayer2Ready = false;
-    public TMPro.TextMeshProUGUI turnCountText;
-    //private bool instantiatedCharacter = false;
 
     private bool creatureSpawned = false;
 
@@ -233,7 +231,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             state = GameState.PLAYERTURN;
         }
         userplayer.userTurnCount += 1; 
-        turnCountText.text = "Turn: " + userplayer.userTurnCount.ToString();
         if(myMonster._defenseOn){
             myMonster._defenseOn = checkDefense(userplayer.userTurnCount, myMonster._Def_endDuration);
             photonView.RPC("RPC_syncDef", RpcTarget.Others, myMonster._defense);
@@ -383,7 +380,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void RPC_InitializeUI()
     {
-        turnCountText.text = "Turn: " + userplayer.userTurnCount.ToString();
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
     [PunRPC]
