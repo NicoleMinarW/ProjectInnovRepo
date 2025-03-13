@@ -3071,7 +3071,6 @@ GameObject:
   - component: {fileID: 1151855075}
   - component: {fileID: 1151855077}
   - component: {fileID: 1151855076}
-  - component: {fileID: 1151855078}
   m_Layer: 0
   m_Name: Scorpirat
   m_TagString: Untagged
@@ -3223,28 +3222,6 @@ MonoBehaviour:
   mPlaneReference: {fileID: 0}
   mMidAirReference: {fileID: 0}
   mPreview: {fileID: 1151855076}
---- !u!114 &1151855078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151855070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 5
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &1187476789
 GameObject:
   m_ObjectHideFlags: 0
@@ -5033,7 +5010,6 @@ GameObject:
   - component: {fileID: 1695564663}
   - component: {fileID: 1695564665}
   - component: {fileID: 1695564667}
-  - component: {fileID: 1695564666}
   m_Layer: 0
   m_Name: Batlamandr
   m_TagString: Untagged
@@ -5168,28 +5144,6 @@ MonoBehaviour:
   mPlaneReference: {fileID: 0}
   mMidAirReference: {fileID: 0}
   mPreview: {fileID: 1695564667}
---- !u!114 &1695564666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695564658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 4
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &1695564667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6238,6 +6192,10 @@ PrefabInstance:
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2198669250408160108, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: sceneViewId
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6092427007856947617, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: data
