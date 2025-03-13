@@ -8,7 +8,7 @@ public class BasicAttack : MoveSet
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Executing {MoveName}: {attacker.data.monsterName} attacks {opponent.data.monsterName}");
         if(P1.costActionPoints(APCost)){
-            opponent._currHP -= (_damage + attacker._buff) - opponent._defense; 
+            opponent._currHP -= (_damage + attacker._buff) - ((_damage + attacker._buff) * (opponent._defense/100)); 
             Debug.Log($"Damage: {_damage}, Buff: {attacker._buff}, Opponent Defense: {opponent._defense}");
             Debug.Log($"Opponent's new HP: {opponent._currHP}");
             return CheckDeath(opponent); 

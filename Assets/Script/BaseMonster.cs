@@ -15,6 +15,19 @@ using System.Collections.Generic;
         public int _defCounter {get=>defCounter; set=>defCounter=value;}
         private float buff; 
         public float _buff{get=>buff; set=>buff=value;}
+        private int remainingCooldown;
+        public int _remainingCooldown {get=>remainingCooldown; set=>remainingCooldown=value;}
+        private int remainingDuration;
+        public int _remainingDuration {get=>remainingDuration; set=>remainingDuration=value;}
+        private int Def_endDuration; 
+        public int _Def_endDuration {get=>Def_endDuration; set=>Def_endDuration=value;}
+        public int buff_endDuration;
+        public int _buff_endDuration {get=>buff_endDuration; set=>buff_endDuration=value;}
+        private bool defenseOn = false; 
+        public bool _defenseOn {get=>defenseOn; set=>defenseOn=value;}
+        private bool buffOn = false;
+        public bool _buffOn {get=>buffOn; set=>buffOn=value;}
+
         private void Awake(){
             if(data!=null){
                 _currHP = data.maxHP; 

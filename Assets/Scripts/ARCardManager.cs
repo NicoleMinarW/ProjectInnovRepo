@@ -12,8 +12,10 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     private bool isLocked = false;
     private void Awake()
     {
+        // PhotonNetwork.AutoCleanUpPlayerObjects = false;
         if (Instance == null)
             Instance = this;
+        
     }
     void Start()
     {
@@ -26,12 +28,16 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             return;
         }
 
+        int observerCount = 0;
+
         foreach (var observer in observerBehaviours)
         {
             if (observer != null)
             {
                 Debug.Log($"ObserverBehaviour found: {observer.TargetName}");
                 observer.OnTargetStatusChanged += OnARCardDetected;
+                observerCount++;
+                Debug.Log($"there are {observerCount} observer count");
             }
         }
     }
@@ -40,17 +46,21 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     private void OnARCardDetected(ObserverBehaviour behaviour, TargetStatus status)
     {
         Debug.Log($"OnARCardDetected triggered! Target: {behaviour.TargetName}, Status: {status.Status}");
+        
         // Check if the target is tracked and no creature has been spawned yet
         if (status.Status != Status.TRACKED || !PhotonNetwork.IsConnected)
         {
             Debug.Log("Target not tracked or Photon not connected.");
             return;
         }
+
         string targetName = behaviour.TargetName; 
         Debug.Log("Card Detected: " + targetName);
-        AssignCard(targetName);
+
+        AssignCard(targetName, behaviour);
     }
-    public void AssignCard(string cardID)
+
+    public void AssignCard(string cardID, ObserverBehaviour behaviour)
     {
         if (isLocked) {
             return;
@@ -58,8 +68,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         assignedCardID = cardID;
         Debug.Log($"Card {cardID} assigned to {PhotonNetwork.NickName}");
 
-
-        BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID);
+        BattleScriptManager.Instance.RegisterPlayer(PhotonNetwork.LocalPlayer, cardID, behaviour);
     }
     public void StartGame()
     {
@@ -67,6 +76,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
         if (string.IsNullOrEmpty(assignedCardID)) {
             return;
         }
+
         isLocked = true;
         Debug.Log($"{PhotonNetwork.NickName} has locked in {assignedCardID}");
         startButton.SetActive(false);
@@ -85,6 +95,10 @@ public class ARCardManager : MonoBehaviourPunCallbacks
             }
         }
         return null; 
+    }
+    private void OnDestroy()
+    {
+        Debug.Log("Monster instance destroyed: " + gameObject.name);
     }
 
 }
