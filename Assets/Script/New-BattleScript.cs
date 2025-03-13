@@ -273,7 +273,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
 
         GameObject enemyMonsterPrefab = enemyView.gameObject;
-        BaseMonster enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
+        enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
 
         if (enemyMonster == null)
         {
@@ -282,26 +282,28 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
 
         // Get the tracked AR card transform
-        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
-        if (cardTransform == null)
-        {
-            Debug.LogError("Card Transform is NULL for: " + cardID);
-            return;
-        }
+        // Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+        // if (cardTransform == null)
+        // {
+        //     Debug.LogError("Card Transform is NULL for: " + cardID);
+        //     return;
+        // }
 
-        // Attach enemy creature to opponent's card (optional)
-        enemyMonsterPrefab.transform.SetParent(cardTransform, true);
+        // // Attach enemy creature to opponent's card (optional)
+        // enemyMonsterPrefab.transform.SetParent(cardTransform, true);
 
         Debug.Log($"Setting enemy monster on card {cardID}");
 
         // Assign opponent monster data
-        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        
+
+        enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
 
         Debug.Log($"Enemy monster {enemyMonster.name}");
         Debug.Log($"setting player position");
 
         // Correctly position the opponent’s creature in front of the player’s creature
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 0.3f); // Move 30cm forward
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1f); // Move 30cm forward
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
         // Make the enemy creature face the player’s creature

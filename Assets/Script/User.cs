@@ -33,6 +33,12 @@ public class User : MonoBehaviourPunCallbacks
         _AP = Mathf.Clamp(_AP, 0, 6);
 
     }
+    public void assignUser(User user, Player player, string username, BaseMonster monster){
+        user.currentplayer = player;
+        user._username = username;
+        user.PlayerMonster = monster;
+        user._AP = 4; 
+    }
 
 
     
