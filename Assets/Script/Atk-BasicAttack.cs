@@ -1,17 +1,14 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Attack", menuName = "New Attack")]
+[CreateAssetMenu(fileName = "New Basic Attack", menuName = "New Basic Attack")]
 public class BasicAttack : MoveSet 
 {
-    // [SerializeField] private string _attackName; 
     [SerializeField] private float _damage; 
-    // public string AttackName => _attackName; 
     public float Damage => _damage; 
-    // public int _APCost{get; protected set;}
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Executing {MoveName}: {attacker.data.monsterName} attacks {opponent.data.monsterName}");
         if(P1.costActionPoints(APCost)){
-            opponent._currHP -= (_damage + attacker._buff) - opponent._defense; 
+            opponent._currHP -= (_damage + attacker._buff) - ((_damage + attacker._buff) * (opponent._defense/100)); 
             Debug.Log($"Damage: {_damage}, Buff: {attacker._buff}, Opponent Defense: {opponent._defense}");
             Debug.Log($"Opponent's new HP: {opponent._currHP}");
             return CheckDeath(opponent); 
@@ -20,11 +17,5 @@ public class BasicAttack : MoveSet
         return false; 
         
     }
-    // public BasicAttack(string attackName, float damage, int APCost){
-    //     _attackName = attackName; 
-    //     _damage = damage;
-    //     // _APCost = APCost; 
-    // }
-
 
 }
