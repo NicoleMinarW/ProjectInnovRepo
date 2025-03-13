@@ -77,19 +77,23 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
 
     }
-    public void RegisterPlayer(Player player, string cardID, ObserverBehaviour behaviour) {
-        if (!creatureDictionary.ContainsKey(cardID)) {
+    public void RegisterPlayer(Player player, string cardID, ObserverBehaviour behaviour)
+    {
+        if (!creatureDictionary.ContainsKey(cardID))
+        {
             Debug.LogError("Invalid card ID: " + cardID);
             return;
         }
 
         Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
 
-        if (cardTransform == null) {
+        if (cardTransform == null)
+        {
             Debug.LogError("AR Card not found: " + cardID);
             return;
         }
-        if (creatureSpawned == true)
+
+        if (creatureSpawned)
         {
             Debug.LogWarning("A monster is already assigned to this card.");
             return;
@@ -99,12 +103,17 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log("Registering player: " + player.NickName);
 
-        GameObject monsterObj = PhotonNetwork.Instantiate(creatureDictionary[cardID].name, 
-                                                            cardTransform.position, 
-                                                            cardTransform.rotation);
+        // Spawn player's own creature on top of their card
+        GameObject monsterObj = PhotonNetwork.Instantiate(
+            creatureDictionary[cardID].name,
+            cardTransform.position + Vector3.up * 0.1f, // Slightly above to avoid clipping
+            cardTransform.rotation
+        );
+
         Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
+
+        // Attach to AR Card
         AnchorBehaviour anchor = behaviour.GetComponent<AnchorBehaviour>();
-        monsterObj.transform.SetParent(cardTransform);
         if (anchor != null)
         {
             monsterObj.transform.SetParent(anchor.transform);
@@ -113,15 +122,17 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         {
             monsterObj.transform.SetParent(behaviour.transform); // Fallback
         }
-        
+
+        // Assign creature data
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
-        newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data; 
-        
+        newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data;
+
         userplayer = new User(player, player.NickName, newMonster);
-        myMonster = newMonster; 
-        
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation); // it's either RpcTarget.Others or RpcTarget.OthersBuffered
-        // photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID);
+        myMonster = newMonster;
+
+        // Send this player's card position to the opponent
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation, monsterObj.GetComponent<PhotonView>().ViewID);
+
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -235,46 +246,58 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         return true; 
     }
 
-
     [PunRPC]
-    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    //void RPC_SetEnemyMonster(string cardID){
-    
-        if (!creatureDictionary.ContainsKey(cardID)) {
+    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
+    {
+        Debug.Log($"RPC_SetEnemyMonster: cardID={cardID}, position={position}, rotation={rotation}, enemyCreatureID={enemyCreatureID}");
+        if (!creatureDictionary.ContainsKey(cardID))
+        {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
             return;
         }
 
-        GameObject monsterObj = GameObject.Find(creatureDictionary[cardID].name + "(Clone)");
-        // GameObject monsterObj = Instantiate(creatureDictionary[cardID], position, rotation);
-        // monsterObj.transform.SetParent(cardTransform);
-        if(monsterObj == null){
-            Debug.LogError("Could not find existing monster for card"+ cardID);
-            return; 
-            // monsterObj.transform.SetParent(cardTransform);
-        }
-        Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
-
-        if (cardTransform == null) {
-            Debug.LogError("Card Transform is nULL for: " + cardID);
+        // Find the opponent’s monster using PhotonView ID
+        PhotonView enemyView = PhotonView.Find(enemyCreatureID);
+        if (enemyView == null)
+        {
+            Debug.LogError("Enemy monster PhotonView not found!");
             return;
         }
-        monsterObj.transform.SetParent(cardTransform, true);
 
+        GameObject enemyMonsterPrefab = enemyView.gameObject;
+        enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
+
+        if (enemyMonster == null)
+        {
+            Debug.LogError("Enemy monster component not found!");
+            return;
+        }
+
+        
         Debug.Log($"Setting enemy monster on card {cardID}");
 
-        // monsterObj.transform.SetParent(arCard.transform);
+        // Assign opponent monster data
 
-        enemyMonster = monsterObj.GetComponent<BaseMonster>();
-        // enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
+
+        Debug.Log($"{PhotonNetwork.PlayerListOthers}");
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        //enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+
+
         Debug.Log($"Enemy monster {enemyMonster.name}");
 
-        Vector3 EnemyPosition = position + rotation * new Vector3(0, 0, 1);
-        monsterObj.transform.position = EnemyPosition;
+        Debug.Log($"setting player position");
 
-        enemyMonster.transform.rotation = Quaternion.LookRotation(position - EnemyPosition);
+        // Correctly position the opponent’s creature in front of the player’s creature
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 0.7f); // Move 30cm forward
+        enemyMonsterPrefab.transform.position = newEnemyPosition;
+
+        // Make the enemy creature face the player’s creature
+        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(position - newEnemyPosition);
+
+        Debug.Log($"Repositioned enemy creature at {newEnemyPosition}");
     }
+
 
     [PunRPC]
     void RPC_SyncTurn(GameState newState)
