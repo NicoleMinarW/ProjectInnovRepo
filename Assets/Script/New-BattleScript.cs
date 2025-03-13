@@ -258,7 +258,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (monster._isOngoing){
             monster.tickDownDuration(monster);
         }
-        playerUI.UpdateSPButton(myMonster)
+        playerUI.UpdateSPButton(myMonster);
     }
 
 
