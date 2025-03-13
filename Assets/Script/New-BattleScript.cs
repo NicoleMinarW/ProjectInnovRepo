@@ -237,8 +237,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
     [PunRPC]
-    // void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
-    void RPC_SetEnemyMonster(string cardID){
+    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation) {
+    //void RPC_SetEnemyMonster(string cardID){
     
         if (!creatureDictionary.ContainsKey(cardID)) {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
@@ -254,6 +254,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             // monsterObj.transform.SetParent(cardTransform);
         }
         Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
+
         if (cardTransform == null) {
             Debug.LogError("Card Transform is nULL for: " + cardID);
             return;
@@ -268,6 +269,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // enemyMonster = creatureDictionary[cardID].GetComponent<BaseMonster>();
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         Debug.Log($"Enemy monster {enemyMonster.name}");
+
+        Vector3 EnemyPosition = position + rotation * new Vector3(0, 0, 1);
+        monsterObj.transform.position = EnemyPosition;
+
+        enemyMonster.transform.rotation = Quaternion.LookRotation(position - EnemyPosition);
     }
 
     [PunRPC]
