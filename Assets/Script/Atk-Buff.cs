@@ -11,12 +11,12 @@ public class Buff : MoveSet{
         Debug.Log($"Adding buff stat to user {_buff} for {attacker.data.monsterName}");
         if(P1.costActionPoints(APCost)){
             attacker._buff += _buff; 
-            setTurnBuff(attacker, P1.userTurnCount, _duration);
+            // setTurnBuff(attacker, P1.userTurnCount, _duration);
         }
         return false; 
     }
-    public void setTurnBuff(BaseMonster monster, int turn, int duration){
-        monster._buff_endDuration=turn + duration + 1;
-        monster._buffOn = true;
-    }
+    // public void setTurnBuff(BaseMonster monster, int turn, int duration){
+    //     monster._buff_endDuration=turn + duration + 1;
+    //     monster._buffOn = true;
+    // }
 }

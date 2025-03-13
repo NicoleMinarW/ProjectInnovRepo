@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     public Slider playerHPSlider; 
     public Slider enemyHPSlider; 
     public Button[] moveBtn; 
+    public Button SPButton; 
+    public TMPro.TextMeshProUGUI SPButtonTxt; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
     public GameObject APContainer; 
     public GameObject APIcon; 
@@ -38,6 +40,8 @@ public class UIManager : MonoBehaviour
         enemyHPSlider.value = enemyMonster._currHP;
         playerUsername.text = user1._username;
         enemyUsername.text = user2._username;
+        SPButtonTxt.text = playerMonster.SPMove.SpName; 
+        SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
@@ -70,6 +74,9 @@ public class UIManager : MonoBehaviour
         battleScriptManager.ExecuteMove(chosenMove); 
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
     }
+    void OnSPButtonPress(SpecialAttack chosenSP){
+        battleScriptManager.ExecuteSP(chosenSP);
+    }
 
     public void UpdateEnemyHPSlider(float hp){
         enemyHPSlider.value = hp; 
@@ -96,5 +103,9 @@ public class UIManager : MonoBehaviour
             // APIcons[i].SetActive(i < currentAP); 
             APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
         }
+    }
+
+    public void UpdateSPButton(){
+        
     }
 }

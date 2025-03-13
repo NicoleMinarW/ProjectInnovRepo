@@ -21,12 +21,16 @@ using System.Collections.Generic;
         public int _remainingDuration {get=>remainingDuration; set=>remainingDuration=value;}
         private int Def_endDuration; 
         public int _Def_endDuration {get=>Def_endDuration; set=>Def_endDuration=value;}
-        public int buff_endDuration;
-        public int _buff_endDuration {get=>buff_endDuration; set=>buff_endDuration=value;}
+        // public int buff_endDuration;
+        // public int _buff_endDuration {get=>buff_endDuration; set=>buff_endDuration=value;}
         private bool defenseOn = false; 
         public bool _defenseOn {get=>defenseOn; set=>defenseOn=value;}
-        private bool buffOn = false;
-        public bool _buffOn {get=>buffOn; set=>buffOn=value;}
+        // private bool buffOn = false;
+        // public bool _buffOn {get=>buffOn; set=>buffOn=value;}
+        private bool isOnCooldown = true;
+        public bool _isOnCooldown {get=>isOnCooldown; set=>isOnCooldown=value;}
+        private bool isOngoing = false;
+        public bool _isOngoing {get=>isOngoing; set=>isOngoing=value;} 
 
         private void Awake(){
             if(data!=null){
@@ -52,11 +56,30 @@ using System.Collections.Generic;
             }
             return data.moveList; 
         }
+        public SpecialAttack SPMove; 
         public void AttackAnimation(){
             monsterAnimator.SetTrigger("move1");
         }
         public void GetHitAnimation(){
             monsterAnimator.SetTrigger("healthDecreased");
+        }
+
+        public void tickDownCD(BaseMonster monster){
+            if(monster._remainingCooldown > 0){
+                monster._remainingCooldown--;
+                if(monster._remainingCooldown == 0){
+                    monster.SPMove.EffectReady(monster);
+                }
+            }
+        }
+        public void tickDownDuration(BaseMonster monster){
+            if(monster._remainingDuration > 0){
+                monster._remainingDuration--;
+                if (monster._remainingDuration == 0){
+                    monster.SPMove.RemoveEffect(monster);
+                }
+ 
+            }
         }
 
     }

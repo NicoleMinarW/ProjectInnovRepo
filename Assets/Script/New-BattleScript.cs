@@ -193,6 +193,20 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
     }
 
+    public void ExecuteSP(SpecialAttack chosenSP){
+        if (!isMyTurn || chosenSP == null) return;
+        if(myMonster._isOnCooldown == false && myMonster._isOngoing == false){
+            bool isDead = chosenSP.ApplyEffect(userplayer, enemyplayer, myMonster, enemyMonster);
+            if(isDead){
+                state = GameState.WON; 
+                photonView.RPC("RPC_EndBattle", RpcTarget.All);
+            }
+        }
+        
+        photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
+    }
+
+
     public void displayGameOver(GameState currentState){
         if (currentState == GameState.WON){
             gameOverText.text = "You WIN!"; 
@@ -223,11 +237,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             myMonster._defenseOn = checkDefense(userplayer.userTurnCount, myMonster._Def_endDuration);
             photonView.RPC("RPC_syncDef", RpcTarget.Others, myMonster._defense);
         }
-        if (myMonster._buffOn){
-            myMonster._buffOn = checkBuff(userplayer.userTurnCount, myMonster._buff_endDuration);
-            photonView.RPC("RPC_syncBuff", RpcTarget.Others, myMonster._buff);
-        }
-
+        runThroughSP(myMonster);
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
@@ -240,13 +250,15 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
         return true; 
     }
-    public bool checkBuff(int currTurn, int lastTurn){
-        if(currTurn <= lastTurn){
-            myMonster._buff = 0;
-            return false;
+    public void runThroughSP(BaseMonster monster){
+        if (monster._isOnCooldown){
+            monster.tickDownCD(monster);
         }
-        return true; 
+        if (monster._isOngoing){
+            monster.tickDownDuration(monster);
+        }
     }
+
 
     [PunRPC]
     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
