@@ -51,8 +51,10 @@ MonoBehaviour:
   - RPC_SyncMonsters
   - RPC_InitializeUI
   - RPC_SyncMonstersHP
+  - RPC_TrigGetHit
   - RPC_syncBuff
   - RPC_syncDef
+
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -5,6 +5,7 @@ using System.Collections.Generic;
     // [CreateAssetMenu(fileName = "New Monster", menuName = "New Monster")]
     public class BaseMonster : MonoBehaviour    
     {
+        [SerializeField] public Animator monsterAnimator; 
         public MonsterData data; 
         private float currHP;
         public float _currHP {get => currHP; set => currHP=value;} 
@@ -51,7 +52,12 @@ using System.Collections.Generic;
             }
             return data.moveList; 
         }
-        // public void ExecuteMove()
+        public void AttackAnimation(){
+            monsterAnimator.SetTrigger("move1");
+        }
+        public void GetHitAnimation(){
+            monsterAnimator.SetTrigger("healthDecreased");
+        }
 
     }
 
