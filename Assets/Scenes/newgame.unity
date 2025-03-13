@@ -1839,7 +1839,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_Name
-      value: Animated batamander
+      value: Batlamandr
+      objectReference: {fileID: 0}
+    - target: {fileID: 2239775579106556631, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: sceneViewId
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4954,7 +4958,7 @@ GameObject:
   - component: {fileID: 1695564661}
   - component: {fileID: 1695564663}
   m_Layer: 0
-  m_Name: tacomundo_scaled
+  m_Name: Batlamandr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
