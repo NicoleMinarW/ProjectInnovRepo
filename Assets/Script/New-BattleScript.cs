@@ -8,7 +8,8 @@ using Unity.VisualScripting;
 using System;
 using Unity.Burst;
 using UnityEngine.UIElements;
-using Vuforia; 
+using Vuforia;
+using Photon.Pun.Demo.PunBasics;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -109,8 +110,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             cardTransform.position + Vector3.up * 0.1f, // Slightly above to avoid clipping
             cardTransform.rotation
         );
-
-        Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
+        Debug.Log($"!!!!! Spawned monster with game object name: {monsterObj.name}");
+        // Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
 
         // Attach to AR Card
         AnchorBehaviour anchor = behaviour.GetComponent<AnchorBehaviour>();
@@ -126,13 +127,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Assign creature data
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data;
+        Debug.Log($"!!!!!!!! Monster has been found, assigned to the current player: {newMonster.data.monsterName}");
 
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster;
+        Debug.Log($"!!!!!!!Current myMonster: {myMonster.data.monsterName}");
 
         // Send this player's card position to the opponent
         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation, monsterObj.GetComponent<PhotonView>().ViewID);
-
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -177,8 +179,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     public void ExecuteMove(MoveSet chosenMove) {
         if (!isMyTurn || chosenMove == null) return;
-        
         bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
+        myMonster.AttackAnimation();
+        photonView.RPC("RPC_TrigGetHit", RpcTarget.Others);
         playerUI.UpdatePlayerHPSlider(myMonster._currHP);
         playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
@@ -190,6 +193,20 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         playerUI.UpdateAPDisplay(userplayer._AP);
         photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
     }
+
+    public void ExecuteSP(SpecialAttack chosenSP){
+        if (!isMyTurn || chosenSP == null) return;
+        if(myMonster._isOnCooldown == false && myMonster._isOngoing == false){
+            bool isDead = chosenSP.ApplyEffect(userplayer, enemyplayer, myMonster, enemyMonster);
+            if(isDead){
+                state = GameState.WON; 
+                photonView.RPC("RPC_EndBattle", RpcTarget.All);
+            }
+        }
+        
+        photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
+    }
+
 
     public void displayGameOver(GameState currentState){
         if (currentState == GameState.WON){
@@ -221,11 +238,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             myMonster._defenseOn = checkDefense(userplayer.userTurnCount, myMonster._Def_endDuration);
             photonView.RPC("RPC_syncDef", RpcTarget.Others, myMonster._defense);
         }
-        if (myMonster._buffOn){
-            myMonster._buffOn = checkBuff(userplayer.userTurnCount, myMonster._buff_endDuration);
-            photonView.RPC("RPC_syncBuff", RpcTarget.Others, myMonster._buff);
-        }
-
+        runThroughSP(myMonster);
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
@@ -238,13 +251,16 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
         return true; 
     }
-    public bool checkBuff(int currTurn, int lastTurn){
-        if(currTurn <= lastTurn){
-            myMonster._buff = 0;
-            return false;
+    public void runThroughSP(BaseMonster monster){
+        if (monster._isOnCooldown){
+            monster.tickDownCD(monster);
         }
-        return true; 
+        if (monster._isOngoing){
+            monster.tickDownDuration(monster);
+        }
+        playerUI.UpdateSPButton(myMonster);
     }
+
 
     [PunRPC]
     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
@@ -266,6 +282,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         GameObject enemyMonsterPrefab = enemyView.gameObject;
         enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
+        enemyMonster.data = enemyMonsterPrefab.GetComponent<BaseMonster>().data;
 
         if (enemyMonster == null)
         {
@@ -289,7 +306,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"setting player position");
 
         // Correctly position the opponent’s creature in front of the player’s creature
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 0.7f); // Move 30cm forward
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0,1); // Move 30cm forward
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
         // Make the enemy creature face the player’s creature
@@ -370,16 +387,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
     [PunRPC]
-    public void RPC_syncDef(int def){
-        enemyMonster._defense = def;
+    public void RPC_TrigGetHit(){
+        myMonster.GetHitAnimation();
     }
-    
-    [PunRPC]
-    public void RPC_syncBuff(int buff){
-        enemyMonster._buff = buff;
-    }
+}
 
-}   
 
 
 
