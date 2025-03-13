@@ -5,6 +5,7 @@ using System.Collections.Generic;
     // [CreateAssetMenu(fileName = "New Monster", menuName = "New Monster")]
     public class BaseMonster : MonoBehaviour    
     {
+        [SerializeField] public Animator monsterAnimator; 
         public MonsterData data; 
         private float currHP;
         public float _currHP {get => currHP; set => currHP=value;} 
@@ -14,6 +15,23 @@ using System.Collections.Generic;
         public int _defCounter {get=>defCounter; set=>defCounter=value;}
         private float buff; 
         public float _buff{get=>buff; set=>buff=value;}
+        private int remainingCooldown;
+        public int _remainingCooldown {get=>remainingCooldown; set=>remainingCooldown=value;}
+        private int remainingDuration;
+        public int _remainingDuration {get=>remainingDuration; set=>remainingDuration=value;}
+        private int Def_endDuration; 
+        public int _Def_endDuration {get=>Def_endDuration; set=>Def_endDuration=value;}
+        // public int buff_endDuration;
+        // public int _buff_endDuration {get=>buff_endDuration; set=>buff_endDuration=value;}
+        private bool defenseOn = false; 
+        public bool _defenseOn {get=>defenseOn; set=>defenseOn=value;}
+        // private bool buffOn = false;
+        // public bool _buffOn {get=>buffOn; set=>buffOn=value;}
+        private bool isOnCooldown = true;
+        public bool _isOnCooldown {get=>isOnCooldown; set=>isOnCooldown=value;}
+        private bool isOngoing = false;
+        public bool _isOngoing {get=>isOngoing; set=>isOngoing=value;} 
+
         private void Awake(){
             if(data!=null){
                 _currHP = data.maxHP; 
@@ -38,7 +56,31 @@ using System.Collections.Generic;
             }
             return data.moveList; 
         }
-        // public void ExecuteMove()
+        public SpecialAttack SPMove; 
+        public void AttackAnimation(){
+            monsterAnimator.SetTrigger("move1");
+        }
+        public void GetHitAnimation(){
+            monsterAnimator.SetTrigger("healthDecreased");
+        }
+
+        public void tickDownCD(BaseMonster monster){
+            if(monster._remainingCooldown > 0){
+                monster._remainingCooldown--;
+                if(monster._remainingCooldown == 0){
+                    monster.SPMove.EffectReady(monster);
+                }
+            }
+        }
+        public void tickDownDuration(BaseMonster monster){
+            if(monster._remainingDuration > 0){
+                monster._remainingDuration--;
+                if (monster._remainingDuration == 0){
+                    monster.SPMove.RemoveEffect(monster);
+                }
+ 
+            }
+        }
 
     }
 

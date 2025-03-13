@@ -78,7 +78,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       propertyPath: m_Name
-      value: Scorpirat 1
+      value: Scorpirat
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -86,32 +86,19 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6092427007856947617}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 488797910852288408}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 162142687785181242}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2035001857237611913}
   m_SourcePrefab: {fileID: 100100000, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
 --- !u!1 &1364411548919714993 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
   m_PrefabInstance: {fileID: 2174733681128761824}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6092427007856947617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364411548919714993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 0}
 --- !u!114 &488797910852288408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,3 +143,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-2035001857237611913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364411548919714993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterAnimator: {fileID: 162142687785181242}
+  data: {fileID: 11400000, guid: 32a82aebddc425d41b0fc500aafe83f1, type: 2}
+  SPMove: {fileID: 11400000, guid: c6981802ee1ceba45b47233968255c4e, type: 2}
