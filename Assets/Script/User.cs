@@ -38,6 +38,7 @@ public class User : MonoBehaviourPunCallbacks
         user._username = username;
         user.PlayerMonster = monster;
         user._AP = 4; 
+        Debug.Log($"{user._username} has been assigned to {user.PlayerMonster.data.monsterName} with {user._AP} AP.");
     }
 
 

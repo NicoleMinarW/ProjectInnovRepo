@@ -281,23 +281,16 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        // Get the tracked AR card transform
-        // Transform cardTransform = ARCardManager.Instance.GetTrackedCardTransform(cardID);
-        // if (cardTransform == null)
-        // {
-        //     Debug.LogError("Card Transform is NULL for: " + cardID);
-        //     return;
-        // }
-
-        // // Attach enemy creature to opponent's card (optional)
-        // enemyMonsterPrefab.transform.SetParent(cardTransform, true);
-
+        
         Debug.Log($"Setting enemy monster on card {cardID}");
 
         // Assign opponent monster data
-        
 
-        enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+
+        Debug.Log($"{PhotonNetwork.PlayerListOthers}")
+        enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+        //enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+
 
         Debug.Log($"Enemy monster {enemyMonster.name}");
         Debug.Log($"setting player position");
