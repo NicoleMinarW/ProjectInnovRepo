@@ -11,8 +11,12 @@ public class Defense : MoveSet{
         Debug.Log($"Adding defense stat to user {_defense} for {attacker.data.monsterName}");
         if(P1.costActionPoints(APCost)){
             attacker._defense += _defense; 
-            BattleScriptManager.Instance.setTurnDefense(P1.userTurnCount, _duration); 
+            setTurnDefense(attacker, P1.userTurnCount, _duration); 
         }
         return false; 
+    }
+    public void setTurnDefense(BaseMonster monster, int turn, int duration){
+        monster._Def_endDuration=turn + duration + 1; 
+        monster._defenseOn = true;
     }
 }

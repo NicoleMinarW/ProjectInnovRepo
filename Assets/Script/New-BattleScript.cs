@@ -26,10 +26,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     private bool isPlayer2Ready = false;
     public TMPro.TextMeshProUGUI turnCountText;
     //private bool instantiatedCharacter = false;
-    int Def_endDuration = 0; 
-    int Buff_endDuration = 0; 
-    bool defenseOn = false; 
-    bool buffOn = false;
+
     private bool creatureSpawned = false;
 
 
@@ -209,38 +206,33 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         }
         userplayer.userTurnCount += 1; 
         turnCountText.text = "Turn: " + userplayer.userTurnCount.ToString();
-        if(defenseOn){
-            checkDefense(userplayer.userTurnCount, Def_endDuration);
+        if(myMonster._defenseOn){
+            myMonster._defenseOn = checkDefense(userplayer.userTurnCount, myMonster._Def_endDuration);
             photonView.RPC("RPC_syncDef", RpcTarget.Others, myMonster._defense);
         }
-        if (buffOn){
-            checkBuff(userplayer.userTurnCount, Buff_endDuration);
+        if (myMonster._buffOn){
+            myMonster._buffOn = checkBuff(userplayer.userTurnCount, myMonster._buff_endDuration);
             photonView.RPC("RPC_syncBuff", RpcTarget.Others, myMonster._buff);
         }
+
         Debug.Log("Ending turn"); 
         photonView.RPC("RPC_SyncTurn", RpcTarget.All, state);
 
     }
 
-    public void setTurnDefense(int currTurns, int duration){
-        Def_endDuration = currTurns + duration +1;
-        defenseOn = true; 
-    }
-    public void checkDefense(int currTurn, int lastTurn){
+    public bool checkDefense(int currTurn, int lastTurn){
         if(currTurn <= lastTurn){
             myMonster._defense = 0;
-            defenseOn = false;
+            return false; 
         }
+        return true; 
     }
-    public void setTurnBuff(int currTurns, int duration){
-        Buff_endDuration = currTurns + duration +1;
-        buffOn = true; 
-    }
-    public void checkBuff(int currTurn, int lastTurn){
+    public bool checkBuff(int currTurn, int lastTurn){
         if(currTurn <= lastTurn){
             myMonster._buff = 0;
-            buffOn = false;
+            return false;
         }
+        return true; 
     }
 
 
