@@ -3087,7 +3087,7 @@ Transform:
   m_GameObject: {fileID: 1151855070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.73, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3150,7 +3150,7 @@ MonoBehaviour:
   m_Script: {fileID: -1631628248, guid: 8a9a760f95896c34689febc965510927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PreviewVisible: 1
+  PreviewVisible: 0
   RuntimeOcclusion: 0
   RuntimeCollider: 0
   mTrackableName: Scorpirat
@@ -3306,8 +3306,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1695564659}
     m_Modifications:
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3315,11 +3327,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.0725
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalRotation.x
@@ -3327,7 +3339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalRotation.z
@@ -3339,7 +3351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -180
       objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -3348,6 +3360,10 @@ PrefabInstance:
     - target: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_Name
       value: Batlamandr
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2239775579106556631, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: sceneViewId
@@ -4565,8 +4581,8 @@ MonoBehaviour:
   enemyplayer: {fileID: 0}
   turnCountText: {fileID: 1103827320}
   monsterPrefabs:
-  - {fileID: 1084149145207174027, guid: a1334581a93d22d41b31ff2c59ed5cdb, type: 3}
-  - {fileID: 2396666765093673719, guid: 549acf17bf5add64fad74db785557b52, type: 3}
+  - {fileID: 1364411548919714993, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+  - {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
   playerUI: {fileID: 2076187937}
   turnIndicator: {fileID: 1147040602}
   endTurnButton: {fileID: 1901335502}
@@ -5089,7 +5105,7 @@ MonoBehaviour:
   m_Script: {fileID: -1631628248, guid: 8a9a760f95896c34689febc965510927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PreviewVisible: 1
+  PreviewVisible: 0
   RuntimeOcclusion: 0
   RuntimeCollider: 0
   mTrackableName: batlamandrbnw_scaled
@@ -6153,9 +6169,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scorpirat
       objectReference: {fileID: 0}
+    - target: {fileID: 1364411548919714993, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.84384555
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6163,7 +6195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.8257084
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalRotation.w

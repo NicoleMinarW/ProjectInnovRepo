@@ -109,8 +109,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             cardTransform.position + Vector3.up * 0.1f, // Slightly above to avoid clipping
             cardTransform.rotation
         );
-
-        Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
+        Debug.Log($"!!!!! Spawned monster with game object name: {monsterObj.name}");
+        // Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
 
         // Attach to AR Card
         AnchorBehaviour anchor = behaviour.GetComponent<AnchorBehaviour>();
@@ -126,13 +126,14 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Assign creature data
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data;
+        Debug.Log($"!!!!!!!! Monster has been found, assigned to the current player: {newMonster.data.monsterName}");
 
         userplayer = new User(player, player.NickName, newMonster);
         myMonster = newMonster;
+        Debug.Log($"!!!!!!!Current myMonster: {myMonster.data.monsterName}");
 
         // Send this player's card position to the opponent
         photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation, monsterObj.GetComponent<PhotonView>().ViewID);
-
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
