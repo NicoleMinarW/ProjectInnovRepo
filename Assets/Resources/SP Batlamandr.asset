@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f00c3e2117014a149b917595b551b1f4, type: 3}
-  m_Name: SP Explosion
+  m_Name: SP Batlamandr
   m_EditorClassIdentifier: 
   _spName: Explosion
   Explosion: {fileID: 11400000, guid: caa9cc573e448224c9ed68c267baaa27, type: 2}
