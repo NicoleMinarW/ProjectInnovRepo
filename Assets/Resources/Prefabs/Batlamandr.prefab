@@ -5019,7 +5019,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 065b2732acdb975408b64b0283bbef58, type: 2}
     - target: {fileID: 919132149155446097, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
       propertyPath: m_Name
-      value: Animated batamander
+      value: Batlamandr
       objectReference: {fileID: 0}
     - target: {fileID: 1248563050450346057, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -5267,9 +5267,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b1eb58150c3fa45812e4cf7fb0c9bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  monsterAnimator: {fileID: 4931242005698540908}
+  data: {fileID: 11400000, guid: 1062b3e6a41f4954588af8a3e1a1badd, type: 2}
+  buff_endDuration: 0
 --- !u!137 &2095567897885801336 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 581294436086199173, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
+  m_PrefabInstance: {fileID: 1514862950381635837}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4931242005698540908 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}
   m_PrefabInstance: {fileID: 1514862950381635837}
   m_PrefabAsset: {fileID: 0}

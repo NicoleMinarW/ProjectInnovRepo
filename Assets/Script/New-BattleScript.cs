@@ -15,7 +15,6 @@ public enum GameState {
 }
 
 public class BattleScriptManager : MonoBehaviourPunCallbacks {
-    Animator animator;
     public static BattleScriptManager Instance;
     public GameState state;
     public BaseMonster myMonster;
@@ -268,6 +267,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         GameObject enemyMonsterPrefab = enemyView.gameObject;
         enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
+        enemyMonster.data = enemyMonsterPrefab.GetComponent<BaseMonster>().data;
 
         if (enemyMonster == null)
         {
