@@ -12,6 +12,7 @@ public enum GameState {
 }
 
 public class BattleScriptManager : MonoBehaviourPunCallbacks {
+    Animator animator;
     public static BattleScriptManager Instance;
     public GameState state;
     public BaseMonster myMonster;
@@ -136,6 +137,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public void ExecuteMove(MoveSet chosenMove) {
         if (!isMyTurn || chosenMove == null) return;
         bool isDead = chosenMove.Execute(userplayer, enemyplayer, myMonster, enemyMonster);
+        myMonster.AttackAnimation();
+        photonView.RPC("RPC_TrigGetHit", RpcTarget.Others);
         playerUI.UpdatePlayerHPSlider(myMonster._currHP);
         playerUI.UpdateEnemyHPSlider(enemyMonster._currHP);
         
@@ -261,6 +264,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     {
         turnCountText.text = "Turn: " + turnCount.ToString();
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
+    }
+    [PunRPC]
+    public void RPC_TrigGetHit(){
+        myMonster.GetHitAnimation();
     }
 }
 
