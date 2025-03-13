@@ -8,7 +8,8 @@ using Unity.VisualScripting;
 using System;
 using Unity.Burst;
 using UnityEngine.UIElements;
-using Vuforia; 
+using Vuforia;
+using Photon.Pun.Demo.PunBasics;
 
 public enum GameState {
     START, PLAYERTURN, ENEMYTURN, WON, LOST 
@@ -257,6 +258,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         if (monster._isOngoing){
             monster.tickDownDuration(monster);
         }
+        playerUI.UpdateSPButton(myMonster)
     }
 
 

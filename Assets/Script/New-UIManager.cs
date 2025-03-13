@@ -105,7 +105,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateSPButton(){
-        
+    public void UpdateSPButton(BaseMonster monster){
+        if(monster._isOnCooldown || monster._isOngoing){
+            SPButton.enabled = false; 
+        }
+        else{
+            SPButton.enabled = true; 
+        }
     }
 }

@@ -5269,7 +5269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterAnimator: {fileID: 4931242005698540908}
   data: {fileID: 11400000, guid: 1062b3e6a41f4954588af8a3e1a1badd, type: 2}
-  buff_endDuration: 0
+  SPMove: {fileID: 11400000, guid: f4b2a52eabd76b74781bad2e7a0c66dd, type: 2}
 --- !u!137 &2095567897885801336 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 581294436086199173, guid: 8faf2f2033e8a224e9217020a8350b52, type: 3}

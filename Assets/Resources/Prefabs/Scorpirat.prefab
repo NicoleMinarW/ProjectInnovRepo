@@ -157,4 +157,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterAnimator: {fileID: 162142687785181242}
   data: {fileID: 11400000, guid: 32a82aebddc425d41b0fc500aafe83f1, type: 2}
-  buff_endDuration: 0
+  SPMove: {fileID: 11400000, guid: c6981802ee1ceba45b47233968255c4e, type: 2}
