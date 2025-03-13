@@ -19,7 +19,8 @@ public class ElementalAttack : BasicAttack
             (_attackElement == MonsterElement.Poison && opponent.data.element == MonsterElement.Water)){
                 mult = 1.5f; 
             }
-            opponent._currHP -= (Damage * mult )+ attacker._buff - opponent._defense; 
+            opponent._currHP -= (Damage * mult )+ attacker._buff - (((Damage * mult )+ attacker._buff) * (opponent._defense/100)); 
+            opponent._currHP = Mathf.Clamp(opponent._currHP, 0, opponent.data.maxHP);
             return CheckDeath(opponent); 
         }
         return false; 
