@@ -1845,6 +1845,14 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4906631305368196302, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 1062b3e6a41f4954588af8a3e1a1badd, type: 2}
+    - target: {fileID: 4906631305368196302, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: monsterAnimator
+      value: 
+      objectReference: {fileID: 1727649638}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3218,14 +3226,14 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: test1_scaled
+  mTrackableName: Scorpirat
   mInitializedInEditor: 1
   mDataSetPath: Vuforia/--- EMPTY ---.xml
   mAspectRatio: 1.4008209
   mImageTargetType: 3
   mWidth: 0.14277343
   mHeight: 0.2
-  mRuntimeTexture: {fileID: 2800000, guid: 33f8e58b21b64a7cb1cef59e0fff71a7, type: 3}
+  mRuntimeTexture: {fileID: 2800000, guid: 040b597c474644cfa830f264a9f8beeb, type: 3}
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
@@ -3244,7 +3252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mObserverBehaviour: {fileID: 1151855074}
   mHiddenRoot: {fileID: 0}
-  mTargetName: test1_scaled
+  mTargetName: Scorpirat
   mDatasetName: Vuforia/--- EMPTY ---.xml
   mCastedBehaviour: {fileID: 1151855074}
   mMeshFilter: {fileID: 0}
@@ -5039,14 +5047,14 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: tacomundo_scaled
+  mTrackableName: Batlamandr
   mInitializedInEditor: 1
   mDataSetPath: Vuforia/--- EMPTY ---.xml
-  mAspectRatio: 1.4321679
+  mAspectRatio: 1.4008209
   mImageTargetType: 3
-  mWidth: 0.13964844
+  mWidth: 0.14277343
   mHeight: 0.2
-  mRuntimeTexture: {fileID: 2800000, guid: 4fbc36dd135547e2a8b147d1730848ab, type: 3}
+  mRuntimeTexture: {fileID: 2800000, guid: 713f451800da4ff29db58d077d56c235, type: 3}
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
@@ -5065,7 +5073,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mObserverBehaviour: {fileID: 1695564662}
   mHiddenRoot: {fileID: 0}
-  mTargetName: tacomundo_scaled
+  mTargetName: Batlamandr
   mDatasetName: Vuforia/--- EMPTY ---.xml
   mCastedBehaviour: {fileID: 1695564662}
   mMeshFilter: {fileID: 0}
@@ -5287,6 +5295,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
   m_PrefabInstance: {fileID: 582272046}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1727649638 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4931242005698540908, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+  m_PrefabInstance: {fileID: 582272046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1728130105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
@@ -5295,6 +5308,11 @@ Transform:
 --- !u!137 &1728130106 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6062906153807475186, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+  m_PrefabInstance: {fileID: 2109637595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1728130107 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 162142687785181242, guid: 14469795640796743993f0c5fdff40ae, type: 3}
   m_PrefabInstance: {fileID: 2109637595}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1762077521
@@ -6106,6 +6124,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 32a82aebddc425d41b0fc500aafe83f1, type: 2}
+    - target: {fileID: 6092427007856947617, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: monsterAnimator
+      value: 
+      objectReference: {fileID: 1728130107}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
