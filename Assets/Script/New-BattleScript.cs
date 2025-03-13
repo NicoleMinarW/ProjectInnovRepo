@@ -291,7 +291,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"setting player position");
 
         // Correctly position the opponent’s creature in front of the player’s creature
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 0.7f); // Move 30cm forward
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0,1); // Move 30cm forward
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
         // Make the enemy creature face the player’s creature
@@ -376,16 +376,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         myMonster.GetHitAnimation();
     }
 }
-    public void RPC_syncDef(int def){
-        enemyMonster._defense = def;
-    }
-    
-    [PunRPC]
-    public void RPC_syncBuff(int buff){
-        enemyMonster._buff = buff;
-    }
 
-}   
 
 
 
