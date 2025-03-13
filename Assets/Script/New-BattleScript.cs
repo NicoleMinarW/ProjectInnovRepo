@@ -287,7 +287,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         // Assign opponent monster data
 
 
-        Debug.Log($"{PhotonNetwork.PlayerListOthers}")
+        Debug.Log($"{PhotonNetwork.PlayerListOthers}");
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
         //enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
 
@@ -296,7 +296,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"setting player position");
 
         // Correctly position the opponent’s creature in front of the player’s creature
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1f); // Move 30cm forward
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 0.7f); // Move 30cm forward
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
         // Make the enemy creature face the player’s creature
