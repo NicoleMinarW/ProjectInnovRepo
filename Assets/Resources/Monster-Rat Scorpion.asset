@@ -18,3 +18,5 @@ MonoBehaviour:
   moveList:
   - {fileID: 11400000, guid: 9b3f19404e72ab7498f78829ea500362, type: 2}
   - {fileID: 11400000, guid: c00e492d65ba9f84083a24a89ab77722, type: 2}
+  specialAttackList: []
+  sprite: {fileID: 21300000, guid: b56cb8dca4a9d094c863f3827ea38004, type: 3}

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic; 
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 [System.Serializable]
 public class UIManager : MonoBehaviour
@@ -12,16 +13,25 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI enemyhpText;
     public TMPro.TextMeshProUGUI playerUsername;
     public TMPro.TextMeshProUGUI enemyUsername;
+    public Sprite playerCard;
+    public Sprite enemyCard;
     public Slider playerHPSlider; 
     public Slider enemyHPSlider; 
     public Button[] moveBtn; 
     public Button SPButton; 
     public TMPro.TextMeshProUGUI SPButtonTxt; 
-    public TMPro.TextMeshProUGUI[] moveBtnTxt; 
+    public TMPro.TextMeshProUGUI SPvalue; 
+    public TMPro.TextMeshProUGUI SPCD; 
+    public TMPro.TextMeshProUGUI[] moveBtnTxt1;
+    public TMPro.TextMeshProUGUI[] moveBtnTxt2;  
     public GameObject APContainer; 
     public GameObject APIcon; 
     private List<GameObject> APIcons = new List<GameObject>();
-    
+    public GameObject moveButtonpref;
+    public GameObject playerCardImage, enemyCardImage;
+    public Image playerImage, enemyImage;
+    public Transform moveButtonContainer; 
+
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         if (battleScriptManager == null) {
@@ -30,7 +40,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetupUI(BaseMonster playerMonster, BaseMonster enemyMonster, User user1, User user2){
-        playerMonText.text = playerMonster.data.monsterName; 
+        playerMonText.text = playerMonster.data.monsterName;
         enemyMonText.text = enemyMonster.data.monsterName;
         playerhpText.text = $"{playerMonster._currHP.ToString()}/{playerMonster.data.maxHP}";
         enemyhpText.text = $"{enemyMonster._currHP.ToString()}/{enemyMonster.data.maxHP}";
@@ -40,13 +50,25 @@ public class UIManager : MonoBehaviour
         enemyHPSlider.value = enemyMonster._currHP;
         playerUsername.text = user1._username;
         enemyUsername.text = user2._username;
-        SPButtonTxt.text = playerMonster.SPMove.SpName; 
-        SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
+        playerCard = playerMonster.data.sprite;
+        enemyCard = enemyMonster.data.sprite;
+       if (playerMonster.SPMove != null) {
+            SPButtonTxt.text = playerMonster.SPMove.SpName;
+            if(playerMonster.SPMove.returnValue().ToString()== null){
+                Debug.LogError("The return value is null");
+            }
+            SPvalue.text = playerMonster.SPMove.returnValue().ToString() + " Damage"; 
+            SPCD.text = playerMonster.SPMove.returnCooldown().ToString() + " Cooldown"; 
+            SPButton.onClick.RemoveAllListeners();
+            SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
+        }
+        UpdatePlayerCardImage(playerCard, enemyCard);
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
 
     public void UpdateMoveButtons(BaseMonster monster){
+
         List<MoveSet> moves = monster.GetMoves();   
 
         if (moves == null || moves.Count==0){
@@ -56,7 +78,8 @@ public class UIManager : MonoBehaviour
         for(int i=0; i< moveBtn.Length; i++){
             if(i<moves.Count && moves != null){
                 moveBtn[i].gameObject.SetActive(true); 
-                moveBtnTxt[i].text = moves[i].MoveName; 
+                moveBtnTxt1[i].text = moves[i].MoveName + moves[i].GetType(); 
+                moveBtnTxt2[i].text = moves[i].returnValue() + " DMG | " + moves[i].APCost + " AP"; 
                 moveBtn[i].onClick.RemoveAllListeners(); 
                 MoveSet currMove = moves[i];
                 Debug.Log($"Adding listener for move {currMove} on button {i}");
@@ -69,12 +92,29 @@ public class UIManager : MonoBehaviour
         Debug.Log($"UpdateMoveButtons: {monster.data.monsterName} has {moves.Count} moves assigned.");
 
     }
-    void OnMoveButtonPress(MoveSet chosenMove){
+
+   public void UpdatePlayerCardImage(Sprite player, Sprite enemy)
+    {
+        playerImage.sprite = player;
+        enemyImage.sprite = enemy;
+    }
+    public void showEnemyCard()
+    {
+        playerCardImage.SetActive(false);
+        enemyCardImage.SetActive(true);
+    }
+
+    public void showPlayerCard()
+    {
+        playerCardImage.SetActive(true);
+        enemyCardImage.SetActive(false);
+    }
+    public void OnMoveButtonPress(MoveSet chosenMove){
         // battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         battleScriptManager.ExecuteMove(chosenMove); 
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
     }
-    void OnSPButtonPress(SpecialAttack chosenSP){
+    public void OnSPButtonPress(SpecialAttack chosenSP){
         battleScriptManager.ExecuteSP(chosenSP);
     }
 
@@ -100,8 +140,8 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < APIcons.Count; i++)
         {
-            // APIcons[i].SetActive(i < currentAP); 
-            APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
+            APIcons[i].SetActive(i < currentAP); 
+            // APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
         }
     }
 
