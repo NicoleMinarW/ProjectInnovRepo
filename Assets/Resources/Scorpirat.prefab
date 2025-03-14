@@ -54,15 +54,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3887185075125053422, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       propertyPath: m_AABB.m_Center.x
-      value: -0.022769213
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3887185075125053422, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       propertyPath: m_AABB.m_Center.y
-      value: 0.8299789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3887185075125053422, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       propertyPath: m_AABB.m_Center.z
-      value: 0.40172416
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3887185075125053422, guid: deaf5cd3a47c04944abe45419e6bb1a8, type: 3}
       propertyPath: m_AABB.m_Extent.x
