@@ -320,6 +320,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
 
         Debug.Log($"Enemy monster {enemyMonster.name}");
+        Debug.Log($"original location {position}");
 
         Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1); 
         enemyMonsterPrefab.transform.position = newEnemyPosition;
