@@ -78,6 +78,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
     public void RegisterPlayer(Player player, string cardID, ObserverBehaviour behaviour)
     {
+        
         if (!creatureDictionary.ContainsKey(cardID))
         {
             Debug.LogError("Invalid card ID: " + cardID);
@@ -103,6 +104,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log("Registering player: " + player.NickName);
 
         Debug.Log($"instantiating............ {creatureDictionary[cardID].name}");
+        Component[] listOfComponents= creatureDictionary[cardID].GetComponents<Component>(); 
+        foreach (Component component in listOfComponents){
+            Debug.Log("----->>>> "+ component.GetType().Name); 
+        }
+
 
         // Spawn player's own creature on top of their card
         GameObject monsterObj = PhotonNetwork.Instantiate(
@@ -123,7 +129,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         {
             monsterObj.transform.SetParent(behaviour.transform); // Fallback
         }
-
+        PhotonView view = monsterObj.GetComponent<PhotonView>();
+        if (view == null) Debug.LogError("PhotonView is missing on spawned Batlamandr!");
         // Assign creature data
         BaseMonster newMonster = monsterObj.GetComponent<BaseMonster>();
         newMonster.data = creatureDictionary[cardID].GetComponent<BaseMonster>().data;
