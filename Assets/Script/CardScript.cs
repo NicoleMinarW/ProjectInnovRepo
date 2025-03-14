@@ -8,7 +8,6 @@ public class CardScript : MonoBehaviour
 
 {   
     public GameObject pCard, eCard;
-    public UIManager currUI; 
     public Image playerImage; 
     public Image enemyImage;
 
