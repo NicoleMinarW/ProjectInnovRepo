@@ -320,14 +320,16 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"Enemy monster {enemyMonster.name}");
         Debug.Log($"original location {position}");
 
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1);
-        enemyMonsterPrefab.transform.position = newEnemyPosition;
+        Vector3 enemyRelativePosition = position + rotation * new Vector3(0, 0, 1);
 
-        Vector3 direction = position - newEnemyPosition;
-        direction.y = 0; 
-        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(direction);
+        Vector3 finalEnemyPosition = position + rotation * new Vector3(0, 0, 2);
 
-        Debug.Log($"Repositioned enemy creature at {newEnemyPosition}");
+        enemyMonsterPrefab.transform.position = finalEnemyPosition;
+
+        Vector3 directionToYourCreature = position - finalEnemyPosition;  // Direction towards player's monster
+        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(directionToYourCreature);
+
+        Debug.Log($"Repositioned enemy creature at {finalEnemyPosition}");
     }
 
 
