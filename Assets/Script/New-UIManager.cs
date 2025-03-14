@@ -55,8 +55,8 @@ public class UIManager : MonoBehaviour
             if(playerMonster.SPMove.returnValue().ToString()== null){
                 Debug.LogError("The return value is null");
             }
-            SPvalue.text = playerMonster.SPMove.returnValue().ToString(); 
-            SPCD.text = playerMonster.SPMove.returnCooldown().ToString(); 
+            SPvalue.text = playerMonster.SPMove.returnValue().ToString() + "Damage"; 
+            SPCD.text = playerMonster.SPMove.returnCooldown().ToString() + "Cooldown"; 
             SPButton.onClick.RemoveAllListeners();
             SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         }
