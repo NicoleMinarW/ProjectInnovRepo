@@ -269,6 +269,11 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         playerUI.UpdateSPButton(myMonster);
     }
 
+    public void RestartGame()
+    {
+        PhotonNetwork.LoadLevel(PhotonNetwork.CurrentRoom.PlayerCount);  
+    }
+
 
     [PunRPC]
     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
