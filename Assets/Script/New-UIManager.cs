@@ -19,12 +19,15 @@ public class UIManager : MonoBehaviour
     public Button[] moveBtn; 
     public Button SPButton; 
     public TMPro.TextMeshProUGUI SPButtonTxt; 
+    public TMPro.TextMeshProUGUI SPvalue; 
+    public TMPro.TextMeshProUGUI SPCD; 
     public TMPro.TextMeshProUGUI[] moveBtnTxt; 
     public GameObject APContainer; 
     public GameObject APIcon; 
     private List<GameObject> APIcons = new List<GameObject>();
     public GameObject moveButtonpref;
     public Transform moveButtonContainer; 
+    private List<GameObject> moveButtons = new List<GameObject>();
     
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
@@ -48,6 +51,8 @@ public class UIManager : MonoBehaviour
         enemyCard = enemyMonster.data.sprite;
        if (playerMonster.SPMove != null) {
             SPButtonTxt.text = playerMonster.SPMove.SpName;
+            SPvalue.text = playerMonster.SPMove.returnValue().ToString(); 
+            SPCD.text = playerMonster.SPMove.returnCooldown().ToString(); 
             SPButton.onClick.RemoveAllListeners();
             SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         }
@@ -55,21 +60,47 @@ public class UIManager : MonoBehaviour
         UpdateMoveButtons(playerMonster); 
     }
 
-    public void UpdateMoveButtons(BaseMonster monster){
-        List<MoveSet> moves = monster.GetMoves();   
-        foreach (Transform child in moveButtonContainer) {
-            Destroy(child.gameObject);
+    // public void UpdateMoveButtons(BaseMonster monster){
+    //     List<MoveSet> moves = monster.GetMoves();   
+    //     foreach (Transform child in moveButtonContainer) {
+    //         Destroy(child.gameObject);
             
+    //     }
+    //     if (moves == null || moves.Count==0){
+    //         Debug.LogError($"Monster {monster.data.monsterName} has no moves");
+    //         return; 
+    //     }
+    //     foreach (MoveSet move in moves){
+    //         GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
+    //         MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
+    //         moveButton.SetButtons(move, () => OnMoveButtonPress(move));
+
+    //     }
+    // }
+    public void UpdateMoveButtons(BaseMonster monster)
+    {
+        // Remove old buttons before adding new ones
+        foreach (GameObject btn in moveButtons)
+        {
+            Destroy(btn);
         }
-        if (moves == null || moves.Count==0){
-            Debug.LogError($"Monster {monster.data.monsterName} has no moves");
-            return; 
-        }
-        foreach (MoveSet move in moves){
+        moveButtons.Clear();
+
+        // Create new buttons
+        foreach (MoveSet move in monster.GetMoves())
+        {
             GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
             MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
-            moveButton.SetButtons(move, () => OnMoveButtonPress(move));
 
+            if (moveButton != null)
+            {
+                moveButton.SetButtons(move, () => OnMoveButtonPress(move));
+                moveButtons.Add(buttonObj); 
+            }
+            else
+            {
+                Debug.LogError("MoveButton script is missing on the instantiated move button!");
+            }
         }
     }
 

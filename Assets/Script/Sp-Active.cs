@@ -18,4 +18,12 @@ public class ActiveBatlamandr : SpecialAttack
     {
         attacker._isOnCooldown = false; 
     }
+    public override float returnValue()
+    {
+        return 10; 
+    }
+    public override float returnCooldown()
+    {
+        return 3;
+    } 
 }

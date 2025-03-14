@@ -7,6 +7,12 @@ public abstract class SpecialAttack : ScriptableObject {
     public abstract bool ApplyEffect(User P1, User P2, BaseMonster attacker, BaseMonster opponent);
     public abstract void RemoveEffect(BaseMonster attacker);
     public abstract void EffectReady(BaseMonster attacker); 
+    public virtual float returnValue(){
+        return 0f; 
+    }
+    public virtual float returnCooldown(){
+        return 0f;
+    }
 
 
 }

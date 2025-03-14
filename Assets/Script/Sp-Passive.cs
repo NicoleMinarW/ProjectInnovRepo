@@ -19,4 +19,12 @@ public class PassiveScorpiRat : SpecialAttack
         attacker._isOnCooldown = false; 
         attacker._remainingCooldown = 2; 
     }
+    public override float returnValue()
+    {
+        return 2;
+    }
+    public override float returnCooldown()
+    {
+        return 2; 
+    }
 }
