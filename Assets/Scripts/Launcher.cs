@@ -12,6 +12,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] TMPro.TMP_InputField roomNameInputField;
     [SerializeField] TMPro.TextMeshProUGUI errorText;
     [SerializeField] TMPro.TextMeshProUGUI roomNameText;
+    [SerializeField] TMPro.TextMeshProUGUI roomNameCurrentText;
     [SerializeField] Transform roomListContent;
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject roomListItemPrefab;
@@ -62,7 +63,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
-        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+        roomNameCurrentText.text = PhotonNetwork.CurrentRoom.Name;
 
 
         Player[] players = PhotonNetwork.PlayerList;
@@ -79,6 +80,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
 
+    }
+
+    public override void OnLeftRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.OpenMenu("title");
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
