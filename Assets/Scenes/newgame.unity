@@ -11323,8 +11323,8 @@ MonoBehaviour:
   - {fileID: 2134705834}
   APContainer: {fileID: 1643844255}
   APIcon: {fileID: 7495759318076573624, guid: d494ae5fcc9ef444b92f17e2d75824a9, type: 3}
-  moveButtonpref: {fileID: 0}
-  moveButtonContainer: {fileID: 0}
+  moveButtonpref: {fileID: 3100876208016174348, guid: 78d8d93b6f50d1c4985bc0f778e2e9d9, type: 3}
+  moveButtonContainer: {fileID: 1800307530}
 --- !u!1 &2098865322
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,7 +57,10 @@ public class UIManager : MonoBehaviour
 
     public void UpdateMoveButtons(BaseMonster monster){
         List<MoveSet> moves = monster.GetMoves();   
-
+        foreach (Transform child in moveButtonContainer) {
+            Destroy(child.gameObject);
+            
+        }
         if (moves == null || moves.Count==0){
             Debug.LogError($"Monster {monster.data.monsterName} has no moves");
             return; 
