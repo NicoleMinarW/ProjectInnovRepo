@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
             if(i<moves.Count && moves != null){
                 moveBtn[i].gameObject.SetActive(true); 
                 moveBtnTxt1[i].text = moves[i].MoveName + moves[i].GetType(); 
-                moveBtnTxt2[i].text = moves[i].returnValue() + "DMG | " + moves[i].APCost + " HP"; 
+                moveBtnTxt2[i].text = moves[i].returnValue() + " DMG | " + moves[i].APCost + " AP"; 
                 moveBtn[i].onClick.RemoveAllListeners(); 
                 MoveSet currMove = moves[i];
                 Debug.Log($"Adding listener for move {currMove} on button {i}");
