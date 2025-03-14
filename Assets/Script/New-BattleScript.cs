@@ -102,10 +102,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log("Registering player: " + player.NickName);
 
+        Debug.Log($"instantiating............ {creatureDictionary[cardID].name}");
+
         // Spawn player's own creature on top of their card
         GameObject monsterObj = PhotonNetwork.Instantiate(
             creatureDictionary[cardID].name,
-            cardTransform.position + Vector3.up * 0.1f, // Slightly above to avoid clipping
+            cardTransform.position, 
             cardTransform.rotation
         );
         Debug.Log($"!!!!! Spawned monster with game object name: {monsterObj.name}");
@@ -300,10 +302,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         Debug.Log($"Enemy monster {enemyMonster.name}");
 
-        Debug.Log($"setting player position");
-
-        // Correctly position the opponent’s creature in front of the player’s creature
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0,1); // Move 30cm forward
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1); 
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
         // Make the enemy creature face the player’s creature

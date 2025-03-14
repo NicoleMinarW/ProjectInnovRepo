@@ -1320,7 +1320,7 @@ GameObject:
   - component: {fileID: 208435055}
   - component: {fileID: 208435054}
   - component: {fileID: 208435053}
-  - component: {fileID: 208435052}
+  - component: {fileID: 208435056}
   m_Layer: 0
   m_Name: Batlamandr
   m_TagString: Untagged
@@ -1344,28 +1344,6 @@ Transform:
   - {fileID: 1376526122}
   m_Father: {fileID: 1596192397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &208435052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208435050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 5
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &208435053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1456,6 +1434,28 @@ MonoBehaviour:
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
   mPreview: {fileID: 208435053}
+--- !u!114 &208435056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208435050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &224300630
 GameObject:
   m_ObjectHideFlags: 0
@@ -7462,6 +7462,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 208435051}
     m_Modifications:
+    - target: {fileID: 527545819019642160, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1337400514921934614, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7506,9 +7510,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Batlamandr
       objectReference: {fileID: 0}
+    - target: {fileID: 1856809066843141548, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2239775579106556631, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4906631305368196302, guid: 3cfe9c942f037aa42ac8ec842643136b, type: 3}
       propertyPath: SPMove
@@ -8045,7 +8053,6 @@ GameObject:
   - component: {fileID: 1458637551}
   - component: {fileID: 1458637550}
   - component: {fileID: 1458637549}
-  - component: {fileID: 1458637548}
   m_Layer: 0
   m_Name: Scorpirat
   m_TagString: Untagged
@@ -8069,28 +8076,6 @@ Transform:
   - {fileID: 2022128295}
   m_Father: {fileID: 1596192397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1458637548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458637546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 1
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &1458637549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10651,6 +10636,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1458637547}
     m_Modifications:
+    - target: {fileID: -7483987042976907300, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 488797910852288408, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: sceneViewId
       value: 2
@@ -10658,6 +10647,10 @@ PrefabInstance:
     - target: {fileID: 1364411548919714993, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_Name
       value: Scorpirat
+      objectReference: {fileID: 0}
+    - target: {fileID: 1364411548919714993, guid: 14469795640796743993f0c5fdff40ae, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1847757601802849803, guid: 14469795640796743993f0c5fdff40ae, type: 3}
       propertyPath: m_LocalPosition.x
