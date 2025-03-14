@@ -11316,6 +11316,8 @@ MonoBehaviour:
   - {fileID: 1500959836}
   SPButton: {fileID: 1670873711}
   SPButtonTxt: {fileID: 207519649}
+  SPvalue: {fileID: 0}
+  SPCD: {fileID: 0}
   moveBtnTxt:
   - {fileID: 1231668485}
   - {fileID: 85567244}
