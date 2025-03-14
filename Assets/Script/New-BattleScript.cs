@@ -308,11 +308,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
-        
         Debug.Log($"Setting enemy monster on card {cardID}");
 
         // Assign opponent monster data
-
 
         Debug.Log($"{PhotonNetwork.PlayerListOthers}");
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
@@ -322,11 +320,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"Enemy monster {enemyMonster.name}");
         Debug.Log($"original location {position}");
 
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1); 
+        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1);
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
-        // Make the enemy creature face the player’s creature
-        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(position - newEnemyPosition);
+        Vector3 direction = position - newEnemyPosition;
+        direction.y = 0; 
+        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(direction);
 
         Debug.Log($"Repositioned enemy creature at {newEnemyPosition}");
     }
