@@ -148,10 +148,10 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     public void StartBattle()
     {
-        if (!PhotonNetwork.IsMasterClient) {
-            Debug.LogError("Trying to start battle without being the MasterClient!");
-            return;
-        }
+        //if (!PhotonNetwork.IsMasterClient) {
+        //    Debug.LogError("Trying to start battle without being the MasterClient!");
+        //    return;
+        //}
 
         Debug.Log("Starting Battle (BattleScript)");
 
@@ -330,9 +330,9 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     //}
 
     [PunRPC]
-    void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
+    void RPC_SetEnemyMonster(string cardID, int enemyCreatureID)
     {
-        Debug.Log($"RPC_SetEnemyMonster: cardID={cardID}, position={position}, rotation={rotation}, enemyCreatureID={enemyCreatureID}");
+       
 
         if (!creatureDictionary.ContainsKey(cardID))
         {
@@ -474,6 +474,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     {
         playerUI.SetupUI(myMonster, enemyMonster, this.userplayer, this.enemyplayer);
     }
+
     [PunRPC]
     public void RPC_TrigGetHit(){
         myMonster.GetHitAnimation();

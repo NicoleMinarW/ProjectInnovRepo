@@ -9457,8 +9457,11 @@ MonoBehaviour:
   APContainer: {fileID: 1643844255}
   APIcon: {fileID: 7495759318076573624, guid: d494ae5fcc9ef444b92f17e2d75824a9, type: 3}
   moveButtonpref: {fileID: 3100876208016174348, guid: 78d8d93b6f50d1c4985bc0f778e2e9d9, type: 3}
+  playerCardImage: {fileID: 1598353102}
+  enemyCardImage: {fileID: 550457604}
+  playerImage: {fileID: 1969235072}
+  enemyImage: {fileID: 1913938004}
   moveButtonContainer: {fileID: 1800307530}
-  cardscript: {fileID: 1239934723}
 --- !u!1 &2098865322
 GameObject:
   m_ObjectHideFlags: 0

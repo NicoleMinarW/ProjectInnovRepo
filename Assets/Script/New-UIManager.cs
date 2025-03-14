@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic; 
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 [System.Serializable]
 public class UIManager : MonoBehaviour
@@ -27,9 +28,9 @@ public class UIManager : MonoBehaviour
     public GameObject APIcon; 
     private List<GameObject> APIcons = new List<GameObject>();
     public GameObject moveButtonpref;
+    public GameObject playerCardImage, enemyCardImage;
+    public Image playerImage, enemyImage;
     public Transform moveButtonContainer; 
-    private List<GameObject> moveButtons;
-    public CardScript cardscript; 
 
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
@@ -39,7 +40,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void SetupUI(BaseMonster playerMonster, BaseMonster enemyMonster, User user1, User user2){
-        playerMonText.text = playerMonster.data.monsterName; 
+        playerMonText.text = playerMonster.data.monsterName;
         enemyMonText.text = enemyMonster.data.monsterName;
         playerhpText.text = $"{playerMonster._currHP.ToString()}/{playerMonster.data.maxHP}";
         enemyhpText.text = $"{enemyMonster._currHP.ToString()}/{enemyMonster.data.maxHP}";
@@ -61,7 +62,7 @@ public class UIManager : MonoBehaviour
             SPButton.onClick.RemoveAllListeners();
             SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         }
-        cardscript.setCardImages(playerCard, enemyCard);
+        UpdatePlayerCardImage(playerCard, enemyCard);
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
@@ -92,50 +93,22 @@ public class UIManager : MonoBehaviour
 
     }
 
-    // public void UpdateMoveButtons(BaseMonster monster){
-    //     List<MoveSet> moves = monster.GetMoves();   
-    //     foreach (Transform child in moveButtonContainer) {
-    //         Destroy(child.gameObject);
-            
-    //     }
-    //     if (moves == null || moves.Count==0){
-    //         Debug.LogError($"Monster {monster.data.monsterName} has no moves");
-    //         return; 
-    //     }
-    //     foreach (MoveSet move in moves){
-    //         GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
-    //         MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
-    //         moveButton.SetButtons(move, () => OnMoveButtonPress(move));
+   public void UpdatePlayerCardImage(Sprite player, Sprite enemy)
+    {
+        playerImage.sprite = player;
+        enemyImage.sprite = enemy;
+    }
+    public void showEnemyCard()
+    {
+        playerCardImage.SetActive(false);
+        enemyCardImage.SetActive(true);
+    }
 
-    //     }
-    // }
-    // public void UpdateMoveButtons(BaseMonster monster)
-    // {
-    //     // Remove old buttons before adding new ones
-    //     foreach (GameObject btn in moveButtons)
-    //     {
-    //         Destroy(btn);
-    //     }
-    //     moveButtons.Clear();
-
-    //     // Create new buttons
-    //     foreach (MoveSet move in monster.GetMoves())
-    //     {
-    //         GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
-    //         MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
-
-    //         if (moveButton != null)
-    //         {
-    //             moveButton.SetButtons(move, () => OnMoveButtonPress(move));
-    //             moveButtons.Add(buttonObj); 
-    //         }
-    //         else
-    //         {
-    //             Debug.LogError("MoveButton script is missing on the instantiated move button!");
-    //         }
-    //     }
-    // }
-
+    public void showPlayerCard()
+    {
+        playerCardImage.SetActive(true);
+        enemyCardImage.SetActive(false);
+    }
     public void OnMoveButtonPress(MoveSet chosenMove){
         // battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         battleScriptManager.ExecuteMove(chosenMove); 
