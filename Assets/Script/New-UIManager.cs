@@ -29,7 +29,8 @@ public class UIManager : MonoBehaviour
     public GameObject moveButtonpref;
     public Transform moveButtonContainer; 
     private List<GameObject> moveButtons;
-    
+    public CardScript cardscript; 
+
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         if (battleScriptManager == null) {
@@ -60,6 +61,7 @@ public class UIManager : MonoBehaviour
             SPButton.onClick.RemoveAllListeners();
             SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         }
+        cardscript.setCardImages(playerCard, enemyCard); 
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
