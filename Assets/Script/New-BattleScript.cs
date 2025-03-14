@@ -117,6 +117,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             cardTransform.rotation
         );
         Debug.Log($"!!!!! Spawned monster with game object name: {monsterObj.name}");
+        Debug.Log($"!!!!! POSITION: {cardTransform.position}");
         // Debug.Log($"Monster spawned: {monsterObj.name}, Owner: {monsterObj.GetComponent<PhotonView>().Owner.NickName}, IsMine: {monsterObj.GetComponent<PhotonView>().IsMine}");
 
         // Attach to AR Card
@@ -141,7 +142,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"!!!!!!!Current myMonster: {myMonster.data.monsterName}");
 
         // Send this player's card position to the opponent
-        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, cardTransform.position, cardTransform.rotation, monsterObj.GetComponent<PhotonView>().ViewID);
+        photonView.RPC("RPC_SetEnemyMonster", RpcTarget.Others, cardID, monsterObj.GetComponent<PhotonView>().ViewID);
         Debug.Log($"Monster with ID {cardID} attached to {player.NickName}");
     }
 
@@ -280,10 +281,59 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     }
 
 
+    //[PunRPC]
+    //void RPC_SetEnemyMonster(string cardID, int enemyCreatureID)
+    //{
+    //    if (!creatureDictionary.ContainsKey(cardID))
+    //    {
+    //        Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
+    //        return;
+    //    }
+
+    //    // Find the opponent’s monster using PhotonView ID
+    //    PhotonView enemyView = PhotonView.Find(enemyCreatureID);
+    //    if (enemyView == null)
+    //    {
+    //        Debug.LogError("Enemy monster PhotonView not found!");
+    //        return;
+    //    }
+
+    //    GameObject enemyMonsterPrefab = enemyView.gameObject;
+    //    enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
+    //    enemyMonster.data = enemyMonsterPrefab.GetComponent<BaseMonster>().data;
+
+    //    if (enemyMonster == null)
+    //    {
+    //        Debug.LogError("Enemy monster component not found!");
+    //        return;
+    //    }
+
+    //    Debug.Log($"Setting enemy monster on card {cardID}");
+
+    //    // Assign opponent monster data
+
+    //    Debug.Log($"{PhotonNetwork.PlayerListOthers}");
+    //    enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+    //    //enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
+
+
+    //    Debug.Log($"Enemy monster {enemyMonster.name}");
+
+    //    Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1);
+    //    enemyMonsterPrefab.transform.position = newEnemyPosition;
+
+    //    Vector3 direction = position - newEnemyPosition;
+    //    direction.y = 0;
+    //    enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(direction);
+
+    //    Debug.Log($"Repositioned enemy creature at {newEnemyPosition}");
+    //}
+
     [PunRPC]
     void RPC_SetEnemyMonster(string cardID, Vector3 position, Quaternion rotation, int enemyCreatureID)
     {
         Debug.Log($"RPC_SetEnemyMonster: cardID={cardID}, position={position}, rotation={rotation}, enemyCreatureID={enemyCreatureID}");
+
         if (!creatureDictionary.ContainsKey(cardID))
         {
             Debug.LogError("Invalid card ID received in RPC_SetEnemyMonster: " + cardID);
@@ -300,7 +350,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
         GameObject enemyMonsterPrefab = enemyView.gameObject;
         enemyMonster = enemyMonsterPrefab.GetComponent<BaseMonster>();
-        enemyMonster.data = enemyMonsterPrefab.GetComponent<BaseMonster>().data;
 
         if (enemyMonster == null)
         {
@@ -311,25 +360,47 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         Debug.Log($"Setting enemy monster on card {cardID}");
 
         // Assign opponent monster data
-
+        enemyMonster.data = enemyMonsterPrefab.GetComponent<BaseMonster>().data;
         Debug.Log($"{PhotonNetwork.PlayerListOthers}");
         enemyplayer = new User(PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
-        //enemyplayer.assignUser(enemyplayer, PhotonNetwork.PlayerListOthers[0], PhotonNetwork.PlayerListOthers[0].NickName, enemyMonster);
-
 
         Debug.Log($"Enemy monster {enemyMonster.name}");
-        Debug.Log($"original location {position}");
-
-        Vector3 newEnemyPosition = position + rotation * new Vector3(0, 0, 1);
-        enemyMonsterPrefab.transform.position = newEnemyPosition;
-
-        Vector3 direction = position - newEnemyPosition;
-        direction.y = 0;
-        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(direction);
-
-        Debug.Log($"Repositioned enemy creature at {newEnemyPosition}");
+         
+        StartCoroutine(WaitForPlayerMonsterThenPositionEnemy(cardID, enemyMonsterPrefab));
     }
 
+    private IEnumerator WaitForPlayerMonsterThenPositionEnemy(string cardID, GameObject enemyMonsterPrefab)
+    {
+        // Wait until the player's monster is assigned
+        while (myMonster == null)
+        {
+            Debug.Log("Waiting for player's monster to spawn...");
+            yield return null; // Wait for the next frame
+        }
+
+        Debug.Log($"Player's monster found: {myMonster.data.monsterName}");
+
+        // ======== Get the Player's Prefab Transform ========
+        Transform playerMonsterTransform = myMonster.transform;
+
+        if (playerMonsterTransform == null)
+        {
+            Debug.LogError("Player monster transform is null!");
+            yield break;
+        }
+
+        // ======== Position Enemy Monster Based on Player's Monster ========
+        float spacingOffset = 0.5f; // Adjust the distance between the player and enemy creatures
+        Vector3 offsetDirection = playerMonsterTransform.forward; // Forward direction of player's monster
+        Vector3 newEnemyPosition = playerMonsterTransform.position + offsetDirection * spacingOffset;
+
+        enemyMonsterPrefab.transform.position = newEnemyPosition;
+
+        // Make the enemy face the player's monster
+        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(-offsetDirection);
+
+        Debug.Log($"Enemy monster repositioned at {newEnemyPosition}, facing the player.");
+    }
 
     [PunRPC]
     void RPC_SyncTurn(GameState newState)
