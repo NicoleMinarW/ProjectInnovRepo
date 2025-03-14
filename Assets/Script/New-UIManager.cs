@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
     private List<GameObject> APIcons = new List<GameObject>();
     public GameObject moveButtonpref;
     public Transform moveButtonContainer; 
-    private List<GameObject> moveButtons = new List<GameObject>();
+    private List<GameObject> moveButtons;
     
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
@@ -51,6 +51,9 @@ public class UIManager : MonoBehaviour
         enemyCard = enemyMonster.data.sprite;
        if (playerMonster.SPMove != null) {
             SPButtonTxt.text = playerMonster.SPMove.SpName;
+            if(playerMonster.SPMove.returnValue().ToString()== null){
+                Debug.LogError("The return value is null");
+            }
             SPvalue.text = playerMonster.SPMove.returnValue().ToString(); 
             SPCD.text = playerMonster.SPMove.returnCooldown().ToString(); 
             SPButton.onClick.RemoveAllListeners();
@@ -135,8 +138,8 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < APIcons.Count; i++)
         {
-            // APIcons[i].SetActive(i < currentAP); 
-            APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
+            APIcons[i].SetActive(i < currentAP); 
+            // APIcons[i].GetComponent<Image>().color = (i < currentAP) ? Color.white : Color.gray;
         }
     }
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4545465822990579252}
   - component: {fileID: 8255540946480289074}
   - component: {fileID: 6719569408059936972}
+  - component: {fileID: 8165415037576717598}
   m_Layer: 5
   m_Name: Attack Button
   m_TagString: Untagged
@@ -150,6 +151,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &8165415037576717598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320821128391136526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edc1022c9412598408df4a6c32e1f968, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveName: {fileID: 1166055098501785724}
+  attackType: {fileID: 1359883487587448521}
+  value: {fileID: 7492594642946654523}
+  AP: {fileID: 3927212714215530005}
 --- !u!1 &2632088730688405670
 GameObject:
   m_ObjectHideFlags: 0

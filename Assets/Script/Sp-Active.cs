@@ -20,10 +20,10 @@ public class ActiveBatlamandr : SpecialAttack
     }
     public override float returnValue()
     {
-        return 10; 
+        return 10f; 
     }
     public override float returnCooldown()
     {
-        return 3;
+        return 3f;
     } 
 }

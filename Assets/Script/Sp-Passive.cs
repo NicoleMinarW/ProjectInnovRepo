@@ -21,10 +21,10 @@ public class PassiveScorpiRat : SpecialAttack
     }
     public override float returnValue()
     {
-        return 2;
+        return 2f;
     }
     public override float returnCooldown()
     {
-        return 2; 
+        return 2f; 
     }
 }
