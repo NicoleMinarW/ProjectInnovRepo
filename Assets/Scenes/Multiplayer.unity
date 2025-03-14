@@ -363,7 +363,7 @@ MonoBehaviour:
   roomNameInputField: {fileID: 1243509895}
   errorText: {fileID: 1281139207}
   roomNameText: {fileID: 1700219386}
-  roomNameCreatedText: {fileID: 1098028337}
+  roomNameCurrentText: {fileID: 1098028337}
   roomListContent: {fileID: 391085449}
   playerListContent: {fileID: 2062402387}
   roomListItemPrefab: {fileID: 6082253416625364406, guid: cddcca56c357e7b4ab751c495e854a60, type: 3}
@@ -4481,8 +4481,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 279658842}
-        m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
-        m_MethodName: onleftRoom
+        m_TargetAssemblyTypeName: Photon.Pun.MonoBehaviourPunCallbacks, PhotonUnityNetworking
+        m_MethodName: OnLeftRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
