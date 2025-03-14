@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI enemyhpText;
     public TMPro.TextMeshProUGUI playerUsername;
     public TMPro.TextMeshProUGUI enemyUsername;
+    public Image playerCard;
+    public Image enemyCard;
     public Slider playerHPSlider; 
     public Slider enemyHPSlider; 
     public Button[] moveBtn; 
@@ -42,6 +44,8 @@ public class UIManager : MonoBehaviour
         enemyUsername.text = user2._username;
         SPButtonTxt.text = playerMonster.SPMove.SpName; 
         SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
+        playerCard = playerMonster.data.sprite;
+        enemyCard = enemyMonster.data.sprite;
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }

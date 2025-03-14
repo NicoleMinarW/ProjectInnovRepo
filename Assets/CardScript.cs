@@ -4,19 +4,6 @@ public class CardScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public GameObject playerCard, enemyCard;
-    public Sprite playerCardImage, enemyCardImage;
-
-    public void setPlayerCardImage(Sprite image)
-    {
-        playerCardImage = image;
-        playerCard.GetComponent<SpriteRenderer>().sprite = playerCardImage;
-    }
-    public void setEnemyCardImage(Sprite image)
-    {
-        enemyCardImage = image;
-        enemyCard.GetComponent<SpriteRenderer>().sprite = enemyCardImage;
-    }
-
     public void showEnemyCard()
     {
         playerCard.SetActive(false);

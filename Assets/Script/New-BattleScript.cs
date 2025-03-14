@@ -168,6 +168,8 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             return;
         }
 
+
+
         // Set initial game state based on MasterClient
         state = GameState.PLAYERTURN;
         isMyTurn = true;
