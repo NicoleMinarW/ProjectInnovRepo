@@ -389,15 +389,18 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
             yield break;
         }
 
-        // ======== Position Enemy Monster Based on Player's Monster ========
-        float spacingOffset = 0.5f; // Adjust the distance between the player and enemy creatures
-        Vector3 offsetDirection = playerMonsterTransform.forward; // Forward direction of player's monster
+        float spacingOffset = 0.7f; 
+        Vector3 offsetDirection = playerMonsterTransform.forward; 
         Vector3 newEnemyPosition = playerMonsterTransform.position + offsetDirection * spacingOffset;
 
         enemyMonsterPrefab.transform.position = newEnemyPosition;
 
-        // Make the enemy face the player's monster
-        enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(-offsetDirection);
+        //enemyMonsterPrefab.transform.rotation = Quaternion.LookRotation(-offsetDirection);
+        Vector3 lookDirection = playerMonsterTransform.position - enemyMonsterPrefab.transform.position;
+        lookDirection.y = 0; // Keep rotation horizontal
+
+        Quaternion enemyRotation = Quaternion.LookRotation(lookDirection) * Quaternion.Euler(0, 180, 0);
+        enemyMonsterPrefab.transform.rotation = enemyRotation;
 
         Debug.Log($"Enemy monster repositioned at {newEnemyPosition}, facing the player.");
     }
