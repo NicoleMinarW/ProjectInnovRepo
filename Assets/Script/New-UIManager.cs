@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
     public GameObject APContainer; 
     public GameObject APIcon; 
     private List<GameObject> APIcons = new List<GameObject>();
+    public GameObject moveButtonpref;
+    public Transform moveButtonContainer; 
     
     void Start() {
         battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
@@ -42,10 +44,13 @@ public class UIManager : MonoBehaviour
         enemyHPSlider.value = enemyMonster._currHP;
         playerUsername.text = user1._username;
         enemyUsername.text = user2._username;
-        SPButtonTxt.text = playerMonster.SPMove.SpName; 
-        SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
         playerCard = playerMonster.data.sprite;
         enemyCard = enemyMonster.data.sprite;
+       if (playerMonster.SPMove != null) {
+            SPButtonTxt.text = playerMonster.SPMove.SpName;
+            SPButton.onClick.RemoveAllListeners();
+            SPButton.onClick.AddListener(() => OnSPButtonPress(playerMonster.SPMove));
+        }
         SetupAPDisplay(); 
         UpdateMoveButtons(playerMonster); 
     }
@@ -57,28 +62,20 @@ public class UIManager : MonoBehaviour
             Debug.LogError($"Monster {monster.data.monsterName} has no moves");
             return; 
         }
-        for(int i=0; i< moveBtn.Length; i++){
-            if(i<moves.Count && moves != null){
-                moveBtn[i].gameObject.SetActive(true); 
-                moveBtnTxt[i].text = moves[i].MoveName; 
-                moveBtn[i].onClick.RemoveAllListeners(); 
-                MoveSet currMove = moves[i];
-                Debug.Log($"Adding listener for move {currMove} on button {i}");
-                moveBtn[i].onClick.AddListener(() => OnMoveButtonPress(currMove)); 
-            }
-            else{
-                moveBtn[i].gameObject.SetActive(false);
-            }
-        }
-        Debug.Log($"UpdateMoveButtons: {monster.data.monsterName} has {moves.Count} moves assigned.");
+        foreach (MoveSet move in moves){
+            GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
+            MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
+            moveButton.SetButtons(move, () => OnMoveButtonPress(move));
 
+        }
     }
-    void OnMoveButtonPress(MoveSet chosenMove){
+
+    public void OnMoveButtonPress(MoveSet chosenMove){
         // battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
         battleScriptManager.ExecuteMove(chosenMove); 
         Debug.Log($"Move {chosenMove.MoveName} clicked!");
     }
-    void OnSPButtonPress(SpecialAttack chosenSP){
+    public void OnSPButtonPress(SpecialAttack chosenSP){
         battleScriptManager.ExecuteSP(chosenSP);
     }
 

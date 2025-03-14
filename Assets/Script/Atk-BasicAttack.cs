@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Basic Attack", menuName = "New Basic Attack")]
@@ -16,6 +17,14 @@ public class BasicAttack : MoveSet
         //insert function for showing that AP is not enough 
         return false; 
         
+    }
+    public override float returnValue()
+    {
+        return _damage;
+    }
+    public override string moveType()
+    {
+        return "Physical"; 
     }
 
 }

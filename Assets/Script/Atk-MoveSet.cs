@@ -20,4 +20,14 @@ public abstract class MoveSet : ScriptableObject
             return false; 
         }   
     }
+    public virtual float returnValue(){
+        return 0f;
+    }
+    public virtual float returnDuration(){
+        return 0f;
+    }
+    public virtual string moveType(){
+        return "None";
+    }
+    
 }

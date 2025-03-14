@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,5 +25,13 @@ public class ElementalAttack : BasicAttack
             return CheckDeath(opponent); 
         }
         return false; 
+    }
+    public override float returnValue()
+    {
+        return Damage; 
+    }
+    public override string moveType()
+    {
+        return "Elemental"; 
     }
 }

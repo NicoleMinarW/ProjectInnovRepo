@@ -6,6 +6,7 @@ public class Heal : MoveSet
     [SerializeField] private float _healAmount;
     public float HealAmount => _healAmount;
     
+
     public override bool Execute(User P1, User P2, BaseMonster attacker, BaseMonster opponent){
         Debug.Log($"Executing healing of {_healAmount} on {attacker.data.monsterName}");
         if(P1.costActionPoints(APCost)){
@@ -15,4 +16,13 @@ public class Heal : MoveSet
         }
         return false; 
     }
+    public override float returnValue()
+    {
+        return _healAmount;
+    }
+    public override string moveType()
+    {
+        return "Heal"; 
+    }
+
 }

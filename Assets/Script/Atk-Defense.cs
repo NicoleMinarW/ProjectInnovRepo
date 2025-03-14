@@ -19,4 +19,16 @@ public class Defense : MoveSet{
         monster._Def_endDuration=turn + duration + 1; 
         monster._defenseOn = true;
     }
+    public override float returnValue()
+    {
+        return _defense; 
+    }
+    public override float returnDuration()
+    {
+        return Duration; 
+    }
+    public override string moveType()
+    {
+        return "Defense"; 
+    }
 }

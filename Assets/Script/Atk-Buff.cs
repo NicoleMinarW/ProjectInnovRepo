@@ -19,4 +19,16 @@ public class Buff : MoveSet{
     //     monster._buff_endDuration=turn + duration + 1;
     //     monster._buffOn = true;
     // }
+    public override float returnValue()
+    {
+        return _buff; 
+    }
+    public override float returnDuration()
+    {
+        return Duration; 
+    }
+    public override string moveType()
+    {
+        return "Buff"; 
+    }
 }
