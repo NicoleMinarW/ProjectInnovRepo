@@ -1380,7 +1380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mObserverBehaviour: {fileID: 208435055}
   mHiddenRoot: {fileID: 0}
-  mTargetName: batlamandrbnw_scaled
+  mTargetName: Batlamandr
   mDatasetName: 
   mCastedBehaviour: {fileID: 208435055}
   mMeshFilter: {fileID: 0}
@@ -1444,7 +1444,7 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: batlamandrbnw_scaled
+  mTrackableName: Batlamandr
   mInitializedInEditor: 1
   mDataSetPath: 
   mAspectRatio: 1.4008209
@@ -8129,7 +8129,7 @@ MonoBehaviour:
   PreviewVisible: 1
   RuntimeOcclusion: 0
   RuntimeCollider: 0
-  mTrackableName: ratscorpionbnw_scaled
+  mTrackableName: Scorpirat
   mInitializedInEditor: 1
   mDataSetPath: 
   mAspectRatio: 1.4008209
@@ -8724,7 +8724,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88691943804b07649aa297cb04d2c3f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startButton: {fileID: 1439486184}
+  gameUI: {fileID: 2076187931}
+  startUI: {fileID: 929181696}
 --- !u!4 &1596192397
 Transform:
   m_ObjectHideFlags: 0
