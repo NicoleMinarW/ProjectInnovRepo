@@ -19,6 +19,7 @@ public class ARCardManager : MonoBehaviourPunCallbacks
     }
     void Start()
     {
+
         // Get all ObserverBehaviour components in children (to handle multiple image targets)
         ObserverBehaviour[] observerBehaviours = GetComponentsInChildren<ObserverBehaviour>();
 
