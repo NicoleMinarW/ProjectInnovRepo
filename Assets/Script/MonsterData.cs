@@ -10,5 +10,5 @@ public class MonsterData : ScriptableObject
     public MonsterElement element; 
     public List<MoveSet> moveList = new List<MoveSet>(); 
     public List<SpecialAttack> specialAttackList = new List<SpecialAttack>();
-    public Image sprite;
+    public Sprite sprite;
 }

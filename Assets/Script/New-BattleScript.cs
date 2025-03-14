@@ -31,7 +31,7 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
 
     public List<GameObject> monsterPrefabs;
 
-    public UIManager playerUI;
+    public UIManager playerUI;  
 
     public TMPro.TextMeshProUGUI turnIndicator;
     public GameObject endTurnButton;
@@ -216,7 +216,6 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
         photonView.RPC("RPC_SyncMonstersHP", RpcTarget.Others, enemyMonster._currHP, myMonster._currHP);
     }
 
-
     public void displayGameOver(GameState currentState){
         if (currentState == GameState.WON){
             gameOverText.text = "You WIN!"; 
@@ -272,6 +271,12 @@ public class BattleScriptManager : MonoBehaviourPunCallbacks {
     public void RestartGame()
     {
         PhotonNetwork.LoadLevel(PhotonNetwork.CurrentRoom.PlayerCount);  
+    }
+
+    public void QuitGame()
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(0);
     }
 
 
