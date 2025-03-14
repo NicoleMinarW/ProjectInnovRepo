@@ -21,7 +21,8 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI SPButtonTxt; 
     public TMPro.TextMeshProUGUI SPvalue; 
     public TMPro.TextMeshProUGUI SPCD; 
-    public TMPro.TextMeshProUGUI[] moveBtnTxt; 
+    public TMPro.TextMeshProUGUI[] moveBtnTxt1;
+    public TMPro.TextMeshProUGUI[] moveBtnTxt2;  
     public GameObject APContainer; 
     public GameObject APIcon; 
     private List<GameObject> APIcons = new List<GameObject>();
@@ -63,6 +64,32 @@ public class UIManager : MonoBehaviour
         UpdateMoveButtons(playerMonster); 
     }
 
+    public void UpdateMoveButtons(BaseMonster monster){
+
+        List<MoveSet> moves = monster.GetMoves();   
+
+        if (moves == null || moves.Count==0){
+            Debug.LogError($"Monster {monster.data.monsterName} has no moves");
+            return; 
+        }
+        for(int i=0; i< moveBtn.Length; i++){
+            if(i<moves.Count && moves != null){
+                moveBtn[i].gameObject.SetActive(true); 
+                moveBtnTxt1[i].text = moves[i].MoveName + moves[i].GetType(); 
+                moveBtnTxt2[i].text = moves[i].returnValue() + "DMG | " + moves[i].APCost + " HP"; 
+                moveBtn[i].onClick.RemoveAllListeners(); 
+                MoveSet currMove = moves[i];
+                Debug.Log($"Adding listener for move {currMove} on button {i}");
+                moveBtn[i].onClick.AddListener(() => OnMoveButtonPress(currMove)); 
+            }
+            else{
+                moveBtn[i].gameObject.SetActive(false);
+            }
+        }
+        Debug.Log($"UpdateMoveButtons: {monster.data.monsterName} has {moves.Count} moves assigned.");
+
+    }
+
     // public void UpdateMoveButtons(BaseMonster monster){
     //     List<MoveSet> moves = monster.GetMoves();   
     //     foreach (Transform child in moveButtonContainer) {
@@ -80,32 +107,32 @@ public class UIManager : MonoBehaviour
 
     //     }
     // }
-    public void UpdateMoveButtons(BaseMonster monster)
-    {
-        // Remove old buttons before adding new ones
-        foreach (GameObject btn in moveButtons)
-        {
-            Destroy(btn);
-        }
-        moveButtons.Clear();
+    // public void UpdateMoveButtons(BaseMonster monster)
+    // {
+    //     // Remove old buttons before adding new ones
+    //     foreach (GameObject btn in moveButtons)
+    //     {
+    //         Destroy(btn);
+    //     }
+    //     moveButtons.Clear();
 
-        // Create new buttons
-        foreach (MoveSet move in monster.GetMoves())
-        {
-            GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
-            MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
+    //     // Create new buttons
+    //     foreach (MoveSet move in monster.GetMoves())
+    //     {
+    //         GameObject buttonObj = Instantiate(moveButtonpref, moveButtonContainer);
+    //         MoveButton moveButton = buttonObj.GetComponent<MoveButton>();
 
-            if (moveButton != null)
-            {
-                moveButton.SetButtons(move, () => OnMoveButtonPress(move));
-                moveButtons.Add(buttonObj); 
-            }
-            else
-            {
-                Debug.LogError("MoveButton script is missing on the instantiated move button!");
-            }
-        }
-    }
+    //         if (moveButton != null)
+    //         {
+    //             moveButton.SetButtons(move, () => OnMoveButtonPress(move));
+    //             moveButtons.Add(buttonObj); 
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("MoveButton script is missing on the instantiated move button!");
+    //         }
+    //     }
+    // }
 
     public void OnMoveButtonPress(MoveSet chosenMove){
         // battleScriptManager = FindFirstObjectByType<BattleScriptManager>();
