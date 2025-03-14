@@ -12,8 +12,8 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI enemyhpText;
     public TMPro.TextMeshProUGUI playerUsername;
     public TMPro.TextMeshProUGUI enemyUsername;
-    public Image playerCard;
-    public Image enemyCard;
+    public Sprite playerCard;
+    public Sprite enemyCard;
     public Slider playerHPSlider; 
     public Slider enemyHPSlider; 
     public Button[] moveBtn; 
